@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMERIT - Gabriel AI Educational Platform</title>
+    <link rel="stylesheet" href="assets/css/pmerit-styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle menu">☰</div>
+        <div class="custom-site-title">PMERIT</div>
+        <div class="language-selector">
+            <select id="languagePreference" aria-label="Select language">
+                <option value="en">🌐 English</option>
+                <option value="yo_female">🇳🇬 Yoruba (Female)</option>
+                <option value="ig_female">🇳🇬 Igbo (Female)</option>
+                <option value="ha_female">🇳🇬 Hausa (Female)</option>
+                <option value="es">🇪🇸 Spanish</option>
+                <option value="fr">🇫🇷 French</option>
+            </select>
+        </div>
+        <div class="avatar" title="User Profile">👤</div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="pmerit-main">
+        <div class="main-wrapper">
+            <div class="background-decor left-decor"></div>
+            <div class="background-decor right-decor"></div>
+            <div class="watermark"></div>
+
+            <div class="main-body">
+                <!-- Avatar Section -->
+                <div class="virtual-avatar-box">
+                    <div class="avatar-placeholder">Avatar will appear here when speaking...</div>
+                    <div class="avatar-frame" id="ai-avatar">
+                        <img src="assets/images/placeholder-avatar.png" alt="AI Avatar" loading="lazy">
+                    </div>
+
+                    <div class="settings-panel">
+                        <h3>Settings</h3>
+                        <div class="setting-item">
+                            <label for="ttsToggle">Text-to-Speech</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="ttsToggle" checked>
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label for="darkModeToggle">Dark Mode</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="ai-center">
+                    <div id="chat-history" class="ai-responses" role="log" aria-live="polite" aria-label="Chat conversation">
+                    </div>
+
+                    <div class="input-container">
+                        <div class="ai-box">
+                            <textarea
+                                id="ai-input"
+                                class="ai-input"
+                                placeholder="Ask your question here..."
+                                rows="1"
+                                maxlength="1000"
+                                aria-label="Question input"
+                            ></textarea>
+                            <div id="char-counter" class="char-counter">0/1000</div>
+                        </div>
+
+                        <div class="ai-btn-row">
+                            <button id="upload-image" title="Upload an image" aria-label="Upload image">📎</button>
+                            <button id="ask-tutor" aria-label="Submit question">Ask Tutor</button>
+                            <button id="read-about" aria-label="Read about topic">Read About</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personality Assessment -->
+                <section class="personality-assessment">
+                    <h2>Personality Assessment</h2>
+                    <ul>
+                        <li><a href="https://www.16personalities.com/" target="_blank" rel="noopener noreferrer">16 Personalities Test</a></li>
+                        <li><a href="https://personality.co/" target="_blank" rel="noopener noreferrer">Big Five Personality Test</a></li>
+                        <li><a href="https://www.careeronestop.org/" target="_blank" rel="noopener noreferrer">Career Skills Assessment</a></li>
+                        <li><a href="https://www.mynextmove.org/explore/ip" target="_blank" rel="noopener noreferrer">Interest Profiler</a></li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="dynamic-sidebar" id="dynamicSidebar">
+            <button class="dynamic-sidebar-toggle" onclick="toggleMenu()" aria-label="Close menu">✕</button>
+            
+            <div class="dynamic-sidebar-item" data-panel="avatarPanel">
+                <span class="icon">👤</span> <span>My Avatar</span>
+            </div>
+            <div class="dynamic-sidebar-item" data-panel="settingsPanel">
+                <span class="icon">⚙️</span> <span>Settings</span>
+            </div>
+            <div class="dynamic-sidebar-item" data-panel="assessmentPanel">
+                <span class="icon">📚</span> <span>Assessments</span>
+            </div>
+            <div class="dynamic-sidebar-item" data-panel="subjectsPanel">
+                <span class="icon">📖</span> <span>Subjects</span>
+            </div>
+            <div class="dynamic-sidebar-item" data-panel="helpPanel">
+                <span class="icon">❓</span> <span>Help</span>
+            </div>
+        </div>
+
+        <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMenu()"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer">
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Use</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
+            <span>© 2025 PMERIT</span>
+        </div>
+    </footer>
+
+    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+    
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/virtual-human.js"></script>
+</body>
+</html>
