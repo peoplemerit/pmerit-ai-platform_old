@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
-    <!-- Fixed Header -->
     <header class="main-header">
         <div class="header-content">
             <a href="#" class="logo">✖ PMERIT</a>
@@ -32,10 +31,13 @@
         </div>
     </header>
 
-    <!-- Main Application Container - Non-scrollable -->
     <main class="app-container">
-        <!-- Left Sidebar -->
         <aside class="sidebar-left">
+            <div class="sidebar-mobile-toggle left" onclick="document.querySelector('.sidebar-left').classList.toggle('expanded')">
+                <span>📱 Quick Actions - Tap to expand</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+
             <div class="avatar-section">
                 <div class="avatar-circle">
                     <span class="avatar-icon">🤖</span>
@@ -82,7 +84,6 @@
             </div>
         </aside>
 
-        <!-- Center Chat Area -->
         <section class="chat-container">
             <div class="welcome-message">
                 <h1 class="mission-title">Empowering Learning Through Innovation</h1>
@@ -128,11 +129,11 @@
             </div>
         </section>
 
-        <!-- Right Sidebar - Personality Assessment -->
         <aside class="sidebar-right">
-            <div class="panel-header">
+            <div class="panel-header sidebar-mobile-toggle right" onclick="document.querySelector('.sidebar-right').classList.toggle('expanded')">
                 <h3>🧠 Discover Your Path</h3>
                 <p>Personalized assessments to guide your learning journey</p>
+                <span class="toggle-icon">▼</span>
             </div>
             
             <div class="assessment-cards">
@@ -167,12 +168,10 @@
         </aside>
     </main>
 
-    <!-- Status Indicator -->
     <div class="status-indicator" id="status-indicator">
         🔧 Connecting to Educational Services...
     </div>
 
-    <!-- Scripts -->
     <script src="assets/js/api.js"></script>
     <script src="assets/js/chat.js"></script>
     <script src="assets/js/sidebar.js"></script>
