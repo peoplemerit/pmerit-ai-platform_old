@@ -39,13 +39,6 @@
     :root {
         --header-height: 60px;
     }
-
-    /* Allow body and app-container to scroll on mobile */
-    body, .app-container {
-        overflow: auto !important; /* */
-        height: auto !important; /* */
-        min-height: 100vh; /* */
-    }
     
     /* Stack layout vertically on mobile */
     .app-container {
@@ -53,7 +46,7 @@
         grid-template-rows: auto 1fr auto;
         gap: 0.5rem;
         padding: 0.5rem;
-        /* height: calc(100vh - var(--header-height)); Removed as overflow is now handled by body/app-container */
+        height: calc(100vh - var(--header-height));
     }
     
     /* Header adjustments */
@@ -89,40 +82,34 @@
     }
     
     /* Sidebar becomes collapsible panels */
-    .sidebar-left, .sidebar-right {
-        padding: 1rem;
-        overflow: hidden; /* Keep overflow hidden for collapsing effect */
-        transition: max-height 0.3s ease;
-    }
-
     .sidebar-left {
         order: 1;
-        max-height: 120px; /* Collapsed height */
+        max-height: 120px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 1rem;
     }
     
     .sidebar-left.expanded {
-        max-height: 300px; /* Expanded height */
+        max-height: 300px;
     }
     
     .sidebar-right {
         order: 3;
-        max-height: 100px; /* Collapsed height */
+        max-height: 100px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 1rem;
     }
     
     .sidebar-right.expanded {
-        max-height: 400px; /* Expanded height */
+        max-height: 400px;
     }
     
-    /* Hide default ::before content, replaced by HTML toggle */
-    .sidebar-left::before, .sidebar-right::before {
-        content: none;
-    }
-
-    /* Styles for the new mobile sidebar toggles */
-    .sidebar-mobile-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    /* Add expand/collapse buttons */
+    .sidebar-left::before {
+        content: "📱 Quick Actions - Tap to expand";
+        display: block;
         text-align: center;
         font-size: 0.8rem;
         color: var(--text-secondary);
@@ -131,28 +118,19 @@
         padding: 0.5rem;
         background: rgba(102,126,234,0.1);
         border-radius: 8px;
-        position: relative; /* For toggle icon positioning */
     }
-
-    .sidebar-mobile-toggle.left {
-        /* Specific styles for left sidebar toggle if needed */
-    }
-
-    .sidebar-mobile-toggle.right {
-        /* Ensures the existing panel-header styles are combined */
-        padding-top: 0.5rem; /* Adjust padding for better look with toggle */
-        padding-bottom: 0.5rem;
-    }
-
-    .sidebar-mobile-toggle .toggle-icon {
-        margin-left: 0.5rem;
-        transition: transform 0.3s ease;
-        font-size: 1rem;
-    }
-
-    .sidebar-left.expanded .sidebar-mobile-toggle .toggle-icon,
-    .sidebar-right.expanded .sidebar-mobile-toggle .toggle-icon {
-        transform: rotate(180deg);
+    
+    .sidebar-right::before {
+        content: "🧠 Assessments - Tap to expand";
+        display: block;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        background: rgba(102,126,234,0.1);
+        border-radius: 8px;
     }
     
     /* Hide avatar section on mobile */
@@ -219,9 +197,6 @@
     }
     
     #chat-input {
-        width: 100%; /* */
-        min-width: 0; /* */
-        box-sizing: border-box; /* */
         padding: 0.6rem 0.8rem;
         font-size: 0.9rem;
     }
@@ -288,10 +263,6 @@
     .sidebar-left, .sidebar-right {
         padding: 0.8rem;
     }
-
-    .sidebar-mobile-toggle {
-        font-size: 0.75rem;
-    }
     
     .sidebar-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -341,26 +312,17 @@
         grid-template-rows: 1fr;
     }
     
-    /* In landscape, sidebars become visible and take their place in the grid */
     .sidebar-left, .sidebar-right {
-        order: initial; /* Reset order from portrait mobile */
-        max-height: none !important; /* Fully expand sidebars */
-        overflow: visible !important; /* Ensure content is visible */
-    }
-
-    .sidebar-mobile-toggle {
-        display: none; /* Hide mobile toggles in landscape */
+        order: initial;
+        max-height: none;
     }
     
     .chat-container {
-        order: initial; /* Reset order from portrait mobile */
+        order: initial;
     }
     
     .avatar-section {
-        display: flex; /* Show avatar section in landscape */
-        flex-direction: column;
-        align-items: center;
-        padding-bottom: 1.5rem;
+        display: none;
     }
     
     .welcome-message {
