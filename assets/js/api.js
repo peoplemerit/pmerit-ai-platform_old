@@ -1,424 +1,401 @@
 /**
- * Chat Functionality for Gabriel AI
- * Handles message sending, receiving, and educational conversations
+ * API Communication Module for Gabriel AI
+ * Handles all backend communication and data management
  */
 
-// Chat state
-let chatState = {
-    isConnected: false,
+// API Configuration
+const API_CONFIG = {
+    endpoints: {
+        production: 'https://gabriel-ai-backend.peoplemerit.workers.dev',
+        development: 'http://localhost:8000'
+    },
+    timeout: 10000,
+    retries: 2,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'PMERIT-Gabriel-AI/1.0'
+    }
+};
+
+// API State
+let apiState = {
     currentEndpoint: null,
-    messageHistory: [],
-    isTyping: false,
-    conversationContext: []
+    isOnline: false,
+    lastHealthCheck: null,
+    requestCount: 0,
+    errorCount: 0
 };
 
 /**
- * Test backend connection and set up API endpoint
+ * Make API request with retry logic and error handling
  */
-async function testBackendConnection() {
-    updateStatus('🔄 Connecting to educational services...', 'connecting');
+async function makeAPIRequest(endpoint, data, options = {}) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...API_CONFIG.headers, ...options.headers },
+        body: JSON.stringify(data),
+        timeout: options.timeout || API_CONFIG.timeout
+    };
+
+    let lastError;
     
-    const endpoints = [
-        APP_CONFIG.apiEndpoints.production,
-        APP_CONFIG.apiEndpoints.development
-    ];
-    
-    for (const endpoint of endpoints) {
+    for (let attempt = 0; attempt <= API_CONFIG.retries; attempt++) {
         try {
-            console.log(`Testing connection to: ${endpoint}`);
+            apiState.requestCount++;
             
-            const response = await fetch(`${endpoint}/qa/process`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    question: 'Connection test',
-                    context: 'system_check'
-                }),
-                timeout: 5000
-            });
+            const response = await fetchWithTimeout(endpoint, requestOptions);
             
-            if (response.ok) {
-                chatState.isConnected = true;
-                chatState.currentEndpoint = endpoint;
-                appState.connectionStatus = 'connected';
-                
-                const endpointType = endpoint.includes('localhost') ? 'Local' : 'Cloud';
-                updateStatus(`✅ Connected to ${endpointType} Educational Services`, 'working');
-                
-                console.log(`✅ Successfully connected to ${endpointType} backend`);
-                
-                // Send welcome message confirming connection
-                setTimeout(() => {
-                    addMessageToChat(
-                        `🎓 Educational services are online! I'm ready to help you explore learning opportunities, discover your strengths, and guide your educational journey. What would you like to learn about today?`,
-                        'assistant'
-                    );
-                }, 1000);
-                
-                return;
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            
+            const result = await response.json();
+            return result;
+            
         } catch (error) {
-            console.log(`❌ Failed to connect to ${endpoint}:`, error.message);
+            lastError = error;
+            apiState.errorCount++;
+            
+            console.warn(`API request attempt ${attempt + 1} failed:`, error.message);
+            
+            // Don't retry on certain errors
+            if (error.name === 'AbortError' || error.message.includes('401') || error.message.includes('403')) {
+                break;
+            }
+            
+            // Exponential backoff for retries
+            if (attempt < API_CONFIG.retries) {
+                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+            }
         }
     }
     
-    // All endpoints failed - use demo mode
-    chatState.isConnected = false;
-    appState.connectionStatus = 'offline';
-    updateStatus('📚 Demo Mode - Educational guidance available', 'info');
-    
-    setTimeout(() => {
-        addMessageToChat(
-            `📚 Welcome to PMERIT! I'm in demo mode while educational services are being optimized. I can still help you explore our learning approach, discuss educational strategies, and guide you toward your goals. What interests you most about learning?`,
-            'assistant'
-        );
-    }, 1000);
+    throw lastError;
 }
 
 /**
- * Send message to AI backend or provide demo response
+ * Fetch with timeout support
  */
-async function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const message = input.value.trim();
-    
-    if (!message) return;
-    
-    // Validate message length
-    if (message.length > 1000) {
-        updateStatus('❌ Message too long (max 1000 characters)', 'error');
-        return;
-    }
-    
-    // Add user message to chat
-    addMessageToChat(message, 'user');
-    input.value = '';
-    updateWordCount();
-    
-    // Store message in history
-    chatState.messageHistory.push({ role: 'user', content: message });
-    
-    // Show typing indicator
-    showTypingIndicator();
+async function fetchWithTimeout(url, options) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), options.timeout);
     
     try {
-        let aiResponse;
-        
-        if (chatState.isConnected && chatState.currentEndpoint) {
-            // Try backend connection
-            aiResponse = await getAIResponse(message);
-        } else {
-            // Use demo mode
-            aiResponse = getDemoResponse(message);
-        }
-        
-        // Hide typing indicator
-        hideTypingIndicator();
-        
-        // Add AI response
-        addMessageToChat(aiResponse, 'assistant');
-        
-        // Store AI response in history
-        chatState.messageHistory.push({ role: 'assistant', content: aiResponse });
-        
-        // Text-to-speech if enabled
-        if (appState.textToSpeech) {
-            speakMessage(aiResponse);
-        }
-        
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
     } catch (error) {
-        hideTypingIndicator();
-        console.error('Chat error:', error);
+        clearTimeout(timeoutId);
+        throw error;
+    }
+}
+
+/**
+ * Health check for API endpoints
+ */
+async function healthCheck(endpoint) {
+    try {
+        const startTime = Date.now();
         
-        // Fallback to demo response
-        const fallbackResponse = getDemoResponse(message);
-        addMessageToChat(fallbackResponse, 'assistant');
+        const response = await makeAPIRequest(`${endpoint}/health`, {
+            timestamp: Date.now(),
+            version: APP_CONFIG.version
+        }, { timeout: 5000 });
         
-        updateStatus('⚠️ Using offline mode', 'warning');
+        const latency = Date.now() - startTime;
+        
+        return {
+            success: true,
+            latency,
+            endpoint,
+            timestamp: new Date().toISOString(),
+            data: response
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message,
+            endpoint,
+            timestamp: new Date().toISOString()
+        };
     }
 }
 
 /**
- * Get AI response from backend
+ * Discover and connect to best available endpoint
  */
-async function getAIResponse(message) {
-    const requestData = {
-        question: message,
-        context: chatState.conversationContext.slice(-5), // Last 5 exchanges for context
-        user_preferences: {
-            language: appState.language,
-            learning_style: appState.learningStyle || 'adaptive'
-        }
-    };
+async function discoverEndpoint() {
+    updateStatus('🔍 Discovering educational services...', 'connecting');
     
-    const response = await fetch(`${chatState.currentEndpoint}/qa/process`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-    });
+    const endpoints = [
+        API_CONFIG.endpoints.production,
+        API_CONFIG.endpoints.development
+    ];
     
-    if (!response.ok) {
-        throw new Error(`Backend responded with ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    // Update conversation context
-    chatState.conversationContext.push({
-        user: message,
-        assistant: data.answer || data.response
-    });
-    
-    return data.answer || data.response || 'I apologize, but I didn\'t receive a proper response. Could you try rephrasing your question?';
-}
-
-/**
- * Generate educational demo responses
- */
-function getDemoResponse(message) {
-    const msg = message.toLowerCase();
-    
-    // Learning and education focused responses
-    if (msg.includes('learn') || msg.includes('study') || msg.includes('education')) {
-        return `🎓 Excellent question about learning! At PMERIT, we believe education should be:\n\n✨ **Accessible** - Available to everyone, regardless of background\n🎯 **Personalized** - Adapted to your unique learning style\n🚀 **Practical** - Focused on skills you can apply immediately\n\nWe offer guidance in Technology, Business, and Creative fields. What area interests you most, or would you like to take a quick assessment to discover your ideal learning path?`;
-    }
-    
-    if (msg.includes('course') || msg.includes('subject') || msg.includes('topic')) {
-        return `📚 Our learning tracks are designed to build real-world capabilities:\n\n🚀 **Technology Track**: Web development, cloud computing, data analysis\n💼 **Business Track**: Project management, digital skills, entrepreneurship\n🎨 **Creative Track**: Design, content creation, digital marketing\n\nEach track includes interactive projects and community support. Which area aligns with your interests or career goals?`;
-    }
-    
-    if (msg.includes('career') || msg.includes('job') || msg.includes('work') || msg.includes('opportunity')) {
-        return `💼 Education opens doors to countless opportunities! Rather than promising specific salaries, we focus on:\n\n🎯 **Skill Development** - Building capabilities that employers value\n🌐 **Remote Work Readiness** - Preparing you for location-independent careers\n🤝 **Professional Networks** - Connecting you with mentors and peers\n📈 **Continuous Growth** - Lifelong learning strategies\n\nWhat type of work environment or role interests you most?`;
-    }
-    
-    if (msg.includes('assess') || msg.includes('test') || msg.includes('personality') || msg.includes('skill')) {
-        return `🧠 Assessments help us understand how you learn best! Our evaluations include:\n\n🎯 **Learning Style Assessment** - Visual, auditory, kinesthetic preferences\n💡 **Interest Profiler** - Subjects that naturally engage you\n⚡ **Skills Evaluation** - Current abilities and growth areas\n🚀 **Goal Setting Workshop** - Defining your educational objectives\n\nThese tools help create a personalized learning journey. Which assessment interests you most?`;
-    }
-    
-    if (msg.includes('help') || msg.includes('support') || msg.includes('guidance')) {
-        return `🤝 I'm here to support your educational journey! I can help with:\n\n📋 **Learning Path Guidance** - Finding the right courses for your goals\n🎯 **Study Strategies** - Effective learning techniques and time management\n💡 **Skill Assessment** - Identifying strengths and areas for improvement\n🌟 **Motivation Support** - Staying engaged and overcoming challenges\n🔗 **Resource Recommendations** - Additional materials and tools\n\nWhat specific aspect of learning would you like guidance on?`;
-    }
-    
-    if (msg.includes('mission') || msg.includes('about') || msg.includes('pmerit')) {
-        return `🌟 **PMERIT's Mission**: ${APP_CONFIG.mission}\n\nWe're committed to breaking down barriers that limit educational access. Through innovative technology and personalized guidance, we help learners:\n\n✨ Discover their unique potential\n🎯 Develop practical, valuable skills\n🚀 Create their own opportunities\n🤝 Build supportive learning communities\n\nEducation isn't about quick promises - it's about empowering you with knowledge, confidence, and the tools to shape your own future. How can we support your learning goals?`;
-    }
-    
-    if (msg.includes('cost') || msg.includes('price') || msg.includes('free') || msg.includes('money')) {
-        return `💝 Education should never be limited by financial barriers! Our approach:\n\n🆓 **Core Learning** - Fundamental courses and guidance available to all\n🌍 **Community Support** - Peer networks and collaborative learning\n🎓 **Skill-Based Progress** - Focus on competency, not payment\n✨ **Opportunity Access** - Connections to internships and projects\n\nOur mission is empowerment through knowledge, not profit. What learning goals can we help you achieve, regardless of your current financial situation?`;
-    }
-    
-    if (msg.includes('time') || msg.includes('schedule') || msg.includes('pace')) {
-        return `⏰ Learning fits into YOUR life! Our flexible approach includes:\n\n🎯 **Self-Paced Learning** - Study when it works for you\n📱 **Micro-Learning** - Short, focused sessions that fit busy schedules\n🔄 **Adaptive Scheduling** - Adjusting to your commitments\n📊 **Progress Tracking** - Celebrating small wins along the way\n\nWhether you have 15 minutes or 2 hours, we can design a learning approach that works. What's your current schedule like?`;
-    }
-    
-    if (msg.includes('motivation') || msg.includes('confidence') || msg.includes('difficult') || msg.includes('struggle')) {
-        return `💪 Every learner faces challenges - that's part of growth! Remember:\n\n🌱 **Progress over Perfection** - Small steps lead to big changes\n🤝 **Community Support** - You're not learning alone\n🎯 **Personalized Approach** - Learning that fits YOUR style\n✨ **Celebrating Wins** - Acknowledging every achievement\n\nEducation is a journey, not a race. What specific learning challenge can we work through together?`;
-    }
-    
-    // Default educational response
-    return `🎓 That's a thoughtful question! I'm here to help you navigate your educational journey. Whether you're interested in:\n\n📚 Exploring new subjects and skills\n🎯 Finding your optimal learning style\n🚀 Setting and achieving educational goals\n🤝 Connecting with learning communities\n💡 Developing problem-solving abilities\n\nI can provide guidance tailored to your interests and needs. What aspect of learning would you like to explore together?`;
-}
-
-/**
- * Add message to chat interface
- */
-function addMessageToChat(message, sender) {
-    const messagesContainer = document.getElementById('chat-messages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}`;
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    
-    if (sender === 'user') {
-        messageContent.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
-    } else {
-        // Process markdown-style formatting for assistant messages
-        const formattedMessage = formatAssistantMessage(message);
-        messageContent.innerHTML = `<strong>Gabriel AI:</strong> ${formattedMessage}`;
-    }
-    
-    messageDiv.appendChild(messageContent);
-    messagesContainer.appendChild(messageDiv);
-    
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
-    // Add animation
-    messageDiv.style.opacity = '0';
-    messageDiv.style.transform = 'translateY(20px)';
-    
-    requestAnimationFrame(() => {
-        messageDiv.style.transition = 'all 0.3s ease';
-        messageDiv.style.opacity = '1';
-        messageDiv.style.transform = 'translateY(0)';
-    });
-}
-
-/**
- * Format assistant messages with basic markdown support
- */
-function formatAssistantMessage(message) {
-    return escapeHtml(message)
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g, '<br>');
-}
-
-/**
- * Escape HTML to prevent XSS
- */
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-/**
- * Show typing indicator
- */
-function showTypingIndicator() {
-    if (document.querySelector('.typing-indicator')) return;
-    
-    chatState.isTyping = true;
-    const messagesContainer = document.getElementById('chat-messages');
-    
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'typing-indicator';
-    typingDiv.innerHTML = `
-        <span>Gabriel AI is thinking</span>
-        <div class="typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    `;
-    
-    messagesContainer.appendChild(typingDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-/**
- * Hide typing indicator
- */
-function hideTypingIndicator() {
-    chatState.isTyping = false;
-    const typingIndicator = document.querySelector('.typing-indicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
-    }
-}
-
-/**
- * Text-to-speech functionality
- */
-function speakMessage(message) {
-    if (!('speechSynthesis' in window)) return;
-    
-    // Clean message for speech (remove formatting)
-    const cleanMessage = message
-        .replace(/\*\*(.*?)\*\*/g, '$1')
-        .replace(/\*(.*?)\*/g, '$1')
-        .replace(/🎓|📚|🚀|💼|🎨|🎯|✨|🤝|💡|📊|⚡|🌟|💝|🆓|🌍|⏰|📱|🔄|💪|🌱/g, '');
-    
-    const utterance = new SpeechSynthesisUtterance(cleanMessage);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 0.8;
-    
-    // Use appropriate voice for language
-    const voices = speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => 
-        voice.lang.startsWith(appState.language) && voice.name.includes('Female')
-    ) || voices.find(voice => voice.lang.startsWith('en'));
-    
-    if (preferredVoice) {
-        utterance.voice = preferredVoice;
-    }
-    
-    speechSynthesis.speak(utterance);
-}
-
-/**
- * Clear chat history
- */
-function clearChat() {
-    const messagesContainer = document.getElementById('chat-messages');
-    messagesContainer.innerHTML = '';
-    chatState.messageHistory = [];
-    chatState.conversationContext = [];
-    
-    // Add welcome message
-    addMessageToChat(
-        'Chat cleared! How can I help you with your learning journey today?',
-        'assistant'
+    const healthChecks = await Promise.allSettled(
+        endpoints.map(endpoint => healthCheck(endpoint))
     );
+    
+    // Find the best working endpoint
+    let bestEndpoint = null;
+    let bestLatency = Infinity;
+    
+    healthChecks.forEach((result, index) => {
+        if (result.status === 'fulfilled' && result.value.success) {
+            if (result.value.latency < bestLatency) {
+                bestLatency = result.value.latency;
+                bestEndpoint = endpoints[index];
+            }
+        }
+    });
+    
+    if (bestEndpoint) {
+        apiState.currentEndpoint = bestEndpoint;
+        apiState.isOnline = true;
+        apiState.lastHealthCheck = Date.now();
+        
+        const endpointType = bestEndpoint.includes('localhost') ? 'Local' : 'Cloud';
+        updateStatus(`✅ Connected to ${endpointType} Services (${bestLatency}ms)`, 'working');
+        
+        return true;
+    } else {
+        apiState.isOnline = false;
+        updateStatus('📚 Offline Mode - Demo responses available', 'info');
+        return false;
+    }
 }
 
 /**
- * Export chat history
+ * Educational Q&A API call
  */
-function exportChatHistory() {
-    const chatData = {
-        timestamp: new Date().toISOString(),
-        messages: chatState.messageHistory,
-        userPreferences: {
-            language: appState.language,
-            darkMode: appState.darkMode
+async function processEducationalQuery(question, context = {}) {
+    if (!apiState.isOnline || !apiState.currentEndpoint) {
+        throw new Error('No connection available');
+    }
+    
+    const requestData = {
+        question: question.trim(),
+        context: {
+            conversation_history: context.history || [],
+            user_preferences: {
+                language: appState.language || 'en',
+                learning_style: context.learningStyle || 'adaptive',
+                difficulty_level: context.difficultyLevel || 'intermediate'
+            },
+            session_info: {
+                timestamp: new Date().toISOString(),
+                session_id: context.sessionId || generateSessionId(),
+                platform: 'web'
+            }
+        },
+        options: {
+            max_length: 500,
+            temperature: 0.7,
+            focus: 'educational',
+            safe_content: true
         }
     };
     
-    const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pmerit-chat-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    updateStatus('💾 Chat history exported', 'info');
+    try {
+        const response = await makeAPIRequest(
+            `${apiState.currentEndpoint}/qa/process`,
+            requestData
+        );
+        
+        return {
+            success: true,
+            answer: response.answer || response.response || response.message,
+            confidence: response.confidence || 0.8,
+            sources: response.sources || [],
+            suggestions: response.suggestions || [],
+            learning_resources: response.learning_resources || []
+        };
+    } catch (error) {
+        console.error('Educational query failed:', error);
+        throw error;
+    }
 }
 
-// Initialize chat system
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize chat connection
-    testBackendConnection();
-    
-    // Add initial welcome based on time of day
-    const hour = new Date().getHours();
-    let greeting = '🌟 Welcome to PMERIT!';
-    
-    if (hour < 12) {
-        greeting = '🌅 Good morning! Welcome to PMERIT!';
-    } else if (hour < 17) {
-        greeting = '☀️ Good afternoon! Welcome to PMERIT!';
-    } else {
-        greeting = '🌙 Good evening! Welcome to PMERIT!';
+/**
+ * Personality assessment submission
+ */
+async function submitPersonalityAssessment(assessmentData) {
+    if (!apiState.isOnline || !apiState.currentEndpoint) {
+        return { success: false, error: 'Offline mode - assessment saved locally' };
     }
     
-    setTimeout(() => {
-        if (document.getElementById('chat-messages').children.length === 0) {
-            addMessageToChat(
-                `${greeting} I'm Gabriel, your AI learning guide. I'm here to help you discover educational opportunities and develop your potential. What would you like to explore today?`,
-                'assistant'
-            );
+    try {
+        const response = await makeAPIRequest(
+            `${apiState.currentEndpoint}/personality/submit`,
+            {
+                assessment_type: assessmentData.type,
+                responses: assessmentData.responses,
+                user_info: {
+                    session_id: assessmentData.sessionId,
+                    timestamp: new Date().toISOString(),
+                    language: appState.language
+                }
+            }
+        );
+        
+        return {
+            success: true,
+            results: response.results,
+            recommendations: response.recommendations,
+            learning_path: response.learning_path
+        };
+    } catch (error) {
+        console.error('Assessment submission failed:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Get course recommendations
+ */
+async function getCourseRecommendations(preferences = {}) {
+    if (!apiState.isOnline || !apiState.currentEndpoint) {
+        return getOfflineCourseRecommendations(preferences);
+    }
+    
+    try {
+        const response = await makeAPIRequest(
+            `${apiState.currentEndpoint}/courses/recommend`,
+            {
+                user_preferences: preferences,
+                filters: {
+                    level: preferences.level || 'beginner',
+                    track: preferences.track || 'all',
+                    duration: preferences.duration || 'flexible'
+                }
+            }
+        );
+        
+        return {
+            success: true,
+            recommendations: response.courses || [],
+            learning_paths: response.learning_paths || [],
+            next_steps: response.next_steps || []
+        };
+    } catch (error) {
+        console.error('Course recommendation failed:', error);
+        return getOfflineCourseRecommendations(preferences);
+    }
+}
+
+/**
+ * Offline course recommendations fallback
+ */
+function getOfflineCourseRecommendations(preferences) {
+    const recommendations = {
+        technology: [
+            { title: 'Web Development Fundamentals', duration: '8 weeks', level: 'beginner' },
+            { title: 'Introduction to Cloud Computing', duration: '6 weeks', level: 'intermediate' },
+            { title: 'Data Analysis with Python', duration: '10 weeks', level: 'intermediate' }
+        ],
+        business: [
+            { title: 'Project Management Essentials', duration: '6 weeks', level: 'beginner' },
+            { title: 'Digital Marketing Strategy', duration: '8 weeks', level: 'intermediate' },
+            { title: 'Excel for Business Analytics', duration: '4 weeks', level: 'beginner' }
+        ],
+        creative: [
+            { title: 'Graphic Design Principles', duration: '6 weeks', level: 'beginner' },
+            { title: 'Content Creation Strategy', duration: '8 weeks', level: 'intermediate' },
+            { title: 'UI/UX Design Fundamentals', duration: '10 weeks', level: 'intermediate' }
+        ]
+    };
+    
+    const track = preferences.track || 'technology';
+    return {
+        success: true,
+        recommendations: recommendations[track] || recommendations.technology,
+        learning_paths: [`${track.charAt(0).toUpperCase() + track.slice(1)} Learning Path`],
+        next_steps: ['Take a personality assessment', 'Set learning goals', 'Join study groups']
+    };
+}
+
+/**
+ * User progress tracking
+ */
+async function updateUserProgress(progressData) {
+    if (!apiState.isOnline || !apiState.currentEndpoint) {
+        // Store locally for now
+        localStorage.setItem('userProgress', JSON.stringify(progressData));
+        return { success: true, stored: 'locally' };
+    }
+    
+    try {
+        const response = await makeAPIRequest(
+            `${apiState.currentEndpoint}/progress/update`,
+            {
+                user_id: progressData.userId || 'anonymous',
+                progress: progressData,
+                timestamp: new Date().toISOString()
+            }
+        );
+        
+        return { success: true, data: response };
+    } catch (error) {
+        // Fallback to local storage
+        localStorage.setItem('userProgress', JSON.stringify(progressData));
+        return { success: true, stored: 'locally', error: error.message };
+    }
+}
+
+/**
+ * Generate session ID
+ */
+function generateSessionId() {
+    return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+/**
+ * Get API statistics
+ */
+function getAPIStats() {
+    return {
+        endpoint: apiState.currentEndpoint,
+        isOnline: apiState.isOnline,
+        requestCount: apiState.requestCount,
+        errorCount: apiState.errorCount,
+        successRate: apiState.requestCount > 0 ? 
+            ((apiState.requestCount - apiState.errorCount) / apiState.requestCount * 100).toFixed(1) + '%' : 
+            'N/A',
+        lastHealthCheck: apiState.lastHealthCheck ? 
+            new Date(apiState.lastHealthCheck).toLocaleString() : 
+            'Never'
+    };
+}
+
+/**
+ * Periodic health monitoring
+ */
+function startHealthMonitoring() {
+    setInterval(async () => {
+        if (apiState.currentEndpoint && apiState.isOnline) {
+            const health = await healthCheck(apiState.currentEndpoint);
+            if (!health.success) {
+                console.warn('Health check failed, attempting reconnection...');
+                await discoverEndpoint();
+            }
         }
-    }, 2000);
+    }, 300000); // Check every 5 minutes
+}
+
+// Initialize API system
+document.addEventListener('DOMContentLoaded', function() {
+    discoverEndpoint();
+    startHealthMonitoring();
 });
 
-// Export functions for global access
-window.sendMessage = sendMessage;
-window.addMessageToChat = addMessageToChat;
-window.testBackendConnection = testBackendConnection;
-window.clearChat = clearChat;
-window.exportChatHistory = exportChatHistory;
+// Export API functions
+window.processEducationalQuery = processEducationalQuery;
+window.submitPersonalityAssessment = submitPersonalityAssessment;
+window.getCourseRecommendations = getCourseRecommendations;
+window.updateUserProgress = updateUserProgress;
+window.getAPIStats = getAPIStats;
+window.discoverEndpoint = discoverEndpoint;
