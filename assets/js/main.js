@@ -10,7 +10,8 @@ const APP_CONFIG = {
     mission: 'Empowering learning through accessible, high-quality education',
     apiEndpoints: {
         production: 'https://gabriel-ai-backend.peoplemerit.workers.dev',
-        development: 'http://localhost:8000'
+        //development: 'http://localhost:8000'
+        const processUrl = "https://gabriel-ai-backend.peoplemerit.workers.dev/qa/process";
     },
     features: {
         virtualHuman: false,
