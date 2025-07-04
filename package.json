@@ -4,11 +4,13 @@
   "description": "Gabriel AI Educational Platform - Local Development Frontend",
   "scripts": {
     "dev": "http-server -p 3000 -c-1",
+    "dev-alt": "python3 -m http.server 3000",
     "build": "echo 'Building for production...'",
-    "deploy": "git add . && git commit -m 'Update from local development' && git push origin main"
+    "deploy": "git add . && git commit -m 'Update from local development' && git push origin main",
+    "status": "git status",
+    "pull": "git pull origin main",
+    "push": "git add . && git commit -m 'Local development updates' && git push origin main"
   },
   "dependencies": {},
-  "devDependencies": {
-    "http-server": "^14.1.1"
-  }
+  "devDependencies": {}
 }

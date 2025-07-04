@@ -15,8 +15,8 @@ const ENV = {
     }
 };
 
-// Current environment
-const currentEnv = window.location.hostname === 'localhost' ? 'development' : 'production';
+// Current environment detection
+const currentEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'development' : 'production';
 const config = ENV[currentEnv];
 
 // API Configuration
@@ -38,6 +38,7 @@ console.log(`📡 API URL: ${API_CONFIG.baseUrl}`);
 // Backend Connection Test
 async function testBackendConnection() {
     try {
+        console.log('🔍 Testing backend connection...');
         const response = await fetch(API_CONFIG.statusUrl, {
             method: 'GET',
             headers: API_CONFIG.headers
@@ -50,12 +51,12 @@ async function testBackendConnection() {
             return true;
         } else {
             console.error('❌ Backend connection failed:', response.status);
-            updateConnectionStatus('Connection Error - Please try again', 'error');
+            updateConnectionStatus(`Connection Error (${response.status})`, 'error');
             return false;
         }
     } catch (error) {
         console.error('❌ Backend connection error:', error);
-        updateConnectionStatus('Connection Error - Please check internet', 'error');
+        updateConnectionStatus('Connection Error - Check internet', 'error');
         return false;
     }
 }
@@ -64,6 +65,7 @@ async function testBackendConnection() {
 async function sendMessage(message, userId = 'local-dev-user') {
     if (!message.trim()) return;
     
+    console.log('📤 Sending message to AI:', message);
     updateConnectionStatus('Gabriel AI is thinking...', 'loading');
     
     try {
@@ -81,6 +83,7 @@ async function sendMessage(message, userId = 'local-dev-user') {
         }
         
         const data = await response.json();
+        console.log('📥 AI response received:', data);
         
         if (data.success) {
             addMessageToChat(data.answer, 'assistant');
@@ -116,7 +119,7 @@ function addMessageToChat(message, sender) {
                               document.querySelector('.chat-messages');
     
     if (!messagesContainer) {
-        console.error('Chat messages container not found');
+        console.error('❌ Chat messages container not found');
         return;
     }
     
@@ -125,20 +128,20 @@ function addMessageToChat(message, sender) {
     messageDiv.style.marginBottom = '1rem';
     messageDiv.style.padding = '1rem';
     messageDiv.style.borderRadius = '10px';
+    messageDiv.style.maxWidth = '80%';
+    messageDiv.style.wordWrap = 'break-word';
     
     if (sender === 'user') {
         messageDiv.style.backgroundColor = '#667eea';
         messageDiv.style.color = 'white';
         messageDiv.style.marginLeft = 'auto';
         messageDiv.style.marginRight = '0';
-        messageDiv.style.maxWidth = '80%';
         messageDiv.innerHTML = `<strong>You:</strong> ${message}`;
     } else {
         messageDiv.style.backgroundColor = '#f1f3f4';
         messageDiv.style.color = '#333';
         messageDiv.style.marginLeft = '0';
         messageDiv.style.marginRight = 'auto';
-        messageDiv.style.maxWidth = '80%';
         messageDiv.innerHTML = `<strong>Gabriel AI:</strong> ${message}`;
     }
     
@@ -164,6 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function setupChatInterface() {
+    console.log('🎮 Setting up chat interface...');
+    
     // Chat input handler
     const chatInput = document.getElementById('chat-input');
     if (chatInput) {
@@ -172,6 +177,9 @@ function setupChatInterface() {
                 handleUserMessage();
             }
         });
+        console.log('✅ Chat input handler attached');
+    } else {
+        console.log('⚠️ Chat input not found');
     }
     
     // Send button handler
@@ -179,6 +187,9 @@ function setupChatInterface() {
                        document.querySelector('.send-button');
     if (sendButton) {
         sendButton.addEventListener('click', handleUserMessage);
+        console.log('✅ Send button handler attached');
+    } else {
+        console.log('⚠️ Send button not found');
     }
 }
 
@@ -198,5 +209,9 @@ function handleUserMessage() {
 window.GabrielAI = {
     sendMessage,
     testBackendConnection,
-    API_CONFIG
+    API_CONFIG,
+    addMessageToChat,
+    updateConnectionStatus
 };
+
+console.log('🚀 Gabriel AI API loaded successfully!');
