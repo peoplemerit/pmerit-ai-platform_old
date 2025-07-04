@@ -3,174 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PMERIT - Gabriel AI Educational Platform (Local Dev)</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .header h1 {
-            color: #667eea;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 1.2rem;
-        }
-        
-        .dev-badge {
-            background: #ff6b6b;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-        
-        .chat-container {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        }
-        
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: #fafafa;
-        }
-        
-        .chat-input-area {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .chat-input {
-            flex: 1;
-            padding: 1rem;
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        .chat-input:focus {
-            border-color: #667eea;
-        }
-        
-        .send-button {
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 1rem 2rem;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        
-        .send-button:hover {
-            background: #5a6fd8;
-        }
-        
-        .connection-status {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-        
-        .connection-status.success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .connection-status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .connection-status.loading {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .message {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-        
-        .message.user {
-            background: #667eea;
-            color: white;
-            margin-left: auto;
-        }
-        
-        .message.assistant {
-            background: #f1f3f4;
-            color: #333;
-        }
-    </style>
+    <title>PMERIT - Breaking Poverty Through Education</title>
+    
+    <!-- Existing CSS Files (matching your GitHub structure) -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/chat.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="dev-badge">🚀 LOCAL DEVELOPMENT</div>
-            <h1>✖ PMERIT - Gabriel AI</h1>
-            <p>Breaking poverty cycles through accessible education</p>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#" class="logo">PMERIT</a>
+            <nav class="nav-actions">
+                <a href="#" class="btn btn-secondary">Support</a>
+                <a href="#" class="btn btn-primary">Start Learning</a>
+            </nav>
         </div>
-        
-        <div class="chat-container">
-            <div id="connection-status" class="connection-status loading">
-                Connecting to Gabriel AI...
-            </div>
-            
-            <div id="chat-messages" class="chat-messages">
-                <div class="message assistant">
-                    <strong>Gabriel AI:</strong> Hello! I'm Gabriel, your AI educational tutor. I'm here to help you build skills for remote work and break free from poverty. What would you like to learn today?
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Empowering Learning Through Innovation</h1>
+                <p class="hero-subtitle">Accessible, high-quality education through innovative technology, empowering learners to achieve academic and personal success</p>
+            </section>
+
+            <!-- Chat Interface -->
+            <section class="chat-container">
+                <div id="connection-status" class="connection-status loading">
+                    Connecting to Gabriel AI Educational Services...
                 </div>
-            </div>
-            
-            <div class="chat-input-area">
-                <input type="text" id="chat-input" class="chat-input" placeholder="Ask about courses, learning paths, or career advice...">
-                <button id="send-button" class="send-button">Send</button>
-            </div>
+                
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message assistant">
+                        <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Ask about courses, learning paths, or your goals...">
+                    <button id="send-button" class="send-button">Send</button>
+                </div>
+            </section>
         </div>
-    </div>
-    
+    </main>
+
+    <!-- Existing JS Files (matching your GitHub structure) -->
     <script src="assets/js/api.js"></script>
+    <script src="assets/js/chat.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
