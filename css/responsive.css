@@ -1,36 +1,68 @@
-/* Mobile Fix - Prevent 404 Error */
+/* Mobile Responsive Design - 404 Error Fix */
 
-/* Tablet adjustments */
+/* Tablet Layout (769px - 1024px) */
 @media (max-width: 1024px) {
     .main-container {
         grid-template-columns: 260px 1fr 260px;
-        gap: 0.8rem;
-        padding: 0.8rem;
-    }
-    
-    .sidebar, .right-sidebar {
-        padding: 1.2rem;
-    }
-}
-
-/* Mobile layout - Fixed to prevent 404 */
-@media (max-width: 768px) {
-    :root {
-        --header-height: 60px;
-    }
-    
-    body {
-        overflow-x: hidden;
-        overflow-y: auto; /* Allow page scroll on mobile */
+        gap: 1rem;
+        padding: 1rem;
     }
     
     .header-content {
+        padding: 0 1.2rem;
+    }
+    
+    .nav-actions {
+        gap: 0.8rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.8rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        padding: 1.3rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Layout (up to 768px) - CRITICAL 404 FIX */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 65px;
+    }
+    
+    body {
+        overflow-x: hidden; /* Prevent horizontal scroll only */
+        overflow-y: auto; /* Allow vertical scrolling on mobile */
+    }
+    
+    /* Mobile header - simplified */
+    .header-content {
         padding: 0 1rem;
+        height: var(--header-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         flex-wrap: nowrap;
     }
     
     .logo {
         font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+    
+    .header-center {
+        margin: 0 0.8rem;
+    }
+    
+    .language-selector select {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
     }
     
     .nav-actions {
@@ -42,36 +74,38 @@
         font-size: 0.75rem;
     }
     
-    /* Mobile main container */
+    /* Mobile Layout - Flexible approach instead of strict grid */
     .main-container {
         display: flex;
         flex-direction: column;
-        gap: 0.8rem;
-        padding: 0.8rem;
-        margin-top: var(--header-height);
         min-height: calc(100vh - var(--header-height));
-        height: auto; /* Allow natural height */
-        overflow: visible;
-    }
-    
-    /* Mobile sidebars */
-    .sidebar, .right-sidebar {
-        flex-shrink: 0;
-        height: auto;
-        max-height: 80px;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        cursor: pointer;
+        gap: 1rem;
         padding: 1rem;
-        position: relative;
+        margin-top: var(--header-height);
     }
     
-    .sidebar.expanded, .right-sidebar.expanded {
+    /* Left Sidebar - Collapsible */
+    .sidebar {
+        order: 1;
+        background: rgba(255,255,255,0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    
+    .sidebar:not(.expanded) {
+        height: 80px;
+    }
+    
+    .sidebar.expanded {
+        height: auto;
         max-height: 400px;
         overflow-y: auto;
     }
     
-    /* Mobile toggle indicators */
     .sidebar::before {
         content: "📱 Quick Actions - Tap to expand ▼";
         display: block;
@@ -79,10 +113,92 @@
         font-size: 0.8rem;
         color: #666;
         font-weight: 600;
-        padding: 0.5rem;
+        padding: 1rem;
         background: rgba(102,126,234,0.1);
-        border-radius: 8px;
-        margin-bottom: 1rem;
+        margin: 1rem;
+        border-radius: 10px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .sidebar.expanded::before {
+        content: "📱 Quick Actions - Tap to collapse ▲";
+    }
+    
+    .sidebar-header {
+        display: none;
+    }
+    
+    .sidebar .sidebar-grid {
+        display: none;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        padding: 0 1rem 1rem;
+    }
+    
+    .sidebar.expanded .sidebar-grid {
+        display: grid;
+    }
+    
+    .sidebar-item {
+        padding: 0.8rem 0.4rem;
+        gap: 0.4rem;
+    }
+    
+    .sidebar-item .icon {
+        font-size: 1.1rem;
+    }
+    
+    .sidebar-item .label {
+        font-size: 0.7rem;
+    }
+    
+    /* Chat Container - Main content */
+    .chat-container {
+        order: 2;
+        flex: 1;
+        min-height: 400px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chat-header {
+        padding: 1.2rem;
+        text-align: center;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .chat-header p {
+        font-size: 0.8rem;
+    }
+    
+    /* Right Sidebar - Collapsible */
+    .right-sidebar {
+        order: 3;
+        background: rgba(255,255,255,0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    
+    .right-sidebar:not(.expanded) {
+        height: 70px;
+    }
+    
+    .right-sidebar.expanded {
+        height: auto;
+        max-height: 500px;
+        overflow-y: auto;
     }
     
     .right-sidebar::before {
@@ -92,69 +208,31 @@
         font-size: 0.8rem;
         color: #666;
         font-weight: 600;
-        padding: 0.5rem;
+        padding: 1rem;
         background: rgba(102,126,234,0.1);
-        border-radius: 8px;
-        margin-bottom: 1rem;
-    }
-    
-    .sidebar.expanded::before {
-        content: "📱 Quick Actions - Tap to collapse ▲";
+        margin: 1rem;
+        border-radius: 10px;
+        position: relative;
+        z-index: 10;
     }
     
     .right-sidebar.expanded::before {
         content: "🧠 Assessments - Tap to collapse ▲";
     }
     
-    /* Hide headers on mobile to save space */
-    .sidebar-header, .panel-header {
+    .right-sidebar .panel-header {
         display: none;
     }
     
-    /* Compact sidebar content */
-    .sidebar-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        margin-top: 0;
+    .right-sidebar .assessment-cards {
+        display: none;
+        gap: 1rem;
+        padding: 0 1rem 1rem;
     }
     
-    .sidebar-item {
-        padding: 0.6rem 0.4rem;
-        font-size: 0.7rem;
-    }
-    
-    .sidebar-item .icon {
-        font-size: 1rem;
-    }
-    
-    .sidebar-item .label {
-        font-size: 0.65rem;
-    }
-    
-    /* Chat container mobile */
-    .chat-container {
-        flex: 1;
-        min-height: 400px;
-        height: auto;
-        overflow: visible;
-    }
-    
-    .chat-header {
-        padding: 1.2rem 1rem;
-    }
-    
-    .chat-header h1 {
-        font-size: 1.3rem;
-    }
-    
-    .chat-header p {
-        font-size: 0.9rem;
-    }
-    
-    /* Assessment cards mobile */
-    .assessment-cards {
-        gap: 0.8rem;
-        margin-top: 0;
+    .right-sidebar.expanded .assessment-cards {
+        display: flex;
+        flex-direction: column;
     }
     
     .assessment-card {
@@ -166,28 +244,49 @@
     }
     
     .assessment-card p {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Status indicator mobile adjustments */
+    .status-indicator {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 0.75rem;
     }
 }
 
-/* Small mobile */
+/* Small Mobile (up to 480px) */
 @media (max-width: 480px) {
+    .header-content {
+        padding: 0 0.8rem;
+    }
+    
     .logo {
         font-size: 1.2rem;
     }
     
-    .btn {
+    .language-selector select {
         padding: 0.3rem 0.5rem;
         font-size: 0.7rem;
     }
     
-    .main-container {
-        padding: 0.5rem;
-        gap: 0.5rem;
+    .btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
     }
     
-    .sidebar-grid {
+    .main-container {
+        gap: 0.8rem;
+        padding: 0.8rem;
+    }
+    
+    .sidebar .sidebar-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chat-header {
+        padding: 1rem;
     }
     
     .chat-header h1 {
@@ -195,14 +294,59 @@
     }
     
     .chat-header p {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
 }
 
-/* Touch friendly */
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+    :root {
+        --header-height: 50px;
+    }
+    
+    .main-container {
+        flex-direction: row;
+        min-height: calc(100vh - var(--header-height));
+    }
+    
+    .sidebar, .right-sidebar {
+        order: initial;
+        flex: 0 0 200px;
+        height: auto;
+        max-height: none;
+    }
+    
+    .sidebar::before, .right-sidebar::before {
+        display: none;
+    }
+    
+    .sidebar-header, .panel-header {
+        display: none;
+    }
+    
+    .sidebar .sidebar-grid, .right-sidebar .assessment-cards {
+        display: block;
+    }
+    
+    .chat-container {
+        order: 2;
+        flex: 1;
+    }
+    
+    .chat-header {
+        padding: 0.8rem;
+    }
+}
+
+/* Touch-friendly adjustments */
 @media (hover: none) and (pointer: coarse) {
-    .sidebar-item, .assessment-card, .btn {
+    .sidebar-item, .assessment-card, .control-btn {
         min-height: 44px;
+    }
+    
+    .btn {
+        min-height: 38px;
+        min-width: 60px;
     }
     
     .sidebar::before, .right-sidebar::before {
@@ -210,5 +354,26 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+
+/* High DPI optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo, .chat-header h1 {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .sidebar, .right-sidebar {
+        transition: none !important;
     }
 }

@@ -555,3 +555,84 @@ body {
         font-size: 1.8rem;
     }
 }
+
+/* Desktop Scaling Improvements - Targeted Fix */
+@media (min-width: 1200px) {
+    .main-container {
+        max-width: 1400px;
+        margin: var(--header-height) auto 0;
+        padding: 1.2rem;
+        gap: 1.2rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        min-width: 300px;
+        max-width: 320px;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .chat-header p {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .main-container {
+        max-width: 1600px;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        min-width: 340px;
+        max-width: 360px;
+    }
+}
+
+/* Better height management for shorter screens */
+@media (max-height: 700px) {
+    :root {
+        --header-height: 50px;
+    }
+    
+    .chat-header {
+        padding: 1rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        padding: 1rem;
+    }
+    
+    .sidebar-grid {
+        gap: 0.6rem;
+    }
+    
+    .assessment-cards {
+        gap: 0.8rem;
+    }
+}
+
+/* Ultra-wide screen optimization */
+@media (min-width: 1600px) {
+    .main-container {
+        max-width: 1800px;
+        gap: 2rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        min-width: 380px;
+        max-width: 400px;
+    }
+    
+    .chat-header h1 {
+        font-size: 2rem;
+    }
+}

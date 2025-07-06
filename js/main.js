@@ -645,3 +645,51 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Mobile sidebar toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const rightSidebar = document.querySelector('.right-sidebar');
+    
+    // Left sidebar toggle
+    if (sidebar) {
+        sidebar.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                this.classList.toggle('expanded');
+            }
+        });
+    }
+    
+    // Right sidebar toggle
+    if (rightSidebar) {
+        rightSidebar.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                this.classList.toggle('expanded');
+            }
+        });
+    }
+    
+    // Close sidebars when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('expanded')) {
+                sidebar.classList.remove('expanded');
+            }
+            if (!rightSidebar.contains(e.target) && rightSidebar.classList.contains('expanded')) {
+                rightSidebar.classList.remove('expanded');
+            }
+        }
+    });
+    
+    // Handle orientation change
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('expanded');
+                rightSidebar.classList.remove('expanded');
+            }
+        }, 100);
+    });
+});
