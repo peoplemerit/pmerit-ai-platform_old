@@ -19,14 +19,13 @@
     box-sizing: border-box;
 }
 
-/* GitHub Copilot Recommendation: Allow internal scrolling, prevent page scroll */
 body {
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     height: 100vh;
-    overflow: hidden; /* Prevent page scroll */
+    overflow: hidden; /* Critical: Prevents page scrolling */
 }
 
 /* Fixed Header */
@@ -146,48 +145,28 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* GitHub Copilot Recommendation: Flexible grid with min-height instead of fixed height */
+/* Main Container - Fixed Height Grid */
 .main-container {
     display: grid;
     grid-template-columns: 280px 1fr 280px;
     gap: 1rem;
     padding: 1rem;
     margin-top: var(--header-height);
-    min-height: calc(100vh - var(--header-height));
-    max-height: calc(100vh - var(--header-height));
-    overflow: hidden; /* Prevent container overflow */
+    height: calc(100vh - var(--header-height));
+    max-width: 100%;
+    overflow: hidden; /* Prevents any internal scrolling */
 }
 
-/* GitHub Copilot Recommendation: Allow internal scrolling */
+/* Beautiful Sidebars - Fixed Height */
 .sidebar, .right-sidebar {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(20px);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
-    border: 1px solid rgba(255,255,255,0.3);
-    min-height: 0; /* Allow flexbox shrinking */
-    overflow-y: auto; /* Enable internal scrolling */
-    max-height: 100%;
-}
-
-/* Mobile toggle - hidden on desktop */
-.mobile-toggle {
-    display: none;
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0.5rem;
-    background: rgba(102,126,234,0.1);
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
-
-.sidebar-content {
-    height: 100%;
     overflow-y: auto;
+    border: 1px solid rgba(255,255,255,0.3);
+    height: 100%; /* Critical: Fixed height */
 }
 
 .sidebar-header {
@@ -334,7 +313,7 @@ body {
     font-weight: 600;
 }
 
-/* Chat Container - GitHub Copilot Recommendation: Flexible height */
+/* Chat Container - Fixed Height */
 .chat-container {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(20px);
@@ -342,10 +321,9 @@ body {
     box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(255,255,255,0.3);
-    min-height: 0; /* Allow flexbox shrinking */
-    max-height: 100%;
     overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.3);
+    height: 100%; /* Critical: Fixed height */
 }
 
 .chat-header {
@@ -353,7 +331,7 @@ body {
     padding: 1.5rem;
     text-align: center;
     border-bottom: 1px solid #e9ecef;
-    flex-shrink: 0; /* Prevent header shrinking */
+    flex-shrink: 0; /* Prevents shrinking */
 }
 
 .chat-header h1 {
@@ -517,42 +495,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
-}
-
-/* Additional mobile fixes */
-@media (max-width: 768px) {
-    body {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-    
-    .main-container {
-        min-height: calc(100vh - var(--header-height));
-        height: auto;
-        overflow: visible;
-    }
-    
-    .sidebar-content {
-        display: none;
-    }
-    
-    .sidebar.expanded .sidebar-content,
-    .right-sidebar.expanded .sidebar-content {
-        display: block;
-    }
-}
-
-/* Fix viewport scaling */
-@media (max-width: 480px) {
-    .main-container {
-        padding: 0.3rem;
-    }
-    
-    .chat-messages {
-        font-size: 0.85rem;
-    }
-    
-    .message-content {
-        padding: 0.6rem 0.8rem;
-    }
 }

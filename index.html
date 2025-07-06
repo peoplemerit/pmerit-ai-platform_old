@@ -34,59 +34,53 @@
         </div>
     </header>
 
-    <!-- Main Application Container -->
+    <!-- Main Application Container - Fixed Height -->
     <main class="main-container">
         <!-- Left Sidebar -->
-        <aside class="sidebar" id="left-sidebar">
-            <div class="mobile-toggle" onclick="toggleSidebar('left')">
-                📱 Quick Actions - Tap to expand ▼
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="avatar-circle">
+                    <span class="avatar-icon">🤖</span>
+                </div>
+                <h3>Gabriel AI</h3>
+                <p>Your Learning Guide</p>
+                
+                <div class="quick-actions">
+                    <label class="toggle">
+                        <input type="checkbox" id="tts-toggle">
+                        <span>🔊 Speech</span>
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" id="dark-mode">
+                        <span>🌙 Dark</span>
+                    </label>
+                </div>
             </div>
             
-            <div class="sidebar-content">
-                <div class="sidebar-header">
-                    <div class="avatar-circle">
-                        <span class="avatar-icon">🤖</span>
-                    </div>
-                    <h3>Gabriel AI</h3>
-                    <p>Your Learning Guide</p>
-                    
-                    <div class="quick-actions">
-                        <label class="toggle">
-                            <input type="checkbox" id="tts-toggle">
-                            <span>🔊 Speech</span>
-                        </label>
-                        <label class="toggle">
-                            <input type="checkbox" id="dark-mode">
-                            <span>🌙 Dark</span>
-                        </label>
-                    </div>
+            <div class="sidebar-grid">
+                <div class="sidebar-item" data-panel="profile">
+                    <span class="icon">👤</span>
+                    <span class="label">Profile</span>
                 </div>
-                
-                <div class="sidebar-grid">
-                    <div class="sidebar-item" data-panel="profile">
-                        <span class="icon">👤</span>
-                        <span class="label">Profile</span>
-                    </div>
-                    <div class="sidebar-item" data-panel="settings">
-                        <span class="icon">⚙️</span>
-                        <span class="label">Settings</span>
-                    </div>
-                    <div class="sidebar-item" data-panel="assessments">
-                        <span class="icon">📋</span>
-                        <span class="label">Tests</span>
-                    </div>
-                    <div class="sidebar-item" data-panel="subjects">
-                        <span class="icon">📚</span>
-                        <span class="label">Subjects</span>
-                    </div>
-                    <div class="sidebar-item" data-panel="progress">
-                        <span class="icon">📊</span>
-                        <span class="label">Progress</span>
-                    </div>
-                    <div class="sidebar-item" data-panel="help">
-                        <span class="icon">❓</span>
-                        <span class="label">Help</span>
-                    </div>
+                <div class="sidebar-item" data-panel="settings">
+                    <span class="icon">⚙️</span>
+                    <span class="label">Settings</span>
+                </div>
+                <div class="sidebar-item" data-panel="assessments">
+                    <span class="icon">📋</span>
+                    <span class="label">Tests</span>
+                </div>
+                <div class="sidebar-item" data-panel="subjects">
+                    <span class="icon">📚</span>
+                    <span class="label">Subjects</span>
+                </div>
+                <div class="sidebar-item" data-panel="progress">
+                    <span class="icon">📊</span>
+                    <span class="label">Progress</span>
+                </div>
+                <div class="sidebar-item" data-panel="help">
+                    <span class="icon">❓</span>
+                    <span class="label">Help</span>
                 </div>
             </div>
         </aside>
@@ -131,45 +125,39 @@
         </section>
 
         <!-- Right Sidebar - Assessments -->
-        <aside class="right-sidebar" id="right-sidebar">
-            <div class="mobile-toggle" onclick="toggleSidebar('right')">
-                🧠 Assessments - Tap to expand ▼
+        <aside class="right-sidebar">
+            <div class="panel-header">
+                <h3>🧠 Discover Your Path</h3>
+                <p>Personalized assessments</p>
             </div>
             
-            <div class="sidebar-content">
-                <div class="panel-header">
-                    <h3>🧠 Discover Your Path</h3>
-                    <p>Personalized assessments</p>
+            <div class="assessment-cards">
+                <div class="assessment-card" onclick="startAssessment('learning-style')">
+                    <span class="card-icon">🎯</span>
+                    <h4>Learning Style</h4>
+                    <p>Discover how you learn best</p>
+                    <span class="card-action">Start →</span>
                 </div>
                 
-                <div class="assessment-cards">
-                    <div class="assessment-card" onclick="startAssessment('learning-style')">
-                        <span class="card-icon">🎯</span>
-                        <h4>Learning Style</h4>
-                        <p>Discover how you learn best</p>
-                        <span class="card-action">Start →</span>
-                    </div>
-                    
-                    <div class="assessment-card" onclick="startAssessment('interest-profiler')">
-                        <span class="card-icon">💡</span>
-                        <h4>Interest Profiler</h4>
-                        <p>Find your natural interests</p>
-                        <span class="card-action">Explore →</span>
-                    </div>
-                    
-                    <div class="assessment-card" onclick="startAssessment('skill-evaluation')">
-                        <span class="card-icon">⚡</span>
-                        <h4>Skills Test</h4>
-                        <p>Assess current abilities</p>
-                        <span class="card-action">Evaluate →</span>
-                    </div>
-                    
-                    <div class="assessment-card" onclick="startAssessment('goal-setting')">
-                        <span class="card-icon">🚀</span>
-                        <h4>Goal Setting</h4>
-                        <p>Define your objectives</p>
-                        <span class="card-action">Set Goals →</span>
-                    </div>
+                <div class="assessment-card" onclick="startAssessment('interest-profiler')">
+                    <span class="card-icon">💡</span>
+                    <h4>Interest Profiler</h4>
+                    <p>Find your natural interests</p>
+                    <span class="card-action">Explore →</span>
+                </div>
+                
+                <div class="assessment-card" onclick="startAssessment('skill-evaluation')">
+                    <span class="card-icon">⚡</span>
+                    <h4>Skills Test</h4>
+                    <p>Assess current abilities</p>
+                    <span class="card-action">Evaluate →</span>
+                </div>
+                
+                <div class="assessment-card" onclick="startAssessment('goal-setting')">
+                    <span class="card-icon">🚀</span>
+                    <h4>Goal Setting</h4>
+                    <p>Define your objectives</p>
+                    <span class="card-action">Set Goals →</span>
                 </div>
             </div>
         </aside>
