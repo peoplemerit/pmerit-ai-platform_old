@@ -2,201 +2,476 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PMERIT - Empowering Learning Through Innovation</title>
-    
-    <!-- Modular CSS Files -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/chat.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 PMERIT - Empowering Learning Through Innovation</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --card-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --border-radius: 15px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-header {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            height: var(--header-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+        }
+
+        .header-center {
+            text-align: center;
+            flex: 1;
+        }
+
+        .header-center h1 {
+            font-size: 1.4rem;
+            color: white;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+        }
+
+        .header-center p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .btn-pricing, .btn-login {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-register {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            margin-top: var(--header-height);
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .sidebar, .right-sidebar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .sidebar-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .sidebar-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.2rem;
+        }
+
+        .sidebar-item .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .chat-container {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        .chat-header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            background: rgba(102,126,234,0.05);
+        }
+
+        .chat-header h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            min-height: 300px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(102,126,234,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 1rem;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        #chat-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .assessment-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .assessment-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .assessment-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+                flex-wrap: wrap;
+            }
+
+            .header-center {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .nav-actions {
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .sidebar, .right-sidebar {
+                order: 1;
+            }
+
+            .chat-container {
+                order: 2;
+            }
+
+            .sidebar-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.8rem;
+            }
+
+            .sidebar-item {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .chat-header h1 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 0.5rem;
+            }
+
+            .sidebar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn-pricing {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- App Container -->
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="logo">🎓 PMERIT</div>
-                
-                <!-- Center Title (Hidden on Mobile) -->
-                <div class="header-center">
-                    <h1>Empowering Learning Through Innovation</h1>
-                    <p>Empowering learning through accessible, high-quality education</p>
-                </div>
-                
-                <!-- Navigation Actions -->
-                <nav class="nav-actions">
-                    <select class="language-selector">
-                        <option value="en">🌍 English</option>
-                        <option value="yo">Yoruba</option>
-                        <option value="ig">Igbo</option>
-                        <option value="ha">Hausa</option>
-                    </select>
-                    <button class="btn btn-pricing">💰 Pricing</button>
-                    <button class="btn btn-signin">Sign In</button>
-                    <button class="btn btn-primary">Start Learning</button>
-                </nav>
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#" class="logo">🎓 PMERIT</a>
+            <div class="header-center">
+                <h1>Empowering Learning Through Innovation</h1>
+                <p>Empowering learning through accessible, high-quality education</p>
             </div>
-        </header>
+            <nav class="nav-actions">
+                <button class="btn btn-pricing">💰 Pricing</button>
+                <button class="btn btn-login" onclick="showSignIn()">Sign In</button>
+                <button class="btn btn-register" onclick="showSignIn()">Start Learning</button>
+            </nav>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Left Sidebar -->
-            <aside class="sidebar-left" id="leftSidebar">
-                <div class="sidebar-header">
-                    <div class="sidebar-toggle" id="leftToggle">
-                        📱 Quick Actions - Tap to expand ▼
-                    </div>
+    <main class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="avatar-circle">🤖</div>
+                <h3>Gabriel AI</h3>
+                <p>Your Learning Guide</p>
+            </div>
+            
+            <div class="sidebar-grid">
+                <div class="sidebar-item">
+                    <span class="icon">👤</span>
+                    <span class="label">My Profile</span>
                 </div>
-                <div class="sidebar-content">
-                    <!-- Avatar Section -->
-                    <div class="avatar-section">
-                        <div class="avatar-container">
-                            <div class="avatar-circle">
-                                <span class="avatar-icon">🤖</span>
-                            </div>
-                            <div class="avatar-info">
-                                <h3>Gabriel AI</h3>
-                                <p>Your Learning Guide</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions Grid -->
-                    <div class="quick-actions">
-                        <div class="action-item" data-action="text-to-speech">
-                            <span class="icon">🎧</span>
-                            <span class="label">Text-to-Speech</span>
-                        </div>
-                        <div class="action-item" data-action="dark-mode">
-                            <span class="icon">🌙</span>
-                            <span class="label">Dark Mode</span>
-                        </div>
-                        <div class="action-item" data-action="my-profile">
-                            <span class="icon">👤</span>
-                            <span class="label">My Profile</span>
-                        </div>
-                        <div class="action-item" data-action="settings">
-                            <span class="icon">⚙️</span>
-                            <span class="label">Settings</span>
-                        </div>
-                        <div class="action-item" data-action="assessments">
-                            <span class="icon">📋</span>
-                            <span class="label">Assessments</span>
-                        </div>
-                        <div class="action-item" data-action="subjects">
-                            <span class="icon">📚</span>
-                            <span class="label">Subjects</span>
-                        </div>
-                        <div class="action-item" data-action="progress">
-                            <span class="icon">📊</span>
-                            <span class="label">Progress</span>
-                        </div>
-                        <div class="action-item" data-action="help">
-                            <span class="icon">❓</span>
-                            <span class="label">Help</span>
-                        </div>
-                    </div>
+                <div class="sidebar-item">
+                    <span class="icon">⚙️</span>
+                    <span class="label">Settings</span>
                 </div>
-            </aside>
-
-            <!-- Chat Container -->
-            <section class="chat-container">
-                <!-- Chat Header -->
-                <div class="chat-header">
-                    <h1>Empowering Learning Through Innovation</h1>
-                    <p>Empowering learning through accessible, high-quality education</p>
+                <div class="sidebar-item">
+                    <span class="icon">📋</span>
+                    <span class="label">Assessments</span>
                 </div>
-
-                <!-- Chat Messages -->
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message ai-message">
-                        <div class="message-content">
-                            <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
-                        </div>
-                    </div>
+                <div class="sidebar-item">
+                    <span class="icon">📚</span>
+                    <span class="label">Subjects</span>
                 </div>
-
-                <!-- Chat Input -->
-                <div class="chat-input-container">
-                    <div class="chat-input-wrapper">
-                        <input 
-                            type="text" 
-                            id="chatInput" 
-                            placeholder="Ask about courses, learning paths, or your goals..."
-                            maxlength="1000"
-                        >
-                        <button id="sendButton" class="send-button">
-                            <span class="send-icon">→</span>
-                        </button>
-                    </div>
-                    
-                    <div class="chat-footer">
-                        <div class="footer-left">
-                            <span class="char-count">0/1000</span>
-                        </div>
-                        <div class="footer-center">
-                            <span class="status-item">📝 Virtual Human Mode</span>
-                            <span class="status-item">📖 Read About</span>
-                        </div>
-                        <div class="footer-right">
-                            <span class="status-connected">✅ Connected to Educational Services</span>
-                        </div>
-                    </div>
+                <div class="sidebar-item">
+                    <span class="icon">📊</span>
+                    <span class="label">Progress</span>
                 </div>
-            </section>
-
-            <!-- Right Sidebar -->
-            <aside class="sidebar-right" id="rightSidebar">
-                <div class="sidebar-header">
-                    <div class="sidebar-toggle" id="rightToggle">
-                        🧠 Assessments - Tap to expand ▼
-                    </div>
+                <div class="sidebar-item">
+                    <span class="icon">❓</span>
+                    <span class="label">Help</span>
                 </div>
-                <div class="sidebar-content">
-                    <!-- Discovery Section -->
-                    <div class="discovery-section">
-                        <div class="section-header">
-                            <span class="section-icon">🧠</span>
-                            <h3>Discover Your Path</h3>
-                        </div>
-                        <p>Personalized assessments to guide your learning journey</p>
-                    </div>
+            </div>
+        </aside>
 
-                    <!-- Assessment Cards -->
-                    <div class="assessment-cards">
-                        <div class="assessment-card" data-assessment="learning-style">
-                            <div class="card-header">
-                                <span class="card-icon">🎯</span>
-                                <h4>Learning Style Assessment</h4>
-                            </div>
-                            <p>Discover how you learn best and personalize your experience</p>
-                            <button class="assessment-btn">Start Assessment →</button>
-                        </div>
-
-                        <div class="assessment-card" data-assessment="interest-profiler">
-                            <div class="card-header">
-                                <span class="card-icon">💡</span>
-                                <h4>Interest Profiler</h4>
-                            </div>
-                            <p>Explore subjects and fields that match your natural interests</p>
-                            <button class="assessment-btn">Discover Interests →</button>
-                        </div>
-                    </div>
+        <section class="chat-container">
+            <div class="chat-header">
+                <h1>Empowering Learning Through Innovation</h1>
+                <p>Empowering learning through accessible, high-quality education</p>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message">
+                    <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
                 </div>
-            </aside>
-        </main>
-    </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about courses, learning paths, or your goals..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">→</button>
+            </div>
+        </section>
 
-    <!-- Modular JavaScript Files -->
-    <script src="js/main.js"></script>
-    <script src="js/chat.js"></script>
-    <script src="js/auth.js"></script>
+        <aside class="right-sidebar">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary-color);">🧠 Discover Your Path</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">Personalized assessments to guide your learning journey</p>
+            </div>
+            
+            <div class="assessment-card">
+                <div class="card-icon">🎯</div>
+                <h4>Learning Style Assessment</h4>
+                <p>Discover how you learn best and personalize your experience</p>
+            </div>
+            
+            <div class="assessment-card">
+                <div class="card-icon">💡</div>
+                <h4>Interest Profiler</h4>
+                <p>Explore subjects and fields that match your natural interests</p>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+            
+            if (input.value.trim()) {
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message';
+                userMessage.innerHTML = `<strong>You:</strong> ${input.value}`;
+                messages.appendChild(userMessage);
+                
+                setTimeout(() => {
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'message';
+                    aiMessage.innerHTML = `<strong>Gabriel AI:</strong> Thank you for your question! I'm here to help you explore learning opportunities and develop your skills. Our platform focuses on accessible education that creates real opportunities for growth and development.`;
+                    messages.appendChild(aiMessage);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function showSignIn() {
+            alert('🔐 Sign-in functionality coming soon! For now, you can explore our educational features and chat with Gabriel AI.');
+        }
+    </script>
 </body>
 </html>
