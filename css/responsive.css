@@ -1,4 +1,17 @@
-/* Perfect Mobile Responsive Design - No Scrolling */
+/* GitHub Copilot Responsive Recommendations - Fix Mobile 404 & Scaling */
+
+/* Better Desktop Scaling (1025px+) */
+@media (min-width: 1400px) {
+    .main-container {
+        grid-template-columns: 320px 1fr 320px;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.8rem;
+    }
+}
 
 /* Tablet Layout (769px - 1024px) */
 @media (max-width: 1024px) {
@@ -32,20 +45,35 @@
     .chat-header p {
         font-size: 0.85rem;
     }
-}
-
-/* Mobile Layout (up to 768px) - Critical Fixes */
-@media (max-width: 768px) {
-    :root {
-        --header-height: 70px; /* Slightly taller for mobile */
+    
+    .sidebar-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.8rem;
     }
     
-    /* Mobile header - no wrapping */
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .avatar-icon {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Layout (up to 768px) - GitHub Copilot Fixes */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 60px;
+    }
+    
+    /* Fix header layout - prevent wrapping */
     .header-content {
         padding: 0 0.8rem;
         height: var(--header-height);
         align-items: center;
-        flex-wrap: nowrap; /* Prevent wrapping */
+        flex-wrap: nowrap;
+        min-width: 0; /* Allow flex items to shrink */
     }
     
     .logo {
@@ -54,7 +82,7 @@
     }
     
     .header-center {
-        flex: 0 0 auto; /* Don't grow */
+        flex: 0 0 auto;
         margin: 0 0.5rem;
     }
     
@@ -73,42 +101,36 @@
         font-size: 0.7rem;
     }
     
-    /* Mobile Stack Layout - NO SCROLLING */
+    /* GitHub Copilot: Flexible mobile layout instead of strict grid */
     .main-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr auto;
+        display: flex;
+        flex-direction: column;
         gap: 0.5rem;
         padding: 0.5rem;
-        height: calc(100vh - var(--header-height));
-        overflow: hidden; /* Critical for mobile */
+        margin-top: var(--header-height);
+        min-height: calc(100vh - var(--header-height));
+        max-height: calc(100vh - var(--header-height));
+        overflow: hidden;
     }
     
-    /* Collapsible Left Sidebar */
-    .sidebar {
-        order: 1;
+    /* Mobile sidebars - GitHub Copilot: Use max-height with internal scroll */
+    .sidebar, .right-sidebar {
+        flex-shrink: 0;
+        padding: 0.8rem;
         max-height: 80px;
         overflow: hidden;
         transition: max-height 0.3s ease;
-        padding: 0.8rem;
         position: relative;
-        cursor: pointer;
     }
     
-    .sidebar.expanded {
-        max-height: 300px;
+    .sidebar.expanded, .right-sidebar.expanded {
+        max-height: 80vh; /* GitHub Copilot: Allow internal scrolling */
+        overflow-y: auto;
     }
     
-    .sidebar::before {
-        content: "📱 Quick Actions - Tap to expand ▼";
+    /* Show mobile toggles */
+    .mobile-toggle {
         display: block;
-        text-align: center;
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        font-weight: 600;
-        cursor: pointer;
-        padding: 0.5rem;
-        background: rgba(102,126,234,0.1);
-        border-radius: 8px;
         position: absolute;
         top: 0.8rem;
         left: 0.8rem;
@@ -116,18 +138,38 @@
         z-index: 10;
     }
     
-    .sidebar.expanded::before {
-        content: "📱 Quick Actions - Tap to collapse ▲";
+    .sidebar.expanded .mobile-toggle {
+        position: static;
+        margin-bottom: 1rem;
     }
     
+    }
+    
+    /* Hide sidebar content initially on mobile */
+    .sidebar-content, .right-sidebar .sidebar-content {
+        display: none;
+    }
+    
+    .sidebar.expanded .sidebar-content,
+    .right-sidebar.expanded .sidebar-content {
+        display: block;
+        margin-top: 0;
+    }
+    
+    /* Hide desktop headers on mobile */
     .sidebar-header {
-        display: none; /* Hide on mobile to save space */
+        display: none;
     }
     
-    .sidebar .sidebar-grid {
-        margin-top: 3rem; /* Space for tap indicator */
+    .panel-header {
+        display: none;
+    }
+    
+    /* Compact sidebar grid for mobile */
+    .sidebar-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.4rem;
+        margin-top: 0;
     }
     
     .sidebar-item {
@@ -143,10 +185,11 @@
         font-size: 0.65rem;
     }
     
-    /* Chat Container - Main Focus */
+    /* Chat container - main focus on mobile */
     .chat-container {
-        order: 2;
-        min-height: 0; /* Allow flexbox shrinking */
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
     }
     
     .chat-header {
@@ -162,50 +205,10 @@
         font-size: 0.75rem;
     }
     
-    /* Collapsible Right Sidebar */
-    .right-sidebar {
-        order: 3;
-        max-height: 60px;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        padding: 0.8rem;
-        position: relative;
-        cursor: pointer;
-    }
-    
-    .right-sidebar.expanded {
-        max-height: 400px;
-    }
-    
-    .right-sidebar::before {
-        content: "🧠 Assessments - Tap to expand ▼";
-        display: block;
-        text-align: center;
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        font-weight: 600;
-        cursor: pointer;
-        padding: 0.5rem;
-        background: rgba(102,126,234,0.1);
-        border-radius: 8px;
-        position: absolute;
-        top: 0.8rem;
-        left: 0.8rem;
-        right: 0.8rem;
-        z-index: 10;
-    }
-    
-    .right-sidebar.expanded::before {
-        content: "🧠 Assessments - Tap to collapse ▲";
-    }
-    
-    .right-sidebar .panel-header {
-        display: none; /* Hide on mobile */
-    }
-    
-    .right-sidebar .assessment-cards {
-        margin-top: 2.5rem; /* Space for tap indicator */
+    /* Assessment cards mobile */
+    .assessment-cards {
         gap: 0.8rem;
+        margin-top: 0;
     }
     
     .assessment-card {
@@ -220,7 +223,12 @@
         font-size: 0.7rem;
     }
     
-    /* Status indicator mobile adjustments */
+    .card-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Status indicator mobile */
     .status-indicator {
         bottom: 10px;
         right: 10px;
@@ -258,9 +266,8 @@
         padding: 0.6rem;
     }
     
-    .sidebar .sidebar-grid {
+    .sidebar-grid {
         grid-template-columns: repeat(2, 1fr);
-        margin-top: 2.5rem;
     }
     
     .chat-header {
@@ -276,34 +283,35 @@
     }
 }
 
-/* Landscape Mobile Orientation */
+/* Landscape Mobile Orientation - GitHub Copilot Fix */
 @media (max-width: 768px) and (orientation: landscape) {
     :root {
-        --header-height: 50px; /* Shorter for landscape */
+        --header-height: 50px;
     }
     
     .main-container {
+        display: grid;
         grid-template-columns: 200px 1fr 200px;
         grid-template-rows: 1fr;
         gap: 0.5rem;
+        flex-direction: row;
     }
     
     .sidebar, .right-sidebar {
-        order: initial;
         max-height: none;
         overflow-y: auto;
     }
     
-    .sidebar::before, .right-sidebar::before {
+    .mobile-toggle {
         display: none;
+    }
+    
+    .sidebar-content, .right-sidebar .sidebar-content {
+        display: block;
     }
     
     .sidebar-header, .panel-header {
         display: none;
-    }
-    
-    .chat-container {
-        order: initial;
     }
     
     .chat-header {
@@ -314,17 +322,17 @@
         font-size: 1.1rem;
     }
     
-    .sidebar .sidebar-grid {
-        margin-top: 0;
+    .sidebar-grid {
         grid-template-columns: repeat(2, 1fr);
+        margin-top: 0;
     }
     
-    .right-sidebar .assessment-cards {
+    .assessment-cards {
         margin-top: 0;
     }
 }
 
-/* Touch-friendly adjustments for all mobile devices */
+/* Touch-friendly adjustments - GitHub Copilot Accessibility */
 @media (hover: none) and (pointer: coarse) {
     .sidebar-item, .assessment-card, .control-btn {
         min-height: 44px; /* iOS accessibility minimum */
@@ -335,11 +343,16 @@
         min-width: 60px;
     }
     
-    .sidebar::before, .right-sidebar::before {
+    .mobile-toggle {
         min-height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    .send-btn, .attach-btn {
+        min-width: 44px;
+        min-height: 44px;
     }
 }
 
@@ -387,4 +400,9 @@ body.dark-mode .assessment-card {
     background: #34495e;
     border-color: #4a5f7a;
     color: var(--text-primary);
+}
+
+body.dark-mode .mobile-toggle {
+    background: rgba(52,73,94,0.8);
+    color: #b0b0b0;
 }

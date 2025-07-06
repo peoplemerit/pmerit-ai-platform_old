@@ -511,3 +511,52 @@ window.startAssessment = startAssessment;
 window.showLogin = showLogin;
 window.showRegister = showRegister;
 window.updateStatus = updateStatus;
+
+/**
+ * Toggle sidebar for mobile - GitHub Copilot Implementation
+ */
+function toggleSidebar(side) {
+    const sidebar = document.getElementById(side === 'left' ? 'left-sidebar' : 'right-sidebar');
+    if (!sidebar) return;
+    
+    const isExpanded = sidebar.classList.contains('expanded');
+    
+    // Close other sidebar first on mobile
+    if (window.innerWidth <= 768) {
+        const otherSidebar = document.getElementById(side === 'left' ? 'right-sidebar' : 'left-sidebar');
+        if (otherSidebar) {
+            otherSidebar.classList.remove('expanded');
+        }
+    }
+    
+    // Toggle current sidebar
+    sidebar.classList.toggle('expanded', !isExpanded);
+    
+    // Update toggle text
+    const toggle = sidebar.querySelector('.mobile-toggle');
+    if (toggle) {
+        const baseName = side === 'left' ? '📱 Quick Actions' : '🧠 Assessments';
+        toggle.textContent = isExpanded ? 
+            `${baseName} - Tap to expand ▼` : 
+            `${baseName} - Tap to collapse ▲`;
+    }
+}
+
+// Auto-close sidebars when clicking on chat area on mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+        chatContainer.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                const leftSidebar = document.getElementById('left-sidebar');
+                const rightSidebar = document.getElementById('right-sidebar');
+                
+                if (leftSidebar) leftSidebar.classList.remove('expanded');
+                if (rightSidebar) rightSidebar.classList.remove('expanded');
+            }
+        });
+    }
+});
+
+// Export for global access
+window.toggleSidebar = toggleSidebar;

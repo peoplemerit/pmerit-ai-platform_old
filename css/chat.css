@@ -1,16 +1,16 @@
-/* Perfect Chat Interface - Fixed Height Design */
+/* GitHub Copilot Chat Interface - Internal Scrolling Design */
 
-/* Chat Messages Area - Fixed Height */
+/* Chat Messages Area - GitHub Copilot: Enable internal scrolling */
 .chat-messages {
     flex: 1;
     padding: 1rem;
-    overflow-y: auto;
     background: #fafafa;
     margin: 0.8rem;
     border-radius: 10px;
     border: 1px solid #e9ecef;
-    min-height: 0; /* Critical for flexbox */
-    max-height: 100%; /* Prevents overflow */
+    min-height: 0; /* GitHub Copilot: Critical for flexbox */
+    max-height: 100%;
+    overflow-y: auto; /* GitHub Copilot: Enable internal scrolling */
 }
 
 .message {
@@ -74,7 +74,7 @@
     padding: 1rem;
     background: white;
     border-top: 1px solid #e9ecef;
-    flex-shrink: 0; /* Prevents shrinking */
+    flex-shrink: 0; /* GitHub Copilot: Prevent shrinking */
 }
 
 .input-wrapper {
@@ -101,6 +101,7 @@
     font-size: 0.9rem;
     outline: none;
     color: var(--text-primary);
+    min-width: 0; /* Allow input to shrink */
 }
 
 #chat-input::placeholder {
@@ -112,6 +113,7 @@
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    flex-shrink: 0;
 }
 
 .attach-btn, .send-btn {
@@ -176,6 +178,7 @@
     font-size: 0.75rem;
     transition: all 0.3s ease;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 .control-btn:hover {
@@ -269,7 +272,7 @@
     background: rgba(102,126,234,0.5);
 }
 
-/* Mobile chat adjustments */
+/* Mobile chat adjustments - GitHub Copilot */
 @media (max-width: 768px) {
     .chat-messages {
         margin: 0.5rem;
@@ -309,11 +312,13 @@
     .chat-controls {
         margin-top: 0.6rem;
         padding-top: 0.6rem;
+        flex-wrap: wrap;
     }
     
     .control-btn {
         padding: 0.3rem 0.6rem;
         font-size: 0.7rem;
+        margin-bottom: 0.3rem;
     }
     
     .word-count {
