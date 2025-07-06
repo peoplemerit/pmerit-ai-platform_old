@@ -602,3 +602,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Mobile sidebar toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const rightSidebar = document.querySelector('.right-sidebar');
+    
+    if (sidebar) {
+        sidebar.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && e.target === this) {
+                this.classList.toggle('expanded');
+                
+                // Close other sidebar
+                if (rightSidebar && rightSidebar.classList.contains('expanded')) {
+                    rightSidebar.classList.remove('expanded');
+                }
+            }
+        });
+    }
+    
+    if (rightSidebar) {
+        rightSidebar.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && e.target === this) {
+                this.classList.toggle('expanded');
+                
+                // Close other sidebar
+                if (sidebar && sidebar.classList.contains('expanded')) {
+                    sidebar.classList.remove('expanded');
+                }
+            }
+        });
+    }
+    
+    // Close sidebars when clicking on chat area on mobile
+    const chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+        chatContainer.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                if (sidebar) sidebar.classList.remove('expanded');
+                if (rightSidebar) rightSidebar.classList.remove('expanded');
+            }
+        });
+    }
+});
