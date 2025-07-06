@@ -1,88 +1,223 @@
-/* Responsive Design for PMERIT */
-
-@media (max-width: 1200px) {
-    .right-sidebar {
-        width: 280px;
-    }
-    .sidebar {
-        width: 260px;
-    }
-}
-
 @media (max-width: 1024px) {
     .main-container {
-        flex-direction: column;
+        grid-template-columns: 250px 1fr 280px;
+        gap: 0.8rem;
+        padding: 0.8rem;
     }
     
-    .sidebar {
-        width: 100%;
-        border-radius: 0;
-        padding: 1rem;
-    }
-    
-    .right-sidebar {
-        width: 100%;
-        border-radius: 0;
-        padding: 1rem;
-    }
-    
-    .chat-container {
-        margin: 1rem;
-        border-radius: 0;
-    }
-    
-    .sidebar-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .chat-header h1 {
+        font-size: 1.8rem;
     }
 }
 
 @media (max-width: 768px) {
+    :root {
+        --header-height: 80px;
+    }
+    
     .header-content {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+        padding: 0 1rem;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: var(--header-height);
     }
     
     .logo {
         font-size: 1.5rem;
+        order: 1;
+    }
+    
+    .header-center {
+        order: 3;
+        flex-basis: 100%;
+        margin-top: 0.5rem;
+        justify-content: flex-start;
     }
     
     .nav-actions {
-        flex-direction: row;
-        gap: 1rem;
+        order: 2;
+        gap: 0.5rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
     }
     
     .main-container {
-        padding-top: 120px;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        margin-top: var(--header-height);
     }
     
-    .chat-messages {
-        min-height: 250px;
+    .sidebar {
+        order: 1;
+        padding: 1rem;
+        max-height: 200px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        position: relative;
     }
     
-    .message {
-        max-width: 95%;
+    .sidebar.expanded {
+        max-height: 400px;
+    }
+    
+    .sidebar::before {
+        content: "📱 Quick Actions - Tap to expand ▼";
+        display: block;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        background: rgba(102,126,234,0.1);
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .sidebar.expanded::before {
+        content: "📱 Quick Actions - Tap to collapse ▲";
+    }
+    
+    .right-sidebar {
+        order: 3;
+        padding: 1rem;
+        max-height: 150px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        position: relative;
+    }
+    
+    .right-sidebar.expanded {
+        max-height: 500px;
+    }
+    
+    .right-sidebar::before {
+        content: "🧠 Assessments - Tap to expand ▼";
+        display: block;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        background: rgba(102,126,234,0.1);
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .right-sidebar.expanded::before {
+        content: "🧠 Assessments - Tap to collapse ▲";
+    }
+    
+    .avatar-circle {
+        display: none;
+    }
+    
+    .sidebar-header h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sidebar-header p {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .quick-actions {
+        margin-top: 0.5rem;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .toggle {
+        font-size: 0.8rem;
     }
     
     .sidebar-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.5rem;
     }
     
     .sidebar-item {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.8rem;
+        padding: 0.6rem 0.4rem;
+        font-size: 0.7rem;
     }
-}
-
-@media (max-width: 480px) {
-    .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
+    
+    .sidebar-item .icon {
+        font-size: 1rem;
+    }
+    
+    .sidebar-item .label {
+        font-size: 0.7rem;
+    }
+    
+    .chat-container {
+        order: 2;
+        min-height: 400px;
+    }
+    
+    .chat-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .chat-header p {
+        font-size: 0.85rem;
+    }
+    
+    .chat-messages {
+        padding: 1rem;
+        min-height: 200px;
+    }
+    
+    .message-content {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+        max-width: 95%;
+    }
+    
+    .chat-input-area {
+        padding: 0.8rem;
+        flex-direction: column;
+        gap: 0.5rem;
     }
     
     .chat-input {
+        padding: 0.8rem;
         font-size: 0.9rem;
+        border-radius: 20px;
+    }
+    
+    .send-btn {
+        width: 45px;
+        height: 45px;
+        align-self: flex-end;
+    }
+    
+    .chat-controls {
+        padding: 0.8rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .assessment-cards {
+        gap: 0.8rem;
     }
     
     .assessment-card {
@@ -90,6 +225,101 @@
     }
     
     .assessment-card h4 {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
+    
+    .assessment-card p {
+        font-size: 0.8rem;
+    }
+    
+    .status-indicator {
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 0.5rem;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+    }
+    
+    .main-container {
+        gap: 0.3rem;
+        padding: 0.3rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        padding: 0.8rem;
+    }
+    
+    .sidebar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chat-header {
+        padding: 1rem 0.8rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .chat-header p {
+        font-size: 0.8rem;
+    }
+    
+    .chat-input-area {
+        padding: 0.6rem;
+    }
+    
+    .chat-input {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .send-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .sidebar-item, .assessment-card, .control-btn {
+        min-height: 44px;
+    }
+    
+    .btn {
+        min-height: 40px;
+        min-width: 80px;
+    }
+    
+    .send-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+.chat-messages::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.right-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track,
+.right-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.right-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(102,126,234,0.3);
+    border-radius: 3px;
 }
