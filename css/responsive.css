@@ -1,64 +1,90 @@
+/* Mobile Responsive Design for Gabriel AI */
+
+/* Tablet Layout (768px - 1024px) */
 @media (max-width: 1024px) {
     .main-container {
-        grid-template-columns: 250px 1fr 280px;
-        gap: 0.8rem;
-        padding: 0.8rem;
+        grid-template-columns: 250px 1fr 250px;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .header-content {
+        padding: 0 1.5rem;
+    }
+    
+    .nav-actions {
+        gap: 0.6rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .sidebar, .right-sidebar {
+        padding: 1.2rem;
     }
     
     .chat-header h1 {
         font-size: 1.8rem;
     }
+    
+    .chat-header p {
+        font-size: 0.95rem;
+    }
 }
 
+/* Mobile Layout (up to 768px) */
 @media (max-width: 768px) {
     :root {
-        --header-height: 80px;
+        --header-height: 60px;
     }
     
+    /* Mobile header adjustments */
     .header-content {
         padding: 0 1rem;
         flex-wrap: wrap;
-        height: auto;
-        min-height: var(--header-height);
+        gap: 0.5rem;
     }
     
     .logo {
         font-size: 1.5rem;
-        order: 1;
     }
     
     .header-center {
         order: 3;
         flex-basis: 100%;
         margin-top: 0.5rem;
-        justify-content: flex-start;
     }
     
     .nav-actions {
-        order: 2;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        flex-wrap: wrap;
     }
     
     .btn {
-        padding: 0.5rem 0.8rem;
+        padding: 0.4rem 0.8rem;
         font-size: 0.75rem;
     }
     
+    /* Mobile Grid Layout */
     .main-container {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr;
+        grid-template-rows: auto 1fr auto;
         gap: 0.5rem;
         padding: 0.5rem;
-        margin-top: var(--header-height);
+        height: calc(100vh - var(--header-height));
     }
     
+    /* Collapsible Sidebars */
     .sidebar {
         order: 1;
-        padding: 1rem;
-        max-height: 200px;
+        max-height: 120px;
         overflow: hidden;
         transition: max-height 0.3s ease;
+        padding: 1rem;
         position: relative;
+        cursor: pointer;
     }
     
     .sidebar.expanded {
@@ -76,7 +102,11 @@
         padding: 0.5rem;
         background: rgba(102,126,234,0.1);
         border-radius: 8px;
-        border: 1px solid #e9ecef;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        z-index: 10;
     }
     
     .sidebar.expanded::before {
@@ -85,11 +115,12 @@
     
     .right-sidebar {
         order: 3;
-        padding: 1rem;
-        max-height: 150px;
+        max-height: 100px;
         overflow: hidden;
         transition: max-height 0.3s ease;
+        padding: 1rem;
         position: relative;
+        cursor: pointer;
     }
     
     .right-sidebar.expanded {
@@ -107,39 +138,25 @@
         padding: 0.5rem;
         background: rgba(102,126,234,0.1);
         border-radius: 8px;
-        border: 1px solid #e9ecef;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        z-index: 10;
     }
     
     .right-sidebar.expanded::before {
         content: "🧠 Assessments - Tap to collapse ▲";
     }
     
-    .avatar-circle {
+    /* Hide sidebar headers on mobile to save space */
+    .sidebar-header {
         display: none;
     }
     
-    .sidebar-header h3 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .sidebar-header p {
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .quick-actions {
-        margin-top: 0.5rem;
-        flex-direction: row;
-        justify-content: center;
-        gap: 1rem;
-    }
-    
-    .toggle {
-        font-size: 0.8rem;
-    }
-    
-    .sidebar-grid {
+    /* Adjust sidebar content for mobile */
+    .sidebar .sidebar-grid {
+        margin-top: 3rem;
         grid-template-columns: repeat(3, 1fr);
         gap: 0.5rem;
     }
@@ -157,6 +174,7 @@
         font-size: 0.7rem;
     }
     
+    /* Chat container adjustments */
     .chat-container {
         order: 2;
         min-height: 400px;
@@ -175,48 +193,9 @@
         font-size: 0.85rem;
     }
     
-    .chat-messages {
-        padding: 1rem;
-        min-height: 200px;
-    }
-    
-    .message-content {
-        padding: 0.8rem 1rem;
-        font-size: 0.9rem;
-        max-width: 95%;
-    }
-    
-    .chat-input-area {
-        padding: 0.8rem;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .chat-input {
-        padding: 0.8rem;
-        font-size: 0.9rem;
-        border-radius: 20px;
-    }
-    
-    .send-btn {
-        width: 45px;
-        height: 45px;
-        align-self: flex-end;
-    }
-    
-    .chat-controls {
-        padding: 0.8rem;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        justify-content: center;
-    }
-    
-    .control-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.75rem;
-    }
-    
-    .assessment-cards {
+    /* Right sidebar mobile adjustments */
+    .right-sidebar .assessment-cards {
+        margin-top: 3rem;
         gap: 0.8rem;
     }
     
@@ -232,6 +211,7 @@
         font-size: 0.8rem;
     }
     
+    /* Status indicator adjustments */
     .status-indicator {
         bottom: 10px;
         right: 10px;
@@ -240,9 +220,10 @@
     }
 }
 
+/* Small Mobile (up to 480px) */
 @media (max-width: 480px) {
     .header-content {
-        padding: 0 0.5rem;
+        padding: 0 0.8rem;
     }
     
     .logo {
@@ -258,7 +239,7 @@
         padding: 0.8rem;
     }
     
-    .sidebar-grid {
+    .sidebar .sidebar-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     
@@ -273,53 +254,66 @@
     .chat-header p {
         font-size: 0.8rem;
     }
-    
-    .chat-input-area {
-        padding: 0.6rem;
+}
+
+/* Landscape mobile orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-container {
+        grid-template-columns: 200px 1fr 200px;
+        grid-template-rows: 1fr;
     }
     
-    .chat-input {
-        padding: 0.6rem;
-        font-size: 0.85rem;
+    .sidebar, .right-sidebar {
+        order: initial;
+        max-height: none;
     }
     
-    .send-btn {
-        width: 40px;
-        height: 40px;
+    .chat-container {
+        order: initial;
+    }
+    
+    .sidebar-header {
+        display: none;
+    }
+    
+    .chat-header {
+        padding: 1rem;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.3rem;
     }
 }
 
+/* Touch-friendly adjustments */
 @media (hover: none) and (pointer: coarse) {
     .sidebar-item, .assessment-card, .control-btn {
-        min-height: 44px;
+        min-height: 44px; /* iOS touch target minimum */
     }
     
     .btn {
         min-height: 40px;
         min-width: 80px;
     }
-    
-    .send-btn {
-        min-width: 44px;
-        min-height: 44px;
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo, .chat-header h1 {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 }
 
-.chat-messages::-webkit-scrollbar,
-.sidebar::-webkit-scrollbar,
-.right-sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-track,
-.sidebar::-webkit-scrollbar-track,
-.right-sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.chat-messages::-webkit-scrollbar-thumb,
-.sidebar::-webkit-scrollbar-thumb,
-.right-sidebar::-webkit-scrollbar-thumb {
-    background: rgba(102,126,234,0.3);
-    border-radius: 3px;
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .sidebar-item, .assessment-card, .btn {
+        transform: none !important;
+    }
 }

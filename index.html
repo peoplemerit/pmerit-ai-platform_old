@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PMERIT - Empowering Learning Through Innovation</title>
+    <title>🎓 PMERIT - Empowering Learning Through Innovation</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/chat.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Fixed Header -->
     <header class="main-header">
         <div class="header-content">
             <a href="#" class="logo">🎓 PMERIT</a>
@@ -17,18 +21,22 @@
                     <select id="language-select">
                         <option value="en">🌍 English</option>
                         <option value="yo">🌍 Yoruba</option>
+                        <option value="ig">🌍 Igbo</option>
+                        <option value="ha">🌍 Hausa</option>
                     </select>
                 </div>
             </div>
             <nav class="nav-actions">
                 <button class="btn btn-pricing">💰 Pricing</button>
-                <button class="btn btn-login">Sign In</button>
-                <button class="btn btn-register">Start Learning</button>
+                <button class="btn btn-login" onclick="showLogin()">Sign In</button>
+                <button class="btn btn-register" onclick="showRegister()">Start Learning</button>
             </nav>
         </div>
     </header>
 
-    <div class="main-container">
+    <!-- Main Application Container -->
+    <main class="main-container">
+        <!-- Left Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="avatar-circle">
@@ -36,6 +44,7 @@
                 </div>
                 <h3>Gabriel AI</h3>
                 <p>Your Learning Guide</p>
+                
                 <div class="quick-actions">
                     <label class="toggle">
                         <input type="checkbox" id="tts-toggle">
@@ -76,29 +85,46 @@
             </div>
         </aside>
 
-        <main class="chat-container">
+        <!-- Center Chat Container -->
+        <section class="chat-container">
             <div class="chat-header">
                 <h1>Empowering Learning Through Innovation</h1>
-                <p>Accessible, high-quality education for global opportunities</p>
+                <p>Accessible, high-quality education through innovative technology, empowering learners to achieve academic and personal success</p>
             </div>
             
-            <div class="chat-messages" id="chat-messages"></div>
-            
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chat-input" placeholder="Ask about courses, learning paths, or your goals..." onkeypress="handleKeyPress(event)">
-                <div class="input-actions">
-                    <button class="send-btn" onclick="sendMessage()">➤</button>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message assistant">
+                    <div class="message-content">
+                        <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
+                    </div>
                 </div>
             </div>
             
-            <div class="chat-controls">
-                <button class="control-btn" onclick="startVoiceInput()">🎤</button>
-                <span class="word-count" id="word-count">0/1000</span>
-                <button class="control-btn mode-toggle" onclick="toggleVirtualHuman()">🎭 Virtual Human Mode</button>
-                <button class="control-btn" onclick="showMissionInfo()">📖 Read About</button>
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <input type="text" 
+                           id="chat-input" 
+                           placeholder="Ask about courses, learning paths, or your goals..."
+                           onkeypress="handleKeyPress(event)">
+                    <div class="input-actions">
+                        <button class="attach-btn" title="Attach file">📎</button>
+                        <button class="send-btn" onclick="sendMessage()">
+                            <span class="send-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-controls">
+                    <button class="control-btn" onclick="startVoiceInput()">🎤</button>
+                    <span class="word-count">0/1000</span>
+                    <button class="control-btn mode-toggle" onclick="toggleVirtualHuman()">
+                        🎭 Virtual Human Mode
+                    </button>
+                    <button class="control-btn" onclick="showMissionInfo()">📖 Read About</button>
+                </div>
             </div>
-        </main>
+        </section>
 
+        <!-- Right Sidebar - Assessments -->
         <aside class="right-sidebar">
             <div class="panel-header">
                 <h3>🧠 Discover Your Path</h3>
@@ -107,31 +133,42 @@
             
             <div class="assessment-cards">
                 <div class="assessment-card" onclick="startAssessment('learning-style')">
-                    <div class="card-icon">🎯</div>
+                    <span class="card-icon">🎯</span>
                     <h4>Learning Style Assessment</h4>
                     <p>Discover how you learn best and personalize your experience</p>
                     <span class="card-action">Start Assessment →</span>
                 </div>
                 
                 <div class="assessment-card" onclick="startAssessment('interest-profiler')">
-                    <div class="card-icon">💡</div>
+                    <span class="card-icon">💡</span>
                     <h4>Interest Profiler</h4>
                     <p>Explore subjects and fields that match your natural interests</p>
                     <span class="card-action">Discover Interests →</span>
                 </div>
                 
                 <div class="assessment-card" onclick="startAssessment('skill-evaluation')">
-                    <div class="card-icon">⚡</div>
+                    <span class="card-icon">⚡</span>
                     <h4>Skills Evaluation</h4>
                     <p>Assess your current abilities and identify growth opportunities</p>
                     <span class="card-action">Evaluate Skills →</span>
                 </div>
+                
+                <div class="assessment-card" onclick="startAssessment('goal-setting')">
+                    <span class="card-icon">🚀</span>
+                    <h4>Goal Setting Workshop</h4>
+                    <p>Define your academic and personal development objectives</p>
+                    <span class="card-action">Set Goals →</span>
+                </div>
             </div>
         </aside>
+    </main>
+
+    <!-- Status Indicator -->
+    <div class="status-indicator" id="status-indicator">
+        🔧 Connecting to Educational Services...
     </div>
 
-    <div class="status-indicator" id="status-indicator">🔧 Connecting to Educational Services...</div>
-
+    <!-- Scripts -->
     <script src="js/main.js"></script>
     <script src="js/chat.js"></script>
     <script src="js/auth.js"></script>

@@ -1,390 +1,311 @@
+/**
+ * Authentication Module for Gabriel AI
+ * Handles user authentication and session management
+ */
+
+// Authentication state
 let authState = {
     isLoggedIn: false,
     currentUser: null,
-    sessionToken: null
+    sessionToken: null,
+    loginAttempts: 0,
+    lastLoginAttempt: null
 };
 
-function showLogin() {
-    console.log('Login functionality coming soon!');
-    updateStatus('🔐 Login system in development', 'info');
-    
-    if (typeof addMessageToChat === 'function') {
-        addMessageToChat(
-            '🔐 User authentication system is being developed! For now, you can explore all our educational features without an account. Full user profiles and progress tracking will be available soon.',
-            'assistant'
-        );
-    }
-}
-
-function showRegister() {
-    console.log('Registration functionality coming soon!');
-    updateStatus('📝 Registration system in development', 'info');
-    
-    if (typeof addMessageToChat === 'function') {
-        addMessageToChat(
-            '📝 User registration is coming soon! Currently, you can explore our learning platform, take assessments, and chat with Gabriel AI without creating an account. We\'re building a comprehensive user system with progress tracking and personalized learning paths.',
-            'assistant'
-        );
-    }
-}
-
-async function handleLogin(credentials) {
-    console.log('Login attempt:', credentials);
-    return { success: false, message: 'Authentication system in development' };
-}
-
-async function handleRegistration(userData) {
-    console.log('Registration attempt:', userData);
-    return { success: false, message: 'Registration system in development' };
-}
-
+/**
+ * Check authentication status on page load
+ */
 function checkAuthStatus() {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-        authState.sessionToken = token;
-        authState.isLoggedIn = true;
-    }
+    const savedToken = localStorage.getItem('authToken');
+    const savedUser = localStorage.getItem('currentUser');
     
-    return authState.isLoggedIn;
+    if (savedToken && savedUser) {
+        try {
+            authState.sessionToken = savedToken;
+            authState.currentUser = JSON.parse(savedUser);
+            authState.isLoggedIn = true;
+            
+            updateUIForAuthenticatedUser();
+            updateStatus('✅ Welcome back!', 'info');
+        } catch (error) {
+            console.error('Error parsing saved user data:', error);
+            clearAuthData();
+        }
+    }
 }
 
-function logout() {
+/**
+ * Handle user login
+ */
+async function handleLogin(email, password) {
+    if (authState.loginAttempts >= 3) {
+        const timeSinceLastAttempt = Date.now() - authState.lastLoginAttempt;
+        if (timeSinceLastAttempt < 300000) { // 5 minutes
+            addMessageToChat('🔒 Too many login attempts. Please wait 5 minutes before trying again.', 'assistant');
+            return false;
+        }
+        authState.loginAttempts = 0;
+    }
+    
+    try {
+        // Simulate authentication (replace with real API call)
+        updateStatus('🔐 Authenticating...', 'connecting');
+        
+        // Demo authentication - replace with real backend call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // For demo purposes, accept any valid email format
+        if (isValidEmail(email) && password.length >= 6) {
+            const userData = {
+                id: 'demo_user_' + Date.now(),
+                email: email,
+                name: email.split('@')[0],
+                joinDate: new Date().toISOString(),
+                learningStyle: 'adaptive',
+                completedAssessments: [],
+                progress: {}
+            };
+            
+            authState.isLoggedIn = true;
+            authState.currentUser = userData;
+            authState.sessionToken = 'demo_token_' + Date.now();
+            authState.loginAttempts = 0;
+            
+            // Save to localStorage
+            localStorage.setItem('authToken', authState.sessionToken);
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            
+            updateUIForAuthenticatedUser();
+            updateStatus('✅ Successfully logged in!', 'working');
+            
+            addMessageToChat(
+                `🎉 Welcome to PMERIT, ${userData.name}! I'm excited to continue your learning journey. Based on your profile, I can provide personalized recommendations and track your progress. What would you like to work on today?`,
+                'assistant'
+            );
+            
+            return true;
+        } else {
+            throw new Error('Invalid credentials');
+        }
+    } catch (error) {
+        authState.loginAttempts++;
+        authState.lastLoginAttempt = Date.now();
+        
+        updateStatus('❌ Login failed', 'error');
+        addMessageToChat(
+            '🔐 Login failed. Please check your credentials. For demo purposes, use any valid email and a password with at least 6 characters.',
+            'assistant'
+        );
+        
+        return false;
+    }
+}
+
+/**
+ * Handle user registration
+ */
+async function handleRegistration(userData) {
+    try {
+        updateStatus('📝 Creating account...', 'connecting');
+        
+        // Validate required fields
+        if (!userData.email || !userData.password || !userData.name) {
+            throw new Error('Missing required fields');
+        }
+        
+        if (!isValidEmail(userData.email)) {
+            throw new Error('Invalid email format');
+        }
+        
+        if (userData.password.length < 6) {
+            throw new Error('Password must be at least 6 characters');
+        }
+        
+        // Simulate registration (replace with real API call)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        const newUser = {
+            id: 'user_' + Date.now(),
+            email: userData.email,
+            name: userData.name,
+            joinDate: new Date().toISOString(),
+            learningStyle: userData.learningStyle || 'adaptive',
+            interests: userData.interests || [],
+            completedAssessments: [],
+            progress: {}
+        };
+        
+        authState.isLoggedIn = true;
+        authState.currentUser = newUser;
+        authState.sessionToken = 'token_' + Date.now();
+        
+        // Save to localStorage
+        localStorage.setItem('authToken', authState.sessionToken);
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+        
+        updateUIForAuthenticatedUser();
+        updateStatus('✅ Account created successfully!', 'working');
+        
+        addMessageToChat(
+            `🎉 Welcome to PMERIT, ${newUser.name}! Your account has been created successfully. Let's start with a quick assessment to personalize your learning experience. Would you like to take the Learning Style Assessment first?`,
+            'assistant'
+        );
+        
+        return true;
+    } catch (error) {
+        updateStatus('❌ Registration failed', 'error');
+        addMessageToChat(
+            `📝 Registration failed: ${error.message}. Please try again with valid information.`,
+            'assistant'
+        );
+        
+        return false;
+    }
+}
+
+/**
+ * Handle user logout
+ */
+function handleLogout() {
     authState.isLoggedIn = false;
     authState.currentUser = null;
     authState.sessionToken = null;
     
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
-    
+    clearAuthData();
+    updateUIForGuestUser();
     updateStatus('👋 Logged out successfully', 'info');
+    
+    addMessageToChat(
+        '👋 You have been logged out. Thank you for using PMERIT! You can continue exploring our educational resources as a guest, or sign back in anytime to access your personalized learning journey.',
+        'assistant'
+    );
 }
 
-document.addEventListener('DOMContent 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+/**
+ * Clear authentication data
+ */
+function clearAuthData() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
 }
 
-.avatar-icon {
-    font-size: 2rem;
-    color: white;
-}
-
-.quick-actions {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.sidebar-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
-}
-
-.sidebar-item {
-    background: white;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    padding: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.sidebar-item:hover {
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102,126,234,0.2);
-}
-
-.sidebar-item.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-.sidebar-item .icon {
-    font-size: 1.2rem;
-}
-
-.sidebar-item .label {
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.chat-container {
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
-    box-shadow: var(--card-shadow);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.chat-header {
-    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
-    padding: 2rem;
-    text-align: center;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.chat-header h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-}
-
-.chat-header p {
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 1.5rem;
-    overflow-y: auto;
-    background: #fafafa;
-    min-height: 300px;
-}
-
-.chat-input-area {
-    padding: 1rem 1.5rem;
-    background: white;
-    border-top: 1px solid #e9ecef;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.chat-input {
-    flex: 1;
-    padding: 1rem;
-    border: 2px solid #e9ecef;
-    border-radius: 25px;
-    outline: none;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.chat-input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-}
-
-.send-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.send-btn:hover {
-    background: var(--secondary-color);
-    transform: scale(1.05);
-}
-
-.chat-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #f0f0f0;
-    background: white;
-}
-
-.control-btn {
-    background: none;
-    border: 1px solid #e9ecef;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-    color: var(--text-secondary);
-}
-
-.control-btn:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    background: rgba(102,126,234,0.05);
-}
-
-.word-count {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
-
-.panel-header {
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.panel-header h3 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-}
-
-.panel-header p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.assessment-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.assessment-card {
-    background: white;
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    padding: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.assessment-card:hover {
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102,126,234,0.15);
-}
-
-.card-icon {
-    font-size: 2rem;
-    margin-bottom: 0.8rem;
-}
-
-.assessment-card h4 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-}
-
-.assessment-card p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.8rem;
-    line-height: 1.4;
-}
-
-.card-action {
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.status-indicator {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--warning-color);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 15px rgba(255,152,0,0.3);
-    z-index: 1001;
-    transition: all 0.3s ease;
-}
-
-.status-indicator.working {
-    background: var(--success-color);
-}
-
-.status-indicator.connecting {
-    background: var(--warning-color);
-}
-
-.status-indicator.error {
-    background: var(--error-color);
-}
-
-.message {
-    margin-bottom: 1.5rem;
-    display: flex;
-    animation: fadeInUp 0.3s ease;
-}
-
-.message.user {
-    justify-content: flex-end;
-}
-
-.message.assistant {
-    justify-content: flex-start;
-}
-
-.message-content {
-    background: white;
-    padding: 1rem 1.2rem;
-    border-radius: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 80%;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-.message.user .message-content {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+/**
+ * Update UI for authenticated user
+ */
+function updateUIForAuthenticatedUser() {
+    const loginBtns = document.querySelectorAll('.btn-login');
+    const registerBtns = document.querySelectorAll('.btn-register');
+    
+    loginBtns.forEach(btn => {
+        btn.textContent = '👤 Profile';
+        btn.onclick = showUserProfile;
+    });
+    
+    registerBtns.forEach(btn => {
+        btn.textContent = '🚪 Logout';
+        btn.onclick = handleLogout;
+    });
+    
+    // Update sidebar with user info if avatar section exists
+    const avatarSection = document.querySelector('.sidebar-header h3');
+    if (avatarSection && authState.currentUser) {
+        avatarSection.textContent = authState.currentUser.name;
     }
 }
 
-body.dark-mode {
-    --text-primary: #e0e0e0;
-    --text-secondary: #b0b0b0;
-    --bg-light: #2c3e50;
+/**
+ * Update UI for guest user
+ */
+function updateUIForGuestUser() {
+    const loginBtns = document.querySelectorAll('.btn-login');
+    const registerBtns = document.querySelectorAll('.btn-register');
+    
+    loginBtns.forEach(btn => {
+        btn.textContent = 'Sign In';
+        btn.onclick = showLogin;
+    });
+    
+    registerBtns.forEach(btn => {
+        btn.textContent = 'Start Learning';
+        btn.onclick = showRegister;
+    });
+    
+    // Reset sidebar
+    const avatarSection = document.querySelector('.sidebar-header h3');
+    if (avatarSection) {
+        avatarSection.textContent = 'Gabriel AI';
+    }
 }
 
-body.dark-mode .sidebar,
-body.dark-mode .right-sidebar,
-body.dark-mode .chat-container {
-    background: rgba(44,62,80,0.95);
-    color: var(--text-primary);
+/**
+ * Show user profile
+ */
+function showUserProfile() {
+    if (!authState.currentUser) {
+        showLogin();
+        return;
+    }
+    
+    const user = authState.currentUser;
+    const profileMessage = `
+👤 **Your Profile**
+
+📧 **Email**: ${user.email}
+👤 **Name**: ${user.name}
+📅 **Member Since**: ${new Date(user.joinDate).toLocaleDateString()}
+🎯 **Learning Style**: ${user.learningStyle}
+📋 **Assessments Completed**: ${user.completedAssessments.length}
+
+**Learning Progress:**
+${Object.keys(user.progress).length > 0 ? 
+    Object.entries(user.progress).map(([subject, progress]) => 
+        `• ${subject}: ${progress}%`
+    ).join('\n') : 
+    '• No progress tracked yet - start learning to see your achievements!'}
+
+Would you like to update your profile, take more assessments, or continue learning?
+    `;
+    
+    addMessageToChat(profileMessage, 'assistant');
 }
 
-body.dark-mode .sidebar-item,
-body.dark-mode .assessment-card {
-    background: #34495e;
-    border-color: #4a5f7a;
+/**
+ * Validate email format
+ */
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
+
+/**
+ * Show login form (demo implementation)
+ */
+function showLogin() {
+    addMessageToChat(
+        '🔐 **Demo Login System**\n\nFor demonstration purposes, enter any valid email address and a password with at least 6 characters to log in.\n\nExample:\n• Email: demo@example.com\n• Password: password123\n\nFull authentication system is being developed for production!',
+        'assistant'
+    );
+}
+
+/**
+ * Show registration form (demo implementation)
+ */
+function showRegister() {
+    addMessageToChat(
+        '📝 **Demo Registration System**\n\nTo register for the demo:\n1. Use any valid email format\n2. Choose a password with at least 6 characters\n3. Provide your name\n\nExample:\n• Email: yourname@example.com\n• Password: mypassword\n• Name: Your Name\n\nComplete registration system with email verification is coming soon!',
+        'assistant'
+    );
+}
+
+// Initialize authentication on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthStatus();
+});
+
+// Export functions for global access
+window.authState = authState;
+window.handleLogin = handleLogin;
+window.handleRegistration = handleRegistration;
+window.handleLogout = handleLogout;
+window.showUserProfile = showUserProfile;
+window.checkAuthStatus = checkAuthStatus;
