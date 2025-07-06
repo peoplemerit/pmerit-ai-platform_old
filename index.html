@@ -23,6 +23,103 @@
             --header-height: 60px;
         }
 
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary-color: #93a9ff;
+            --secondary-color: #b293ff;
+            --accent-color: #ffb8fb;
+            --text-primary: #e0e0e0;
+            --text-secondary: #c0c0c0;
+            --bg-light: #1a1a2e;
+            --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1f 50%, #1f0f1f 100%);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .main-header,
+        body.dark-mode .sidebar,
+        body.dark-mode .right-sidebar,
+        body.dark-mode .chat-container {
+            background: rgba(30, 30, 46, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: var(--card-shadow);
+        }
+
+        body.dark-mode .language-selector select,
+        body.dark-mode .btn-pricing,
+        body.dark-mode .btn-login {
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        body.dark-mode .sidebar-header h3,
+        body.dark-mode .assessment-card h4,
+        body.dark-mode .panel-header h3,
+        body.dark-mode .card-action {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode .chat-header h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark-mode .sidebar-item,
+        body.dark-mode .assessment-card {
+            background: linear-gradient(135deg, #2a2a4a, #1a1a2e);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        body.dark-mode .sidebar-item:hover,
+        body.dark-mode .assessment-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(147, 169, 255, 0.3);
+        }
+
+        body.dark-mode .chat-messages {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .message-content {
+            background: #2a2a4a;
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .chat-input-container {
+            background: #1a1a2e;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode .input-wrapper {
+            background: #2a2a4a;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode #chat-input {
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .control-btn {
+            background: #2a2a4a;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+
+        body.dark-mode .chat-controls {
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        body.dark-mode .status-indicator {
+            box-shadow: 0 6px 20px rgba(76,175,80,0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -623,7 +720,6 @@
     </style>
 </head>
 <body>
-    <!-- Fixed Header -->
     <header class="main-header">
         <div class="header-content">
             <a href="#" class="logo">🎓 PMERIT</a>
@@ -645,9 +741,7 @@
         </div>
     </header>
 
-    <!-- Main Application Container -->
     <main class="main-container">
-        <!-- Left Sidebar -->
         <aside class="sidebar" id="leftSidebar">
             <div class="sidebar-header">
                 <div class="avatar-circle">
@@ -659,11 +753,11 @@
                 <div class="quick-actions">
                     <label class="toggle">
                         <input type="checkbox" id="tts-toggle">
-                        <span>🔊 Speech</span>
+                        <span>🔊 Text-to-Speech</span>
                     </label>
                     <label class="toggle">
                         <input type="checkbox" id="dark-mode">
-                        <span>🌙 Dark</span>
+                        <span>🌙 Dark Mode</span>
                     </label>
                 </div>
             </div>
@@ -671,7 +765,7 @@
             <div class="sidebar-grid">
                 <div class="sidebar-item">
                     <span class="icon">👤</span>
-                    <span class="label">Profile</span>
+                    <span class="label">My Profile</span>
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">⚙️</span>
@@ -679,7 +773,7 @@
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">📋</span>
-                    <span class="label">Tests</span>
+                    <span class="label">Assessments</span>
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">📚</span>
@@ -696,11 +790,10 @@
             </div>
         </aside>
 
-        <!-- Center Chat Container -->
         <section class="chat-container">
             <div class="chat-header">
                 <h1>Empowering Learning Through Innovation</h1>
-                <p>Accessible, high-quality education through innovative technology</p>
+                <p>Empowering learning through accessible, high-quality education</p>
             </div>
             
             <div class="chat-messages" id="chat-messages">
@@ -721,52 +814,50 @@
                 <div class="chat-controls">
                     <button class="control-btn">🎤</button>
                     <span class="word-count">0/1000</span>
-                    <button class="control-btn">🎭 Virtual Mode</button>
-                    <button class="control-btn">📖 Mission</button>
+                    <button class="control-btn">🎭 Virtual Human Mode</button>
+                    <button class="control-btn">📖 Read About</button>
                 </div>
             </div>
         </section>
 
-        <!-- Right Sidebar -->
         <aside class="right-sidebar" id="rightSidebar">
             <div class="panel-header">
                 <h3>🧠 Discover Your Path</h3>
-                <p>Personalized assessments</p>
+                <p>Personalized assessments to guide your learning journey</p>
             </div>
             
             <div class="assessment-cards">
                 <div class="assessment-card">
                     <span class="card-icon">🎯</span>
-                    <h4>Learning Style</h4>
-                    <p>Discover how you learn best</p>
-                    <span class="card-action">Start →</span>
+                    <h4>Learning Style Assessment</h4>
+                    <p>Discover how you learn best and personalize your experience</p>
+                    <span class="card-action">Start Assessment →</span>
                 </div>
                 
                 <div class="assessment-card">
                     <span class="card-icon">💡</span>
                     <h4>Interest Profiler</h4>
-                    <p>Find your natural interests</p>
-                    <span class="card-action">Explore →</span>
+                    <p>Explore subjects and fields that match your natural interests</p>
+                    <span class="card-action">Discover Interests →</span>
                 </div>
                 
                 <div class="assessment-card">
                     <span class="card-icon">⚡</span>
-                    <h4>Skills Test</h4>
-                    <p>Assess current abilities</p>
-                    <span class="card-action">Evaluate →</span>
+                    <h4>Skills Assessment</h4>
+                    <p>Assess your current abilities to identify strengths and areas for growth</p>
+                    <span class="card-action">Evaluate Skills →</span>
                 </div>
                 
                 <div class="assessment-card">
                     <span class="card-icon">🚀</span>
-                    <h4>Goal Setting</h4>
-                    <p>Define your objectives</p>
+                    <h4>Goal Setting Workshop</h4>
+                    <p>Define clear learning objectives and create a roadmap for success</p>
                     <span class="card-action">Set Goals →</span>
                 </div>
             </div>
         </aside>
     </main>
 
-    <!-- Status Indicator -->
     <div class="status-indicator">
         🟢 Connected to Educational Services
     </div>
@@ -808,7 +899,7 @@
                     }
                 }
             });
-            
+
             // Handle orientation change
             window.addEventListener('orientationchange', function() {
                 setTimeout(() => {
@@ -818,6 +909,26 @@
                     }
                 }, 100);
             });
+
+            // Dark mode toggle logic [cite: 13]
+            const darkModeCheckbox = document.getElementById('dark-mode');
+            if (darkModeCheckbox) {
+                // Load saved preference [cite: 13]
+                if (localStorage.getItem('darkMode') === 'enabled') {
+                    document.body.classList.add('dark-mode');
+                    darkModeCheckbox.checked = true;
+                }
+
+                darkModeCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        document.body.classList.add('dark-mode');
+                        localStorage.setItem('darkMode', 'enabled');
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                        localStorage.setItem('darkMode', 'disabled'); [cite: 14, 15]
+                    }
+                });
+            }
         });
 
         // Chat functionality
@@ -840,7 +951,6 @@
                     messages.appendChild(aiMessage);
                     messages.scrollTop = messages.scrollHeight;
                 }, 1000);
-                
                 input.value = '';
                 messages.scrollTop = messages.scrollHeight;
             }
@@ -853,28 +963,5 @@
             }
         });
     </script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const darkModeCheckbox = document.getElementById('dark-mode');
-    if (darkModeCheckbox) {
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            darkModeCheckbox.checked = true;
-        }
-
-        darkModeCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        });
-    }
-});
-</script>
-
 </body>
 </html>
