@@ -34,7 +34,7 @@
         </div>
     </header>
 
-    <!-- Main Application Container -->
+    <!-- Main Application Container - Fixed Height -->
     <main class="main-container">
         <!-- Left Sidebar -->
         <aside class="sidebar">
@@ -48,11 +48,11 @@
                 <div class="quick-actions">
                     <label class="toggle">
                         <input type="checkbox" id="tts-toggle">
-                        <span>🔊 Text-to-Speech</span>
+                        <span>🔊 Speech</span>
                     </label>
                     <label class="toggle">
                         <input type="checkbox" id="dark-mode">
-                        <span>🌙 Dark Mode</span>
+                        <span>🌙 Dark</span>
                     </label>
                 </div>
             </div>
@@ -60,7 +60,7 @@
             <div class="sidebar-grid">
                 <div class="sidebar-item" data-panel="profile">
                     <span class="icon">👤</span>
-                    <span class="label">My Profile</span>
+                    <span class="label">Profile</span>
                 </div>
                 <div class="sidebar-item" data-panel="settings">
                     <span class="icon">⚙️</span>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="sidebar-item" data-panel="assessments">
                     <span class="icon">📋</span>
-                    <span class="label">Assessments</span>
+                    <span class="label">Tests</span>
                 </div>
                 <div class="sidebar-item" data-panel="subjects">
                     <span class="icon">📚</span>
@@ -89,7 +89,7 @@
         <section class="chat-container">
             <div class="chat-header">
                 <h1>Empowering Learning Through Innovation</h1>
-                <p>Accessible, high-quality education through innovative technology, empowering learners to achieve academic and personal success</p>
+                <p>Accessible, high-quality education through innovative technology</p>
             </div>
             
             <div class="chat-messages" id="chat-messages">
@@ -117,9 +117,9 @@
                     <button class="control-btn" onclick="startVoiceInput()">🎤</button>
                     <span class="word-count">0/1000</span>
                     <button class="control-btn mode-toggle" onclick="toggleVirtualHuman()">
-                        🎭 Virtual Human Mode
+                        🎭 Virtual Mode
                     </button>
-                    <button class="control-btn" onclick="showMissionInfo()">📖 Read About</button>
+                    <button class="control-btn" onclick="showMissionInfo()">📖 Mission</button>
                 </div>
             </div>
         </section>
@@ -128,35 +128,35 @@
         <aside class="right-sidebar">
             <div class="panel-header">
                 <h3>🧠 Discover Your Path</h3>
-                <p>Personalized assessments to guide your learning journey</p>
+                <p>Personalized assessments</p>
             </div>
             
             <div class="assessment-cards">
                 <div class="assessment-card" onclick="startAssessment('learning-style')">
                     <span class="card-icon">🎯</span>
-                    <h4>Learning Style Assessment</h4>
-                    <p>Discover how you learn best and personalize your experience</p>
-                    <span class="card-action">Start Assessment →</span>
+                    <h4>Learning Style</h4>
+                    <p>Discover how you learn best</p>
+                    <span class="card-action">Start →</span>
                 </div>
                 
                 <div class="assessment-card" onclick="startAssessment('interest-profiler')">
                     <span class="card-icon">💡</span>
                     <h4>Interest Profiler</h4>
-                    <p>Explore subjects and fields that match your natural interests</p>
-                    <span class="card-action">Discover Interests →</span>
+                    <p>Find your natural interests</p>
+                    <span class="card-action">Explore →</span>
                 </div>
                 
                 <div class="assessment-card" onclick="startAssessment('skill-evaluation')">
                     <span class="card-icon">⚡</span>
-                    <h4>Skills Evaluation</h4>
-                    <p>Assess your current abilities and identify growth opportunities</p>
-                    <span class="card-action">Evaluate Skills →</span>
+                    <h4>Skills Test</h4>
+                    <p>Assess current abilities</p>
+                    <span class="card-action">Evaluate →</span>
                 </div>
                 
                 <div class="assessment-card" onclick="startAssessment('goal-setting')">
                     <span class="card-icon">🚀</span>
-                    <h4>Goal Setting Workshop</h4>
-                    <p>Define your academic and personal development objectives</p>
+                    <h4>Goal Setting</h4>
+                    <p>Define your objectives</p>
                     <span class="card-action">Set Goals →</span>
                 </div>
             </div>

@@ -1,19 +1,20 @@
-/* Chat Interface Styles for Gabriel AI */
+/* Perfect Chat Interface - Fixed Height Design */
 
-/* Chat Messages Area */
+/* Chat Messages Area - Fixed Height */
 .chat-messages {
     flex: 1;
-    padding: 1.5rem;
+    padding: 1rem;
     overflow-y: auto;
     background: #fafafa;
-    margin: 1rem;
+    margin: 0.8rem;
     border-radius: 10px;
     border: 1px solid #e9ecef;
-    max-height: 400px;
+    min-height: 0; /* Critical for flexbox */
+    max-height: 100%; /* Prevents overflow */
 }
 
 .message {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     display: flex;
     max-width: 85%;
     animation: fadeInUp 0.3s ease;
@@ -31,11 +32,11 @@
 
 .message-content {
     background: white;
-    padding: 1rem 1.2rem;
-    border-radius: 15px;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: relative;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.5;
 }
 
@@ -47,32 +48,33 @@
 .message.assistant .message-content::before {
     content: '';
     position: absolute;
-    left: -8px;
-    top: 12px;
+    left: -6px;
+    top: 10px;
     width: 0;
     height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-right: 8px solid white;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid white;
 }
 
 .message.user .message-content::before {
     content: '';
     position: absolute;
-    right: -8px;
-    top: 12px;
+    right: -6px;
+    top: 10px;
     width: 0;
     height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 8px solid var(--primary-color);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid var(--primary-color);
 }
 
-/* Chat Input Container */
+/* Chat Input Container - Fixed at Bottom */
 .chat-input-container {
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     background: white;
     border-top: 1px solid #e9ecef;
+    flex-shrink: 0; /* Prevents shrinking */
 }
 
 .input-wrapper {
@@ -81,8 +83,8 @@
     align-items: center;
     background: #f8f9fa;
     border: 2px solid #e9ecef;
-    border-radius: 25px;
-    padding: 0.5rem;
+    border-radius: 20px;
+    padding: 0.3rem;
     transition: all 0.3s ease;
 }
 
@@ -95,39 +97,40 @@
     flex: 1;
     border: none;
     background: transparent;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
     outline: none;
     color: var(--text-primary);
 }
 
 #chat-input::placeholder {
     color: var(--text-secondary);
+    font-size: 0.85rem;
 }
 
 .input-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
 }
 
 .attach-btn, .send-btn {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem;
     border-radius: 50%;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
 }
 
 .attach-btn {
     color: var(--text-secondary);
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .attach-btn:hover {
@@ -138,7 +141,7 @@
 .send-btn {
     background: var(--primary-color);
     color: white;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .send-btn:hover {
@@ -152,25 +155,25 @@
     transform: none;
 }
 
-/* Chat Controls */
+/* Chat Controls - Compact Design */
 .chat-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
     border-top: 1px solid #f0f0f0;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .control-btn {
     background: none;
     border: 1px solid #e9ecef;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    padding: 0.4rem 0.8rem;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
     color: var(--text-secondary);
 }
@@ -189,19 +192,20 @@
 }
 
 .word-count {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    padding: 0.5rem;
+    padding: 0.3rem;
 }
 
 /* Typing indicator */
 .typing-indicator {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    padding: 1rem;
+    gap: 0.6rem;
+    padding: 0.8rem;
     color: var(--text-secondary);
     font-style: italic;
+    font-size: 0.85rem;
 }
 
 .typing-dots {
@@ -210,8 +214,8 @@
 }
 
 .typing-dots span {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background: var(--primary-color);
     border-radius: 50%;
     animation: typing 1.4s infinite ease-in-out;
@@ -235,7 +239,7 @@
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;
@@ -249,7 +253,7 @@
 }
 
 .chat-messages::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
@@ -258,7 +262,7 @@
 
 .chat-messages::-webkit-scrollbar-thumb {
     background: rgba(102,126,234,0.3);
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 .chat-messages::-webkit-scrollbar-thumb:hover {
@@ -269,18 +273,18 @@
 @media (max-width: 768px) {
     .chat-messages {
         margin: 0.5rem;
-        padding: 1rem;
-        max-height: 300px;
+        padding: 0.8rem;
+        border-radius: 8px;
     }
     
     .message {
-        max-width: 95%;
+        max-width: 90%;
         margin-bottom: 1rem;
     }
     
     .message-content {
-        padding: 0.8rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.7rem 0.8rem;
+        font-size: 0.85rem;
     }
     
     .chat-input-container {
@@ -288,23 +292,32 @@
     }
     
     #chat-input {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    #chat-input::placeholder {
+        font-size: 0.8rem;
     }
     
     .attach-btn, .send-btn {
-        width: 35px;
-        height: 35px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
     }
     
     .chat-controls {
-        margin-top: 0.8rem;
-        padding-top: 0.8rem;
+        margin-top: 0.6rem;
+        padding-top: 0.6rem;
     }
     
     .control-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    
+    .word-count {
+        font-size: 0.7rem;
     }
 }
 
@@ -331,4 +344,13 @@ body.dark-mode .input-wrapper {
 
 body.dark-mode #chat-input {
     color: white;
+}
+
+body.dark-mode #chat-input::placeholder {
+    color: #95a5a6;
+}
+
+body.dark-mode .chat-input-container {
+    background: #2c3e50;
+    border-color: #4a5f7a;
 }
