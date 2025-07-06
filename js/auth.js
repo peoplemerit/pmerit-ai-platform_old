@@ -149,3 +149,69 @@ window.authModule = {
 };
 
 console.log('🔐 Gabriel AI Auth Module - Ready!');
+
+// Enhanced authentication functions for main page integration
+function enhanceMainPageAuth() {
+    const signInBtns = document.querySelectorAll('.btn-login');
+    const startLearningBtns = document.querySelectorAll('.btn-register');
+    
+    // Update sign in buttons
+    signInBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'signin.html';
+        });
+    });
+    
+    // Update start learning buttons
+    startLearningBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Check if already authenticated
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            if (isAuthenticated) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'signin.html';
+            }
+        });
+    });
+    
+    // Update header for authenticated users
+    checkAndUpdateHeader();
+}
+
+function checkAndUpdateHeader() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const userName = localStorage.getItem('userName');
+    
+    if (isAuthenticated && userName) {
+        // Update navigation for authenticated users
+        const navActions = document.querySelector('.nav-actions');
+        if (navActions) {
+            navActions.innerHTML = `
+                <button class="btn btn-pricing" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                <span style="color: white; font-weight: 600;">Welcome, ${userName}!</span>
+                <button class="btn btn-login" onclick="logout()">Logout</button>
+            `;
+        }
+    }
+}
+
+function logout() {
+    // Clear authentication data
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    
+    // Refresh page to update UI
+    window.location.reload();
+}
+
+// Initialize enhanced auth when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+        enhanceMainPageAuth();
+    }
+});

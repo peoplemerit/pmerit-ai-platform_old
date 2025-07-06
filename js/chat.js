@@ -247,3 +247,73 @@ window.chatModule = {
 };
 
 console.log('💬 Gabriel AI Chat Module - Ready!');
+
+// Enhanced chat functionality with backend integration
+async function sendMessageWithBackend() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message || chatState.isTyping) return;
+    
+    // Add user message to chat
+    addMessageToChat(message, 'user');
+    
+    // Clear input
+    input.value = '';
+    updateWordCount();
+    
+    // Save to history
+    chatState.messageHistory.push({
+        role: 'user',
+        content: message,
+        timestamp: new Date()
+    });
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    try {
+        // Try backend API first
+        const isConnected = await checkBackendConnection();
+        let response;
+        
+        if (isConnected) {
+            // Use backend API
+            const apiResponse = await API.chat.sendMessage(message, chatState.conversationContext);
+            response = apiResponse.answer || apiResponse.response || generateEducationalResponse(message);
+        } else {
+            // Fallback to local responses
+            response = generateEducationalResponse(message);
+        }
+        
+        hideTypingIndicator();
+        addMessageToChat(response, 'assistant');
+        
+        // Save AI response to history
+        chatState.messageHistory.push({
+            role: 'assistant',
+            content: response,
+            timestamp: new Date()
+        });
+        
+        // Update conversation context
+        chatState.conversationContext.push({
+            user: message,
+            assistant: response
+        });
+        
+    } catch (error) {
+        console.error('Chat error:', error);
+        hideTypingIndicator();
+        
+        // Fallback to local response
+        const fallbackResponse = generateEducationalResponse(message);
+        addMessageToChat(fallbackResponse, 'assistant');
+    }
+}
+
+// Override the original sendMessage function
+if (typeof sendMessage !== 'undefined') {
+    window.originalSendMessage = sendMessage;
+    window.sendMessage = sendMessageWithBackend;
+}

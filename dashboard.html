@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PMERIT Learning Platform</title>
+    
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Dashboard-specific styles -->
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(102,126,234,0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e9ecef;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #8b7700;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        
+        .recent-activity {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e9ecef;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(102,126,234,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">🎓 PMERIT</a>
+            <div class="header-center">
+                <h1>Learning Dashboard</h1>
+            </div>
+            <nav class="nav-actions">
+                <div class="user-menu">
+                    <span class="user-name" id="userName">Student</span>
+                    <button class="btn btn-login" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar" id="leftSidebar">
+            <div class="sidebar-header">
+                <div class="avatar-circle">
+                    <span class="avatar-icon">👤</span>
+                </div>
+                <h3 id="dashboardUserName">Welcome back!</h3>
+                <p>Continue your learning journey</p>
+            </div>
+            
+            <div class="sidebar-grid">
+                <div class="sidebar-item active">
+                    <span class="icon">📊</span>
+                    <span class="label">Dashboard</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateTo('courses')">
+                    <span class="icon">📚</span>
+                    <span class="label">My Courses</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateTo('assessments')">
+                    <span class="icon">📋</span>
+                    <span class="label">Assessments</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateTo('progress')">
+                    <span class="icon">📈</span>
+                    <span class="label">Progress</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateTo('certificates')">
+                    <span class="icon">🏆</span>
+                    <span class="label">Certificates</span>
+                </div>
+                <div class="sidebar-item" onclick="navigateTo('settings')">
+                    <span class="icon">⚙️</span>
+                    <span class="label">Settings</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Dashboard Content -->
+        <section class="chat-container">
+            <div class="chat-header">
+                <h1>Your Learning Journey</h1>
+                <p>Track your progress and continue growing your skills</p>
+            </div>
+            
+            <div style="padding: 2rem; overflow-y: auto; height: calc(100% - 120px);">
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div>Courses Enrolled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">67%</div>
+                        <div>Overall Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24h</div>
+                        <div>Study Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2</div>
+                        <div>Certificates</div>
+                    </div>
+                </div>
+
+                <!-- Current Courses -->
+                <h2 style="margin-bottom: 1rem; color: var(--primary-color);">📚 Current Courses</h2>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">💻</div>
+                            <div>
+                                <h3>Web Development Fundamentals</h3>
+                                <p style="color: var(--text-secondary); margin: 0;">Technology Track</p>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <p><strong>Progress:</strong> 75% Complete (9/12 modules)</p>
+                        <p><strong>Next:</strong> JavaScript Functions & Events</p>
+                        <button class="btn btn-register" style="margin-top: 1rem;">Continue Learning</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎨</div>
+                            <div>
+                                <h3>Digital Design Principles</h3>
+                                <p style="color: var(--text-secondary); margin: 0;">Creative Track</p>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                        <p><strong>Progress:</strong> 45% Complete (3/7 modules)</p>
+                        <p><strong>Next:</strong> Color Theory & Typography</p>
+                        <button class="btn btn-register" style="margin-top: 1rem;">Continue Learning</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">💼</div>
+                            <div>
+                                <h3>Project Management Essentials</h3>
+                                <p style="color: var(--text-secondary); margin: 0;">Business Track</p>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                        <p><strong>Progress:</strong> 90% Complete (8/9 modules)</p>
+                        <p><strong>Next:</strong> Final Project Submission</p>
+                        <button class="btn btn-register" style="margin-top: 1rem;">Continue Learning</button>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <h2 style="margin: 2rem 0 1rem; color: var(--primary-color);">🏆 Recent Achievements</h2>
+                <div class="dashboard-card">
+                    <div class="achievement-badge">
+                        <span>🌟</span> Course Completion: HTML & CSS Basics
+                    </div>
+                    <div class="achievement-badge">
+                        <span>📚</span> 7-Day Learning Streak
+                    </div>
+                    <div class="achievement-badge">
+                        <span>🎯</span> Assessment Perfect Score
+                    </div>
+                    <div class="achievement-badge">
+                        <span>💡</span> First Project Completed
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <h2 style="margin: 2rem 0 1rem; color: var(--primary-color);">📈 Recent Activity</h2>
+                <div class="recent-activity">
+                    <div class="activity-item">
+                        <div class="activity-icon">📖</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">Completed: JavaScript Variables & Data Types</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">✅</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">Passed Assessment: Web Design Quiz (95%)</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">1 day ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">🎯</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">Started: Digital Design Principles Course</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">3 days ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">💬</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">Chat with Gabriel AI: Career Guidance Session</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">5 days ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="panel-header">
+                <h3>🎯 Quick Actions</h3>
+                <p>Continue your learning journey</p>
+            </div>
+            
+            <div class="assessment-cards">
+                <div class="assessment-card" onclick="navigateTo('chat')">
+                    <span class="card-icon">💬</span>
+                    <h4>Chat with Gabriel AI</h4>
+                    <p>Get personalized learning guidance and support</p>
+                    <span class="card-action">Start Conversation →</span>
+                </div>
+                
+                <div class="assessment-card" onclick="navigateTo('assessment')">
+                    <span class="card-icon">📋</span>
+                    <h4>Take Assessment</h4>
+                    <p>Evaluate your skills and get recommendations</p>
+                    <span class="card-action">Start Assessment →</span>
+                </div>
+                
+                <div class="assessment-card" onclick="navigateTo('explore')">
+                    <span class="card-icon">🔍</span>
+                    <h4>Explore Courses</h4>
+                    <p>Discover new learning opportunities and skills</p>
+                    <span class="card-action">Browse Catalog →</span>
+                </div>
+                
+                <div class="assessment-card" onclick="navigateTo('community')">
+                    <span class="card-icon">👥</span>
+                    <h4>Join Community</h4>
+                    <p>Connect with other learners and mentors</p>
+                    <span class="card-action">Join Discussion →</span>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <div class="status-indicator">
+        ✅ Connected to Educational Services
+    </div>
+
+    <!-- Modular JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        // Dashboard-specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is authenticated
+            checkAuthentication();
+            
+            // Load user data
+            loadUserData();
+            
+            // Initialize dashboard features
+            initializeDashboard();
+        });
+
+        function checkAuthentication() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const userName = localStorage.getItem('userName');
+            
+            if (!isAuthenticated) {
+                // Redirect to sign-in if not authenticated
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+            // Update user name in header and sidebar
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('dashboardUserName').textContent = `Welcome back, ${userName}!`;
+            }
+        }
+
+        function loadUserData() {
+            // Placeholder for backend API call
+            // This will be replaced with actual API integration
+            const mockUserData = {
+                coursesEnrolled: 3,
+                overallProgress: 67,
+                studyTime: '24h',
+                certificates: 2,
+                recentActivities: [
+                    { type: 'completion', title: 'JavaScript Variables & Data Types', time: '2 hours ago' },
+                    { type: 'assessment', title: 'Web Design Quiz (95%)', time: '1 day ago' },
+                    { type: 'enrollment', title: 'Digital Design Principles Course', time: '3 days ago' }
+                ]
+            };
+            
+            // Update dashboard with user data
+            console.log('User data loaded:', mockUserData);
+        }
+
+        function initializeDashboard() {
+            // Animate progress bars
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 500);
+        }
+
+        function navigateTo(section) {
+            // Navigation placeholder - will be enhanced with routing
+            switch(section) {
+                case 'courses':
+                    alert('Course catalog coming soon! Full course management system in development.');
+                    break;
+                case 'assessments':
+                    alert('Assessment portal coming soon! Comprehensive skill evaluation system in development.');
+                    break;
+                case 'progress':
+                    alert('Progress analytics coming soon! Detailed learning analytics dashboard in development.');
+                    break;
+                case 'certificates':
+                    alert('Certificate gallery coming soon! Digital credential management system in development.');
+                    break;
+                case 'settings':
+                    alert('User settings coming soon! Profile customization and preferences in development.');
+                    break;
+                case 'chat':
+                    window.location.href = 'index.html';
+                    break;
+                case 'assessment':
+                    alert('Interactive assessment coming soon! Skill evaluation and personalized recommendations in development.');
+                    break;
+                case 'explore':
+                    alert('Course catalog coming soon! Browse hundreds of courses across Technology, Business, and Creative tracks.');
+                    break;
+                case 'community':
+                    alert('Community platform coming soon! Connect with learners, mentors, and industry professionals worldwide.');
+                    break;
+                default:
+                    console.log('Navigation to:', section);
+            }
+        }
+
+        function logout() {
+            // Clear authentication data
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
