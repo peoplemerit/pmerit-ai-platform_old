@@ -3,34 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PMERIT - Educational Platform</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-        }
-        .container {
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-    </style>
+    <title>PMERIT - Breaking Poverty Through Education</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🎓 PMERIT</h1>
-        <h2>Educational Platform</h2>
-        <p>Breaking poverty cycles through accessible education</p>
-        <div style="background: rgba(76,175,80,0.3); padding: 15px; border-radius: 10px; margin: 20px 0;">
-            ✅ Git Cleanup: COMPLETE<br>
-            🚀 Status: Ready for Gabriel AI
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#" class="logo">🎓 PMERIT</a>
+            <nav class="nav-actions">
+                <a href="#" class="btn btn-login">Sign In</a>
+                <a href="#" class="btn btn-register">Start Learning Free</a>
+            </nav>
         </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="avatar-circle">
+                    <span class="avatar-icon">🤖</span>
+                </div>
+                <h3>Gabriel AI</h3>
+                <p>Your Learning Guide</p>
+            </div>
+            <div class="sidebar-grid">
+                <div class="sidebar-item">👤 Profile</div>
+                <div class="sidebar-item">⚙️ Settings</div>
+                <div class="sidebar-item">📚 Courses</div>
+                <div class="sidebar-item">🧠 Tests</div>
+                <div class="sidebar-item">📊 Progress</div>
+                <div class="sidebar-item">❓ Help</div>
+            </div>
+        </aside>
+
+        <main class="chat-container">
+            <div class="chat-header">
+                <h1>Empowering Learning Through Innovation</h1>
+                <p>Accessible, high-quality education for global opportunities</p>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ask about courses, careers, or anything...">
+                <button class="send-btn" id="send-btn">➤</button>
+            </div>
+        </main>
+
+        <aside class="right-sidebar">
+            <h3>🧠 Personality Assessments</h3>
+            <div class="assessment-card">
+                <h4>16 Personalities Test</h4>
+                <p>Discover your ideal career path</p>
+            </div>
+            <div class="assessment-card">
+                <h4>Skills Assessment</h4>
+                <p>Evaluate your current abilities</p>
+            </div>
+        </aside>
     </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/chat.js"></script>
 </body>
 </html>
