@@ -560,3 +560,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Export for global access
 window.toggleSidebar = toggleSidebar;
+
+// Simple mobile toggle function
+function toggleMobileSidebar(element) {
+    if (window.innerWidth <= 768) {
+        element.classList.toggle('expanded');
+        
+        const isExpanded = element.classList.contains('expanded');
+        const beforeElement = element.querySelector('::before');
+        
+        if (element.classList.contains('sidebar')) {
+            element.style.setProperty('--before-content', 
+                isExpanded ? '"📱 Quick Actions - Tap to collapse ▲"' : '"📱 Quick Actions - Tap to expand ▼"'
+            );
+        } else {
+            element.style.setProperty('--before-content', 
+                isExpanded ? '"🧠 Assessments - Tap to collapse ▲"' : '"🧠 Assessments - Tap to expand ▼"'
+            );
+        }
+    }
+}
+
+// Add click handlers for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const rightSidebar = document.querySelector('.right-sidebar');
+    
+    if (sidebar) {
+        sidebar.addEventListener('click', function(e) {
+            if (e.target === this && window.innerWidth <= 768) {
+                toggleMobileSidebar(this);
+            }
+        });
+    }
+    
+    if (rightSidebar) {
+        rightSidebar.addEventListener('click', function(e) {
+            if (e.target === this && window.innerWidth <= 768) {
+                toggleMobileSidebar(this);
+            }
+        });
+    }
+});

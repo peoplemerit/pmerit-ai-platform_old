@@ -518,3 +518,41 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
 }
+
+/* Additional mobile fixes */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    
+    .main-container {
+        min-height: calc(100vh - var(--header-height));
+        height: auto;
+        overflow: visible;
+    }
+    
+    .sidebar-content {
+        display: none;
+    }
+    
+    .sidebar.expanded .sidebar-content,
+    .right-sidebar.expanded .sidebar-content {
+        display: block;
+    }
+}
+
+/* Fix viewport scaling */
+@media (max-width: 480px) {
+    .main-container {
+        padding: 0.3rem;
+    }
+    
+    .chat-messages {
+        font-size: 0.85rem;
+    }
+    
+    .message-content {
+        padding: 0.6rem 0.8rem;
+    }
+}
