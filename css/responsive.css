@@ -1,0 +1,95 @@
+/* Responsive Design for PMERIT */
+
+@media (max-width: 1200px) {
+    .right-sidebar {
+        width: 280px;
+    }
+    .sidebar {
+        width: 260px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        border-radius: 0;
+        padding: 1rem;
+    }
+    
+    .right-sidebar {
+        width: 100%;
+        border-radius: 0;
+        padding: 1rem;
+    }
+    
+    .chat-container {
+        margin: 1rem;
+        border-radius: 0;
+    }
+    
+    .sidebar-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .nav-actions {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .main-container {
+        padding-top: 120px;
+    }
+    
+    .chat-messages {
+        min-height: 250px;
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+    
+    .sidebar-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .sidebar-item {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .chat-input {
+        font-size: 0.9rem;
+    }
+    
+    .assessment-card {
+        padding: 1rem;
+    }
+    
+    .assessment-card h4 {
+        font-size: 1rem;
+    }
+}
