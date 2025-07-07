@@ -22,34 +22,41 @@
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .logo {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: #667eea;
+            flex-shrink: 0;
         }
         
         .nav-actions {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             align-items: center;
+            flex-shrink: 0;
         }
         
         .btn {
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border: 1px solid #667eea;
-            border-radius: 8px;
+            border-radius: 6px;
             background: transparent;
             color: #667eea;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
         
         .btn:hover {
@@ -62,29 +69,31 @@
             color: white;
         }
         
+        /* REALISTIC DESKTOP GRID - Fits actual laptop screens */
         .main-container {
             display: grid;
-            grid-template-columns: minmax(250px, 300px) 1fr minmax(280px, 320px);
-            gap: 1rem;
-            padding: 2rem;
-            max-width: 1400px;
+            grid-template-columns: 200px 1fr 220px;
+            gap: 0.8rem;
+            padding: 1rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
         .sidebar, .right-sidebar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(102, 126, 234, 0.2);
+            height: fit-content;
         }
         
         .chat-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(102, 126, 234, 0.2);
             display: flex;
             flex-direction: column;
@@ -92,50 +101,58 @@
         }
         
         .chat-header {
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             border-bottom: 1px solid rgba(102, 126, 234, 0.1);
         }
         
         .chat-header h1 {
-            font-size: 2rem;
+            font-size: 1.4rem;
             color: #333;
             margin-bottom: 0.5rem;
         }
         
+        .chat-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
         .chat-messages {
             flex: 1;
-            padding: 1.5rem;
+            padding: 1rem;
             overflow-y: auto;
+            min-height: 200px;
+            max-height: 300px;
         }
         
         .message {
             background: rgba(102, 126, 234, 0.1);
-            padding: 1rem;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            margin-bottom: 1rem;
-            line-height: 1.6;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            font-size: 0.9rem;
         }
         
         .chat-input-area {
-            padding: 1.5rem;
+            padding: 1rem;
             border-top: 1px solid rgba(102, 126, 234, 0.1);
         }
         
         .input-wrapper {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             align-items: center;
         }
         
         .chat-input {
             flex: 1;
-            padding: 1rem;
+            padding: 0.8rem;
             border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 25px;
+            border-radius: 20px;
             outline: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .send-btn {
@@ -143,100 +160,289 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .avatar-circle {
-            width: 80px;
-            height: 80px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 2rem;
+            margin: 0 auto 0.8rem;
+            font-size: 1.2rem;
             color: white;
+        }
+        
+        .sidebar h3 {
+            text-align: center;
+            margin-bottom: 0.3rem;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar p {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.75rem;
         }
         
         .sidebar-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
         }
         
-        .sidebar-item, .assessment-card {
+        .sidebar-item {
             background: white;
             border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: 8px;
+            padding: 0.6rem 0.4rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.7rem;
         }
         
-        .sidebar-item:hover, .assessment-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        .sidebar-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
-        .assessment-card {
-            margin-bottom: 1rem;
-        }
-        
-        .card-icon, .sidebar-item .icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .sidebar-item .icon {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
             display: block;
         }
         
-        .assessment-card h4, .sidebar-item .label {
+        .sidebar-item .label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .right-sidebar h3 {
+            text-align: center;
+            margin-bottom: 0.3rem;
             color: #667eea;
-            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .right-sidebar > p {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.75rem;
+        }
+        
+        .assessment-card {
+            background: white;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .assessment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .card-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+        
+        .assessment-card h4 {
+            color: #667eea;
+            margin-bottom: 0.4rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
         
         .assessment-card p {
             color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-size: 0.7rem;
+            margin-bottom: 0.6rem;
+            line-height: 1.3;
         }
         
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-            
+        .card-action {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+        
+        /* Responsive for smaller desktops */
+        @media (max-width: 1024px) {
             .main-container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
+                grid-template-columns: 180px 1fr 200px;
+                gap: 0.6rem;
             }
             
             .sidebar, .right-sidebar {
-                order: 2;
+                padding: 0.8rem;
+            }
+        }
+        
+        /* MOBILE - Complete reset for mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            
+            .header {
+                padding: 0.8rem;
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .nav-actions {
+                gap: 0.5rem;
+            }
+            
+            .btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            /* MOBILE: Single column layout */
+            .main-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+                max-width: 100%;
+            }
+            
+            .sidebar, .right-sidebar {
+                width: 100%;
+                max-height: 60px;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                cursor: pointer;
+                position: relative;
+            }
+            
+            .sidebar.expanded, .right-sidebar.expanded {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            
+            /* Mobile toggle indicators */
+            .sidebar::before {
+                content: "📱 Quick Actions - Tap to expand ▼";
+                display: block;
+                text-align: center;
+                padding: 1rem;
+                background: rgba(102, 126, 234, 0.05);
+                font-size: 0.8rem;
+                color: #666;
+                font-weight: 600;
+                border-radius: 8px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .sidebar.expanded::before {
+                content: "📱 Quick Actions - Tap to collapse ▲";
+            }
+            
+            .right-sidebar::before {
+                content: "🧠 Assessments - Tap to expand ▼";
+                display: block;
+                text-align: center;
+                padding: 1rem;
+                background: rgba(102, 126, 234, 0.05);
+                font-size: 0.8rem;
+                color: #666;
+                font-weight: 600;
+                border-radius: 8px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .right-sidebar.expanded::before {
+                content: "🧠 Assessments - Tap to collapse ▲";
+            }
+            
+            /* Hide content by default on mobile */
+            .sidebar .avatar-circle,
+            .sidebar h3,
+            .sidebar p,
+            .sidebar-grid,
+            .right-sidebar h3,
+            .right-sidebar > p,
+            .assessment-card {
+                display: none;
+            }
+            
+            /* Show content when expanded */
+            .sidebar.expanded .avatar-circle,
+            .sidebar.expanded h3,
+            .sidebar.expanded p,
+            .sidebar.expanded .sidebar-grid,
+            .right-sidebar.expanded h3,
+            .right-sidebar.expanded > p,
+            .right-sidebar.expanded .assessment-card {
+                display: block;
+            }
+            
+            .sidebar.expanded .sidebar-grid {
+                display: grid;
             }
             
             .chat-container {
-                order: 1;
+                order: -1;
+                min-height: 400px;
+            }
+            
+            .chat-header {
+                padding: 1rem;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .chat-messages {
+                max-height: 250px;
             }
         }
         
-        @media (max-width: 1200px) {
+        /* Very small screens */
+        @media (max-width: 480px) {
             .main-container {
-                grid-template-columns: 250px 1fr 280px;
+                padding: 0.8rem;
             }
-        }
-        
-        @media (max-width: 1000px) {
-            .main-container {
-                grid-template-columns: 1fr 2fr 1fr;
+            
+            .sidebar-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.4rem;
+            }
+            
+            .sidebar-item {
+                padding: 0.5rem 0.3rem;
+                font-size: 0.65rem;
+            }
+            
+            .assessment-card {
+                padding: 0.6rem;
             }
         }
     </style>
@@ -245,7 +451,7 @@
     <header class="header">
         <div class="logo">🎓 PMERIT</div>
         <nav class="nav-actions">
-            <select style="padding: 0.5rem; border-radius: 8px;">
+            <select style="padding: 0.4rem; border-radius: 6px; font-size: 0.8rem;">
                 <option>🌍 English</option>
                 <option>Yoruba</option>
                 <option>Igbo</option>
@@ -258,15 +464,15 @@
     </header>
 
     <main class="main-container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="leftSidebar">
             <div class="avatar-circle">🤖</div>
-            <h3 style="text-align: center; margin-bottom: 0.5rem; color: #667eea;">Gabriel AI</h3>
-            <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">Your Learning Guide</p>
+            <h3>Gabriel AI</h3>
+            <p>Your Learning Guide</p>
             
             <div class="sidebar-grid">
                 <div class="sidebar-item">
                     <span class="icon">👤</span>
-                    <span class="label">My Profile</span>
+                    <span class="label">Profile</span>
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">⚙️</span>
@@ -274,11 +480,11 @@
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">📋</span>
-                    <span class="label">Assessments</span>
+                    <span class="label">Tests</span>
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">📚</span>
-                    <span class="label">Subjects</span>
+                    <span class="label">Courses</span>
                 </div>
                 <div class="sidebar-item">
                     <span class="icon">📊</span>
@@ -297,7 +503,7 @@
                 <p>Accessible, high-quality education for global opportunities</p>
             </div>
             
-            <div class="chat-messages">
+            <div class="chat-messages" id="chatMessages">
                 <div class="message">
                     <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
                 </div>
@@ -305,39 +511,39 @@
             
             <div class="chat-input-area">
                 <div class="input-wrapper">
-                    <input type="text" class="chat-input" placeholder="Ask about courses, learning paths, or your goals...">
-                    <button class="send-btn">→</button>
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about courses, learning paths, or your goals...">
+                    <button class="send-btn" id="sendBtn">→</button>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.8rem; color: #666;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; font-size: 0.75rem; color: #666;">
                     <span>0/1000</span>
                     <span style="color: #4caf50; font-weight: 600;">✅ Platform Ready</span>
                 </div>
             </div>
         </section>
 
-        <aside class="right-sidebar">
-            <h3 style="text-align: center; margin-bottom: 0.5rem; color: #667eea;">🧠 Discover Your Path</h3>
-            <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">Personalized assessments to guide your learning journey</p>
+        <aside class="right-sidebar" id="rightSidebar">
+            <h3>🧠 Discover Your Path</h3>
+            <p>Personalized assessments to guide your learning journey</p>
             
             <div class="assessment-card">
                 <span class="card-icon">🎯</span>
                 <h4>Learning Style Assessment</h4>
                 <p>Discover how you learn best and personalize your experience</p>
-                <span style="color: #667eea; font-weight: 600;">Start Assessment →</span>
+                <span class="card-action">Start Assessment →</span>
             </div>
             
             <div class="assessment-card">
                 <span class="card-icon">💡</span>
                 <h4>Interest Profiler</h4>
                 <p>Explore subjects and fields that match your natural interests</p>
-                <span style="color: #667eea; font-weight: 600;">Discover Interests →</span>
+                <span class="card-action">Discover Interests →</span>
             </div>
             
             <div class="assessment-card">
                 <span class="card-icon">⚡</span>
                 <h4>Skills Assessment</h4>
                 <p>Assess your current abilities and identify growth opportunities</p>
-                <span style="color: #667eea; font-weight: 600;">Evaluate Skills →</span>
+                <span class="card-action">Evaluate Skills →</span>
             </div>
         </aside>
     </main>
@@ -345,36 +551,78 @@
     <script>
         console.log('🎓 Gabriel AI Educational Platform - Loaded successfully!');
         
-        // Simple chat functionality
-        document.querySelector('.send-btn').addEventListener('click', function() {
-            const input = document.querySelector('.chat-input');
-            const messages = document.querySelector('.chat-messages');
+        // Mobile sidebar toggles
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftSidebar = document.getElementById('leftSidebar');
+            const rightSidebar = document.getElementById('rightSidebar');
             
-            if (input.value.trim()) {
+            // Left sidebar toggle
+            if (leftSidebar) {
+                leftSidebar.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        this.classList.toggle('expanded');
+                        if (rightSidebar && rightSidebar.classList.contains('expanded')) {
+                            rightSidebar.classList.remove('expanded');
+                        }
+                    }
+                });
+            }
+            
+            // Right sidebar toggle
+            if (rightSidebar) {
+                rightSidebar.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        this.classList.toggle('expanded');
+                        if (leftSidebar && leftSidebar.classList.contains('expanded')) {
+                            leftSidebar.classList.remove('expanded');
+                        }
+                    }
+                });
+            }
+            
+            // Close sidebars when clicking outside
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    const clickedSidebar = e.target.closest('#leftSidebar') || e.target.closest('#rightSidebar');
+                    if (!clickedSidebar) {
+                        if (leftSidebar) leftSidebar.classList.remove('expanded');
+                        if (rightSidebar) rightSidebar.classList.remove('expanded');
+                    }
+                }
+            });
+        });
+        
+        // Simple chat functionality
+        const sendBtn = document.getElementById('sendBtn');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        
+        function sendMessage() {
+            if (chatInput.value.trim()) {
                 const userMessage = document.createElement('div');
                 userMessage.className = 'message';
                 userMessage.style.background = 'rgba(118, 75, 162, 0.1)';
                 userMessage.style.borderLeftColor = '#764ba2';
-                userMessage.innerHTML = '<strong>You:</strong> ' + input.value;
-                messages.appendChild(userMessage);
+                userMessage.innerHTML = '<strong>You:</strong> ' + chatInput.value;
+                chatMessages.appendChild(userMessage);
                 
                 setTimeout(() => {
                     const aiMessage = document.createElement('div');
                     aiMessage.className = 'message';
                     aiMessage.innerHTML = '<strong>Gabriel AI:</strong> Thank you for your question! I\'m here to help you explore educational opportunities and develop your potential through accessible, high-quality learning experiences.';
-                    messages.appendChild(aiMessage);
-                    messages.scrollTop = messages.scrollHeight;
+                    chatMessages.appendChild(aiMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 }, 1000);
                 
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-        });
+        }
         
-        // Enter key support
-        document.querySelector('.chat-input').addEventListener('keypress', function(e) {
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                document.querySelector('.send-btn').click();
+                sendMessage();
             }
         });
     </script>
