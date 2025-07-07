@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Virtual Classroom - PMERIT Educational Platform</title>
+    
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .classroom-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .classroom-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .course-info h1 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .course-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        .classroom-nav {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary-purple);
+            color: white;
+            border-color: var(--primary-purple);
+        }
+        
+        .classroom-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            overflow: hidden;
+        }
+        
+        .main-content-area {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .lesson-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .lesson-video {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .play-button {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .lesson-title {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .lesson-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .lesson-objectives {
+            background: rgba(102, 126, 234, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        
+        .objectives-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .objectives-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .objectives-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .objectives-list li::before {
+            content: "✓";
+            color: var(--primary-purple);
+            font-weight: bold;
+        }
+        
+        .lesson-navigation {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(102, 126, 234, 0.02);
+        }
+        
+        .nav-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-previous {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-previous:hover {
+            background: var(--border-color);
+        }
+        
+        .btn-next {
+            background: var(--primary-purple);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: var(--secondary-purple);
+            transform: translateY(-1px);
+        }
+        
+        .progress-indicator {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin: 0.5rem auto;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-purple), var(--secondary-purple));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .sidebar-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .panel-tab {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .panel-tab.active {
+            color: var(--primary-purple);
+            border-bottom-color: var(--primary-purple);
+        }
+        
+        .tab-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .ai-tutor-chat {
+            height: 300px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .chat-header-small {
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.05);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .chat-messages-small {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+        
+        .chat-input-small {
+            padding: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chat-input-small input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            outline: none;
+        }
+        
+        .chat-input-small button {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .resource-item, .note-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-item:hover, .note-item:hover {
+            border-color: var(--primary-purple);
+            transform: translateY(-1px);
+        }
+        
+        .resource-title, .note-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .resource-type, .note-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .classroom-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-panel {
+                order: -1;
+                max-height: 200px;
+            }
+            
+            .classroom-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .lesson-content {
+                padding: 1rem;
+            }
+            
+            .lesson-video {
+                height: 200px;
+                font-size: 2rem;
+            }
+            
+            .play-button {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .lesson-navigation {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .progress-bar {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">🎓 PMERIT</div>
+                <div class="header-center">
+                    <h1>Virtual Classroom</h1>
+                    <p>Interactive learning with AI-powered guidance</p>
+                </div>
+                <nav class="nav-actions">
+                    <button class="btn btn-pricing" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                    <button class="btn btn-signin" onclick="window.location.href='courses.html'">📚 Courses</button>
+                    <button class="btn btn-primary" onclick="exitClassroom()">🚪 Exit Classroom</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="classroom-container">
+                <!-- Classroom Header -->
+                <div class="classroom-header">
+                    <div class="course-info">
+                        <h1 id="courseTitle">Web Development Fundamentals</h1>
+                        <p id="lessonTitle">Lesson 3: Introduction to JavaScript</p>
+                    </div>
+                    <div class="classroom-nav">
+                        <button class="nav-btn active" data-mode="lesson">📚 Lesson</button>
+                        <button class="nav-btn" data-mode="practice">💻 Practice</button>
+                        <button class="nav-btn" data-mode="quiz">📝 Quiz</button>
+                    </div>
+                </div>
+
+                <!-- Classroom Content -->
+                <div class="classroom-content">
+                    <!-- Main Content Area -->
+                    <div class="main-content-area">
+                        <div class="lesson-content">
+                            <!-- Video/Content Area -->
+                            <div class="lesson-video" id="lessonVideo">
+                                📹
+                                <div class="play-button" onclick="playLesson()">
+                                    ▶️
+                                </div>
+                            </div>
+
+                            <!-- Lesson Content -->
+                            <h2 class="lesson-title" id="currentLessonTitle">Introduction to JavaScript</h2>
+                            <div class="lesson-description" id="lessonDescription">
+                                <p>JavaScript is the programming language of the web. In this lesson, you'll learn the fundamentals of JavaScript programming, including variables, functions, and DOM manipulation. By the end of this lesson, you'll be able to create interactive web pages that respond to user actions.</p>
+                            </div>
+
+                            <!-- Learning Objectives -->
+                            <div class="lesson-objectives">
+                                <h3 class="objectives-title">
+                                    🎯 Learning Objectives
+                                </h3>
+                                <ul class="objectives-list">
+                                    <li>Understand JavaScript syntax and basic programming concepts</li>
+                                    <li>Learn how to declare and use variables and functions</li>
+                                    <li>Practice DOM manipulation and event handling</li>
+                                    <li>Build a simple interactive web component</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Lesson Navigation -->
+                        <div class="lesson-navigation">
+                            <button class="nav-button btn-previous" onclick="previousLesson()">
+                                ← Previous Lesson
+                            </button>
+                            
+                            <div class="progress-indicator">
+                                <div>Lesson 3 of 12</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 25%"></div>
+                                </div>
+                                <div>25% Complete</div>
+                            </div>
+                            
+                            <button class="nav-button btn-next" onclick="nextLesson()">
+                                Next Lesson →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Panel -->
+                    <div class="sidebar-panel">
+                        <!-- Panel Tabs -->
+                        <div class="panel-tabs">
+                            <button class="panel-tab active" data-tab="ai-tutor">🤖 AI Tutor</button>
+                            <button class="panel-tab" data-tab="resources">📚 Resources</button>
+                            <button class="panel-tab" data-tab="notes">📝 Notes</button>
+                        </div>
+
+                        <!-- AI Tutor Tab -->
+                        <div class="tab-content active" id="ai-tutor">
+                            <h4>Ask Gabriel AI</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                                I'm here to help you understand the lesson content and answer your questions.
+                            </p>
+                            
+                            <div class="ai-tutor-chat">
+                                <div class="chat-header-small">💬 Chat with Gabriel AI</div>
+                                <div class="chat-messages-small" id="tutorMessages">
+                                    <div style="color: var(--text-secondary); font-style: italic; margin-bottom: 0.5rem;">
+                                        <strong>Gabriel AI:</strong> Hi! I'm here to help you with this JavaScript lesson. Feel free to ask me anything about variables, functions, or DOM manipulation!
+                                    </div>
+                                </div>
+                                <div class="chat-input-small">
+                                    <input type="text" placeholder="Ask about the lesson..." id="tutorInput">
+                                    <button onclick="askTutor()">Send</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resources Tab -->
+                        <div class="tab-content" id="resources">
+                            <h4>Lesson Resources</h4>
+                            
+                            <div class="resource-item" onclick="openResource('javascript-guide')">
+                                <div class="resource-title">📖 JavaScript Beginner's Guide</div>
+                                <div class="resource-type">PDF • 45 pages</div>
+                            </div>
+                            
+                            <div class="resource-item" onclick="openResource('code-examples')">
+                                <div class="resource-title">💻 Code Examples</div>
+                                <div class="resource-type">Interactive • 12 examples</div>
+                            </div>
+                            
+                            <div class="resource-item" onclick="openResource('cheat-sheet')">
+                                <div class="resource-title">📋 JavaScript Cheat Sheet</div>
+                                <div class="resource-type">Reference • 2 pages</div>
+                            </div>
+                            
+                            <div class="resource-item" onclick="openResource('practice-exercises')">
+                                <div class="resource-title">🏋️ Practice Exercises</div>
+                                <div class="resource-type">Interactive • 8 exercises</div>
+                            </div>
+                        </div>
+
+                        <!-- Notes Tab -->
+                        <div class="tab-content" id="notes">
+                            <h4>My Notes</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                                Your personal notes for this lesson
+                            </p>
+                            
+                            <div class="note-item" onclick="openNote('variables-notes')">
+                                <div class="note-title">📝 Variables and Data Types</div>
+                                <div class="note-date">Created 2 hours ago</div>
+                            </div>
+                            
+                            <div class="note-item" onclick="openNote('functions-notes')">
+                                <div class="note-title">📝 Function Basics</div>
+                                <div class="note-date">Created 1 hour ago</div>
+                            </div>
+                            
+                            <button style="width: 100%; padding: 0.75rem; background: var(--primary-purple); color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 1rem;" onclick="createNote()">
+                                ➕ Add New Note
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Backend Integration Placeholders -->
+    <script>
+        let currentLesson = 3;
+        let totalLessons = 12;
+        let courseId = 'web-dev-101';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏫 Virtual classroom initialized');
+            
+            // Get course info from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const course = urlParams.get('course');
+            if (course) {
+                courseId = course;
+                loadCourseData(course);
+            }
+            
+            initializeClassroom();
+            checkAuthentication();
+        });
+
+        function initializeClassroom() {
+            // Initialize tab switching
+            const tabButtons = document.querySelectorAll('.panel-tab');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Initialize classroom mode switching
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    switchMode(this.dataset.mode);
+                });
+            });
+
+            // Initialize tutor chat Enter key
+            const tutorInput = document.getElementById('tutorInput');
+            if (tutorInput) {
+                tutorInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        askTutor();
+                    }
+                });
+            }
+
+            console.log('✅ Classroom interactions initialized');
+        }
+
+        function checkAuthentication() {
+            // BACKEND INTEGRATION PLACEHOLDER
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                console.log('🔐 User not authenticated for classroom');
+                alert('Please sign in to access the virtual classroom');
+                window.location.href = 'signin.html';
+                return;
+            }
+        }
+
+        function loadCourseData(courseId) {
+            // BACKEND INTEGRATION PLACEHOLDER
+            // API call to get course and lesson data
+            
+            /*
+            fetch(`/api/courses/${courseId}/current-lesson`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateClassroomContent(data);
+                updateProgress(data.progress);
+            });
+            */
+            
+            console.log(`📚 Loading course data for: ${courseId}`);
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.panel-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            console.log(`📋 Switched to tab: ${tabName}`);
+        }
+
+        function switchMode(mode) {
+            // Remove active class from all nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            console.log(`🔄 Switched to mode: ${mode}`);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Load different content based on mode (lesson/practice/quiz)
+        }
+
+        function playLesson() {
+            console.log('▶️ Playing lesson video');
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Track lesson video start and load video content
+            
+            /*
+            fetch(`/api/lessons/${currentLesson}/play`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            });
+            */
+            
+            alert('🎬 Lesson video would start playing here!');
+        }
+
+        function askTutor() {
+            const input = document.getElementById('tutorInput');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            // Add user message to chat
+            const messagesContainer = document.getElementById('tutorMessages');
+            const userMessage = document.createElement('div');
+            userMessage.style.marginBottom = '0.5rem';
+            userMessage.innerHTML = `<strong>You:</strong> ${question}`;
+            messagesContainer.appendChild(userMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Send question to AI tutor API
+            
+            /*
+            fetch('/api/ai-tutor/ask', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question: question,
+                    lesson_id: currentLesson,
+                    course_id: courseId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                addTutorResponse(data.answer);
+            });
+            */
+            
+            // Demo response
+            setTimeout(() => {
+                const responses = [
+                    "Great question! JavaScript variables are containers that store data values. You can declare them using 'let', 'const', or 'var'.",
+                    "Functions in JavaScript are reusable blocks of code. They help you organize your code and avoid repetition.",
+                    "DOM manipulation means changing the HTML elements on a page using JavaScript. It's what makes web pages interactive!",
+                    "That's an excellent question about JavaScript! Let me explain that concept in more detail..."
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addTutorResponse(randomResponse);
+            }, 1000);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addTutorResponse(response) {
+            const messagesContainer = document.getElementById('tutorMessages');
+            const tutorMessage = document.createElement('div');
+            tutorMessage.style.marginBottom = '0.5rem';
+            tutorMessage.style.fontStyle = 'italic';
+            tutorMessage.style.color = 'var(--text-secondary)';
+            tutorMessage.innerHTML = `<strong>Gabriel AI:</strong> ${response}`;
+            messagesContainer.appendChild(tutorMessage);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function previousLesson() {
+            if (currentLesson > 1) {
+                currentLesson--;
+                updateLessonContent();
+                
+                // BACKEND INTEGRATION PLACEHOLDER
+                // Load previous lesson content
+                console.log(`⬅️ Moving to lesson ${currentLesson}`);
+            } else {
+                alert('This is the first lesson!');
+            }
+        }
+
+        function nextLesson() {
+            if (currentLesson < totalLessons) {
+                currentLesson++;
+                updateLessonContent();
+                
+                // BACKEND INTEGRATION PLACEHOLDER
+                // Load next lesson content and mark current as complete
+                console.log(`➡️ Moving to lesson ${currentLesson}`);
+            } else {
+                alert('🎉 Congratulations! You\'ve completed all lessons in this course!');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function updateLessonContent() {
+            // Update progress indicator
+            const progressFill = document.querySelector('.progress-fill');
+            const progressPercent = Math.round((currentLesson / totalLessons) * 100);
+            progressFill.style.width = progressPercent + '%';
+            
+            document.querySelector('.progress-indicator div:first-child').textContent = `Lesson ${currentLesson} of ${totalLessons}`;
+            document.querySelector('.progress-indicator div:last-child').textContent = `${progressPercent}% Complete`;
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Update lesson title, description, video, etc.
+        }
+
+        function openResource(resourceId) {
+            console.log(`📖 Opening resource: ${resourceId}`);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Open resource in modal or new tab
+            alert(`📚 Opening ${resourceId} resource...`);
+        }
+
+        function openNote(noteId) {
+            console.log(`📝 Opening note: ${noteId}`);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Open note editor
+            alert(`📝 Opening note: ${noteId}...`);
+        }
+
+        function createNote() {
+            console.log('📝 Creating new note');
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Open note creation modal
+            const noteTitle = prompt('Enter note title:');
+            if (noteTitle) {
+                alert(`📝 Creating note: "${noteTitle}"`);
+            }
+        }
+
+        function exitClassroom() {
+            if (confirm('Are you sure you want to exit the classroom? Your progress will be saved.')) {
+                // BACKEND INTEGRATION PLACEHOLDER
+                // Save current progress
+                
+                console.log('🚪 Exiting classroom');
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+
+    <!-- Modular JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

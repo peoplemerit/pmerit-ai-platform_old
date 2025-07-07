@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dashboard - PMERIT Educational Platform</title>
+    
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .dashboard-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .dashboard-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+        
+        .welcome-section h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .welcome-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .main-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            font-size: 1.3rem;
+        }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+            border-color: var(--primary-purple);
+        }
+        
+        .course-header {
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .course-progress {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-description {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+        
+        .course-body {
+            padding: 1.5rem;
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .course-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-continue {
+            flex: 1;
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-continue:hover {
+            background: var(--secondary-purple);
+            transform: translateY(-1px);
+        }
+        
+        .btn-resources {
+            background: transparent;
+            color: var(--primary-purple);
+            border: 1px solid var(--primary-purple);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .activity-item {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-purple);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .goal-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .goal-progress {
+            margin-top: 1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-purple), var(--secondary-purple));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+            
+            .dashboard-header {
+                padding: 1.5rem;
+            }
+            
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">🎓 PMERIT</div>
+                <div class="header-center">
+                    <h1>Learning Dashboard</h1>
+                    <p>Track your progress and continue your educational journey</p>
+                </div>
+                <nav class="nav-actions">
+                    <select class="language-selector">
+                        <option value="en">🌍 English</option>
+                        <option value="yo">Yoruba</option>
+                    </select>
+                    <button class="btn btn-pricing" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                    <button class="btn btn-signin" onclick="window.location.href='signin.html'">Sign In</button>
+                    <button class="btn btn-primary" onclick="window.location.href='index.html'">🏠 Home</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="courses-container">
+                <!-- Courses Header -->
+                <div class="courses-header">
+                    <h1>Explore Our Learning Tracks</h1>
+                    <p>Choose from our comprehensive courses designed to build real-world skills and open career opportunities.</p>
+                    
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="search-input" placeholder="Search courses..." id="courseSearch">
+                        </div>
+                        <select class="filter-dropdown" id="trackFilter">
+                            <option value="all">All Tracks</option>
+                            <option value="technology">💻 Technology</option>
+                            <option value="business">💼 Business</option>
+                            <option value="creative">🎨 Creative</option>
+                        </select>
+                        <select class="filter-dropdown" id="levelFilter">
+                            <option value="all">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Courses Content -->
+                <div class="courses-content">
+                    <!-- Technology Track -->
+                    <section class="track-section" data-track="technology">
+                        <div class="track-header">
+                            <span class="track-icon">💻</span>
+                            <div class="track-info">
+                                <h2>Technology Track</h2>
+                                <p>Build technical skills for the digital economy - from web development to data science</p>
+                            </div>
+                        </div>
+                        
+                        <div class="courses-grid">
+                            <div class="course-card" data-level="beginner">
+                                <div class="course-badge">FREE</div>
+                                <div class="course-image">🌐</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Web Development Fundamentals</h3>
+                                    <p class="course-description">Master HTML, CSS, and JavaScript to build modern, responsive websites. Perfect for beginners starting their coding journey.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Beginner</span>
+                                        <span>⏱️ 8 weeks</span>
+                                        <span>👥 2,847 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('web-dev-101')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('web-dev-101')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="intermediate">
+                                <div class="course-badge">POPULAR</div>
+                                <div class="course-image">🐍</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Python Programming & Data Science</h3>
+                                    <p class="course-description">Learn Python programming and apply it to data analysis, automation, and machine learning projects.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Intermediate</span>
+                                        <span>⏱️ 12 weeks</span>
+                                        <span>👥 1,924 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('python-data-science')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('python-data-science')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="intermediate">
+                                <div class="course-badge">NEW</div>
+                                <div class="course-image">☁️</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Cloud Computing with AWS</h3>
+                                    <p class="course-description">Master cloud architecture, deployment strategies, and AWS services for scalable applications.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Intermediate</span>
+                                        <span>⏱️ 10 weeks</span>
+                                        <span>👥 856 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('aws-cloud')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('aws-cloud')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Business Track -->
+                    <section class="track-section" data-track="business">
+                        <div class="track-header">
+                            <span class="track-icon">💼</span>
+                            <div class="track-info">
+                                <h2>Business Track</h2>
+                                <p>Develop entrepreneurship and business skills to create value and opportunities</p>
+                            </div>
+                        </div>
+                        
+                        <div class="courses-grid">
+                            <div class="course-card" data-level="beginner">
+                                <div class="course-badge">FREE</div>
+                                <div class="course-image">📈</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Digital Marketing Essentials</h3>
+                                    <p class="course-description">Learn SEO, social media marketing, content strategy, and analytics to grow your online presence.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Beginner</span>
+                                        <span>⏱️ 6 weeks</span>
+                                        <span>👥 3,142 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('digital-marketing')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('digital-marketing')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="intermediate">
+                                <div class="course-badge">POPULAR</div>
+                                <div class="course-image">🚀</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Project Management & Agile</h3>
+                                    <p class="course-description">Master project management methodologies, team leadership, and agile frameworks for successful delivery.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Intermediate</span>
+                                        <span>⏱️ 8 weeks</span>
+                                        <span>👥 2,567 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('project-management')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('project-management')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="intermediate">
+                                <div class="course-badge">NEW</div>
+                                <div class="course-image">💡</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Entrepreneurship & Business Planning</h3>
+                                    <p class="course-description">Learn to validate business ideas, create business plans, and launch successful startups.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Intermediate</span>
+                                        <span>⏱️ 10 weeks</span>
+                                        <span>👥 1,423 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('entrepreneurship')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('entrepreneurship')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Creative Track -->
+                    <section class="track-section" data-track="creative">
+                        <div class="track-header">
+                            <span class="track-icon">🎨</span>
+                            <div class="track-info">
+                                <h2>Creative Track</h2>
+                                <p>Express your creativity through design, content creation, and multimedia production</p>
+                            </div>
+                        </div>
+                        
+                        <div class="courses-grid">
+                            <div class="course-card" data-level="beginner">
+                                <div class="course-badge">FREE</div>
+                                <div class="course-image">🎨</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Graphic Design Principles</h3>
+                                    <p class="course-description">Master design fundamentals, color theory, typography, and Adobe Creative Suite for professional graphics.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Beginner</span>
+                                        <span>⏱️ 8 weeks</span>
+                                        <span>👥 2,234 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('graphic-design')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('graphic-design')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="intermediate">
+                                <div class="course-badge">POPULAR</div>
+                                <div class="course-image">📱</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">UI/UX Design & Prototyping</h3>
+                                    <p class="course-description">Create beautiful, user-friendly interfaces and experiences that people love to use.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Intermediate</span>
+                                        <span>⏱️ 10 weeks</span>
+                                        <span>👥 1,876 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('uiux-design')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('uiux-design')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-card" data-level="beginner">
+                                <div class="course-badge">NEW</div>
+                                <div class="course-image">🎬</div>
+                                <div class="course-content">
+                                    <h3 class="course-title">Content Creation & Video Production</h3>
+                                    <p class="course-description">Learn video editing, audio production, and multimedia storytelling for social media and marketing.</p>
+                                    <div class="course-meta">
+                                        <span class="course-level">Beginner</span>
+                                        <span>⏱️ 6 weeks</span>
+                                        <span>👥 967 enrolled</span>
+                                    </div>
+                                    <div class="course-actions">
+                                        <button class="btn-enroll" onclick="enrollCourse('content-creation')">Enroll Now</button>
+                                        <button class="btn-preview" onclick="previewCourse('content-creation')">Preview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Backend Integration Placeholders -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 Courses page initialized');
+            
+            initializeSearch();
+            initializeFilters();
+            loadCourseData();
+        });
+
+        function initializeSearch() {
+            const searchInput = document.getElementById('courseSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const query = e.target.value.toLowerCase();
+                    filterCourses({ search: query });
+                });
+            }
+        }
+
+        function initializeFilters() {
+            const trackFilter = document.getElementById('trackFilter');
+            const levelFilter = document.getElementById('levelFilter');
+            
+            if (trackFilter) {
+                trackFilter.addEventListener('change', function(e) {
+                    filterCourses({ track: e.target.value });
+                });
+            }
+            
+            if (levelFilter) {
+                levelFilter.addEventListener('change', function(e) {
+                    filterCourses({ level: e.target.value });
+                });
+            }
+        }
+
+        function filterCourses(filters) {
+            // Course filtering logic
+            console.log('🔍 Filtering courses:', filters);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // This would filter courses based on search and filter criteria
+        }
+
+        function loadCourseData() {
+            // BACKEND INTEGRATION PLACEHOLDER
+            // API call to get current course data and enrollment numbers
+            
+            /*
+            fetch('/api/courses')
+            .then(response => response.json())
+            .then(data => {
+                updateCourseCards(data);
+                updateEnrollmentNumbers(data);
+            });
+            */
+            
+            console.log('📊 Loading course data...');
+        }
+
+        function enrollCourse(courseId) {
+            console.log(`📝 Enrolling in course: ${courseId}`);
+            
+            // Check authentication
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                alert('Please sign in to enroll in courses');
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // API call to enroll user in course
+            
+            /*
+            fetch('/api/courses/enroll', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ course_id: courseId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Successfully enrolled! Redirecting to your dashboard...');
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Enrollment failed: ' + data.message);
+                }
+            });
+            */
+            
+            // Demo enrollment
+            alert(`✅ Successfully enrolled in course! Redirecting to dashboard...`);
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+
+        function previewCourse(courseId) {
+            console.log(`👀 Previewing course: ${courseId}`);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Show course preview modal or redirect to preview page
+            
+            alert(`🔍 Course preview coming soon! For now, you can enroll to access the full content.`);
+        }
+    </script>
+
+    <!-- Modular JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

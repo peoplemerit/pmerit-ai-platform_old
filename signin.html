@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sign In - PMERIT Educational Platform</title>
+    
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .auth-container {
+            min-height: calc(100vh - var(--header-height));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            width: 100%;
+            max-width: 480px;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            padding: 0.25rem;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 0.875rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+        
+        .auth-tab.active {
+            background: white;
+            color: var(--primary-purple);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-purple);
+        }
+        
+        .form-checkbox label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .form-checkbox a {
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+        
+        .form-checkbox a:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-button:hover {
+            background: var(--secondary-purple);
+            transform: translateY(-1px);
+        }
+        
+        .auth-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+        
+        .auth-divider span {
+            background: var(--card-bg);
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-button {
+            flex: 1;
+            padding: 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .social-button:hover {
+            border-color: var(--primary-purple);
+            transform: translateY(-1px);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .auth-footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .auth-footer a {
+            color: var(--primary-purple);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff40;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            color: #d32f2f;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            display: none;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            color: #388e3c;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 1rem;
+                align-items: flex-start;
+                padding-top: 2rem;
+            }
+            
+            .auth-card {
+                padding: 2rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">🎓 PMERIT</div>
+                <div class="header-center">
+                    <h1>Join Our Learning Community</h1>
+                    <p>Access your personalized educational journey</p>
+                </div>
+                <nav class="nav-actions">
+                    <button class="btn btn-pricing" onclick="window.location.href='courses.html'">📚 Browse Courses</button>
+                    <button class="btn btn-signin" onclick="window.location.href='index.html'">🏠 Home</button>
+                    <button class="btn btn-primary" onclick="scrollToSignUp()">Create Account</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <!-- Auth Header -->
+                    <div class="auth-header">
+                        <h1>Welcome to PMERIT</h1>
+                        <p>Sign in to your account or create a new one to start your educational journey with personalized learning paths and AI-powered guidance.</p>
+                    </div>
+
+                    <!-- Auth Tabs -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="signin">Sign In</button>
+                        <button class="auth-tab" data-tab="signup">Create Account</button>
+                    </div>
+
+                    <!-- Error/Success Messages -->
+                    <div class="error-message" id="errorMessage"></div>
+                    <div class="success-message" id="successMessage"></div>
+
+                    <!-- Sign In Form -->
+                    <form class="auth-form active" id="signinForm">
+                        <div class="form-group">
+                            <label class="form-label" for="signinEmail">Email Address</label>
+                            <input type="email" class="form-input" id="signinEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="signinPassword">Password</label>
+                            <input type="password" class="form-input" id="signinPassword" placeholder="Enter your password" required>
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">Remember me</label>
+                            <a href="#" style="margin-left: auto;">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="auth-button" id="signinButton">
+                            <span>Sign In</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </form>
+
+                    <!-- Sign Up Form -->
+                    <form class="auth-form" id="signupForm">
+                        <div class="form-group">
+                            <label class="form-label" for="signupName">Full Name</label>
+                            <input type="text" class="form-input" id="signupName" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="signupEmail">Email Address</label>
+                            <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="signupPassword">Password</label>
+                            <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <label for="agreeTerms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="auth-button" id="signupButton">
+                            <span>Create Account</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </form>
+
+                    <!-- Social Login -->
+                    <div class="auth-divider">
+                        <span>Or continue with</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <button class="social-button" onclick="socialLogin('google')">
+                            🔍 Google
+                        </button>
+                        <button class="social-button" onclick="socialLogin('github')">
+                            🐙 GitHub
+                        </button>
+                    </div>
+
+                    <!-- Auth Footer -->
+                    <div class="auth-footer">
+                        <p>🎓 Ready to transform your future through education?</p>
+                        <p style="margin-top: 1rem;">
+                            <a href="index.html">← Back to Homepage</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Backend Integration Placeholders -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔐 Authentication page initialized');
+            
+            initializeAuthTabs();
+            initializeAuthForms();
+            checkExistingAuth();
+        });
+
+        function initializeAuthTabs() {
+            const tabs = document.querySelectorAll('.auth-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchAuthTab(this.dataset.tab);
+                });
+            });
+        }
+
+        function switchAuthTab(tabName) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.auth-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update forms
+            const forms = document.querySelectorAll('.auth-form');
+            forms.forEach(form => form.classList.remove('active'));
+            
+            if (tabName === 'signin') {
+                document.getElementById('signinForm').classList.add('active');
+            } else {
+                document.getElementById('signupForm').classList.add('active');
+            }
+            
+            // Clear any previous messages
+            hideMessages();
+        }
+
+        function initializeAuthForms() {
+            // Sign In Form
+            const signinForm = document.getElementById('signinForm');
+            if (signinForm) {
+                signinForm.addEventListener('submit', handleSignIn);
+            }
+            
+            // Sign Up Form
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', handleSignUp);
+            }
+        }
+
+        function handleSignIn(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            // Show loading state
+            setLoadingState('signin', true);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // API call to authenticate user
+            
+            /*
+            fetch('/api/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('user_data', JSON.stringify(data.user));
+                    showSuccess('Sign in successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showError(data.message || 'Sign in failed');
+                }
+                setLoadingState('signin', false);
+            })
+            .catch(error => {
+                showError('Network error. Please try again.');
+                setLoadingState('signin', false);
+            });
+            */
+            
+            // Demo authentication
+            setTimeout(() => {
+                if (email === 'demo@pmerit.com' && password === 'demo123') {
+                    // Demo successful login
+                    const demoUser = {
+                        id: 1,
+                        name: 'Demo User',
+                        email: 'demo@pmerit.com',
+                        courses_enrolled: 3,
+                        completion_rate: 67
+                    };
+                    
+                    localStorage.setItem('auth_token', 'demo_token_123');
+                    localStorage.setItem('user_data', JSON.stringify(demoUser));
+                    
+                    showSuccess('Welcome back! Redirecting to your dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showError('Invalid email or password. Try demo@pmerit.com / demo123');
+                }
+                setLoadingState('signin', false);
+            }, 2000);
+        }
+
+        function handleSignUp(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                showError('Please agree to the Terms of Service and Privacy Policy');
+                return;
+            }
+            
+            // Show loading state
+            setLoadingState('signup', true);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // API call to create new user account
+            
+            /*
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('user_data', JSON.stringify(data.user));
+                    showSuccess('Account created successfully! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showError(data.message || 'Account creation failed');
+                }
+                setLoadingState('signup', false);
+            })
+            .catch(error => {
+                showError('Network error. Please try again.');
+                setLoadingState('signup', false);
+            });
+            */
+            
+            // Demo account creation
+            setTimeout(() => {
+                const newUser = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    courses_enrolled: 0,
+                    completion_rate: 0
+                };
+                
+                localStorage.setItem('auth_token', 'demo_token_' + Date.now());
+                localStorage.setItem('user_data', JSON.stringify(newUser));
+                
+                showSuccess('🎉 Welcome to PMERIT! Your account has been created successfully.');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+                setLoadingState('signup', false);
+            }, 2000);
+        }
+
+        function socialLogin(provider) {
+            console.log(`🔗 Attempting ${provider} social login`);
+            
+            // BACKEND INTEGRATION PLACEHOLDER
+            // Redirect to OAuth provider or open popup
+            
+            /*
+            window.location.href = `/api/auth/${provider}`;
+            */
+            
+            alert(`🔗 ${provider} social login coming soon! For now, please use email/password or try:\n\nEmail: demo@pmerit.com\nPassword: demo123`);
+        }
+
+        function setLoadingState(form, isLoading) {
+            const button = document.getElementById(form + 'Button');
+            const spinner = button.querySelector('.loading-spinner');
+            const text = button.querySelector('span');
+            
+            if (isLoading) {
+                button.disabled = true;
+                spinner.style.display = 'inline-block';
+                text.textContent = form === 'signin' ? 'Signing In...' : 'Creating Account...';
+            } else {
+                button.disabled = false;
+                spinner.style.display = 'none';
+                text.textContent = form === 'signin' ? 'Sign In' : 'Create Account';
+            }
+        }
+
+        function showError(message) {
+            hideMessages();
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(hideMessages, 5000);
+        }
+
+        function showSuccess(message) {
+            hideMessages();
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function checkExistingAuth() {
+            // Check if user is already authenticated
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+                console.log('🔐 User already authenticated, redirecting to dashboard');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function scrollToSignUp() {
+            switchAuthTab('signup');
+            // Update the active tab
+            const tabs = document.querySelectorAll('.auth-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.querySelector('[data-tab="signup"]').classList.add('active');
+        }
+    </script>
+
+    <!-- Modular JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
