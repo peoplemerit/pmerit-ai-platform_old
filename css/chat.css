@@ -1,19 +1,27 @@
+/* ========================================
+   Gabriel AI Educational Platform - Chat Styles
+   NON-SCROLLABLE DESIGN
+   ======================================== */
+
+/* Chat Container */
 .chat-container {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(102, 126, 234, 0.2);
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
+/* Chat Header */
 .chat-header {
     padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
     text-align: center;
     background: rgba(102, 126, 234, 0.05);
+    flex-shrink: 0;
 }
 
 .chat-header h1 {
@@ -28,6 +36,7 @@
     font-size: 0.9rem;
 }
 
+/* Chat Messages - Scrollable Area */
 .chat-messages {
     flex: 1;
     padding: 1.5rem;
@@ -35,8 +44,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    min-height: 300px;
-    max-height: 500px;
+    min-height: 0; /* Allow flexbox shrinking */
 }
 
 .message {
@@ -48,7 +56,7 @@
     background: rgba(102, 126, 234, 0.1);
     padding: 1rem;
     border-radius: 12px;
-    border-left: 4px solid var(--primary-purple);
+    border-left: 4px solid var(--primary-color);
     color: var(--text-primary);
     line-height: 1.5;
 }
@@ -57,14 +65,34 @@
     background: rgba(118, 75, 162, 0.1);
     padding: 1rem;
     border-radius: 12px;
-    border-right: 4px solid var(--secondary-purple);
+    border-right: 4px solid var(--secondary-color);
     color: var(--text-primary);
     line-height: 1.5;
     margin-left: 2rem;
 }
 
+/* Typing Indicator */
+.typing-indicator .message-content {
+    background: rgba(102, 126, 234, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+    color: var(--text-secondary);
+}
+
+.typing-dots {
+    animation: typing 1.5s infinite;
+}
+
+@keyframes typing {
+    0%, 20% { opacity: 0.2; }
+    50% { opacity: 1; }
+    80%, 100% { opacity: 0.2; }
+}
+
+/* Chat Input Container */
 .chat-input-container {
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid rgba(102, 126, 234, 0.1);
     padding: 1rem;
     flex-shrink: 0;
     background: rgba(255, 255, 255, 0.5);
@@ -80,7 +108,7 @@
 #chatInput {
     flex: 1;
     padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: 12px;
     font-size: 0.9rem;
     resize: none;
@@ -90,7 +118,7 @@
 }
 
 #chatInput:focus {
-    border-color: var(--primary-purple);
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -99,7 +127,7 @@
     height: 40px;
     border: none;
     border-radius: 50%;
-    background: var(--primary-purple);
+    background: var(--primary-color);
     color: white;
     cursor: pointer;
     display: flex;
@@ -110,7 +138,7 @@
 }
 
 .send-button:hover {
-    background: var(--secondary-purple);
+    background: var(--secondary-color);
     transform: scale(1.05);
 }
 
@@ -119,6 +147,7 @@
     font-weight: bold;
 }
 
+/* Chat Footer */
 .chat-footer {
     display: flex;
     justify-content: space-between;
@@ -157,10 +186,29 @@
     font-weight: 500;
 }
 
+/* Character count color changes */
 .char-count.warning {
     color: #f97316;
 }
 
 .char-count.danger {
     color: #ef4444;
+}
+
+/* Custom Scrollbar for Chat Messages */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
 }
