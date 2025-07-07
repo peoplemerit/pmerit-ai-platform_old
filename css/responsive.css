@@ -182,3 +182,11 @@
         transform: scale(0.98);
     }
 }
+/* NEW: Fill the gap between 1024px and unlimited */
+@media (max-width: 1280px) {
+    .main-content {
+        max-width: 98vw;
+        grid-template-columns: 180px 1fr 180px;
+        gap: 0.6rem;
+    }
+}
