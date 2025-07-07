@@ -140,7 +140,8 @@ html, body {
     grid-template-columns: 200px 1fr 220px;
     gap: 0.8rem;
     padding: 1rem;
-    max-width: 1200px;
+    /*max-width: 1200px;*/
+    max-width: min(96vw, 1140px);  /* ✅ Responsive to screen size */
     margin: 0 auto;
     width: 100%;
     min-height: calc(100vh - var(--header-height) - 2rem);
