@@ -1,8 +1,3 @@
-/* ========================================
-   Gabriel AI Educational Platform - Mobile Responsive Styles
-   ======================================== */
-
-/* Tablet Layout */
 @media (max-width: 1024px) {
     .main-content {
         grid-template-columns: 250px 1fr 280px;
@@ -24,9 +19,7 @@
     }
 }
 
-/* Mobile Layout - FIXED HEADER SPACING */
 @media (max-width: 768px) {
-    /* Allow natural scrolling on mobile */
     html, body {
         overflow: auto;
         height: auto;
@@ -39,26 +32,24 @@
         overflow: visible;
     }
     
-    /* FIXED: Mobile header with proper spacing */
     :root {
-        --header-height: 85px; /* Slightly taller for breathing room */
+        --header-height: 85px;
     }
     
     .header-content {
-        padding: 0.75rem 1rem; /* More padding for breathing room */
+        padding: 0.75rem 1rem;
         height: var(--header-height);
         flex-wrap: nowrap;
         justify-content: space-between;
-        gap: 0.75rem; /* Proper gap between elements */
+        gap: 0.75rem;
     }
     
     .logo {
         font-size: 1.4rem;
         flex-shrink: 0;
-        margin-right: 0.5rem; /* Breathing room */
+        margin-right: 0.5rem;
     }
     
-    /* Hide center title on mobile to save space */
     .header-center {
         display: none;
     }
@@ -66,30 +57,28 @@
     .nav-actions {
         display: flex;
         align-items: center;
-        gap: 0.6rem; /* Proper spacing between buttons */
+        gap: 0.6rem;
         flex-shrink: 0;
         flex-wrap: nowrap;
     }
     
     .language-selector {
-        padding: 0.5rem 0.7rem; /* Better padding */
+        padding: 0.5rem 0.7rem;
         font-size: 0.75rem;
-        min-width: 80px; /* Prevent cramping */
+        min-width: 80px;
     }
     
     .btn {
-        padding: 0.5rem 0.8rem; /* Better button padding */
+        padding: 0.5rem 0.8rem;
         font-size: 0.75rem;
-        white-space: nowrap; /* Prevent text wrapping */
+        white-space: nowrap;
         min-width: fit-content;
     }
     
-    /* Hide pricing button on very small screens */
     .btn-pricing {
         display: none;
     }
     
-    /* Mobile main layout - vertical stack */
     .main-content {
         display: flex;
         flex-direction: column;
@@ -98,7 +87,6 @@
         min-height: calc(100vh - var(--header-height));
     }
     
-    /* Mobile sidebars - collapsible */
     .sidebar-left, .sidebar-right {
         order: 1;
         background: var(--sidebar-bg);
@@ -117,7 +105,6 @@
         overflow-y: auto;
     }
     
-    /* Show sidebar headers on mobile */
     .sidebar-header {
         display: block;
         padding: 1rem;
@@ -134,7 +121,6 @@
         user-select: none;
     }
     
-    /* Sidebar content hidden by default on mobile */
     .sidebar-content {
         padding: 1rem;
         opacity: 0;
@@ -146,135 +132,8 @@
         opacity: 1;
     }
     
-    /* Hide avatar on mobile to save space */
     .avatar-section {
         display: none;
-    }
-    
-    /* Compact mobile grid for quick actions */
-    .quick-actions {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        margin-top: 0;
-    }
-    
-    .action-item {
-        padding: 0.8rem 0.5rem;
-        font-size: 0.75rem;
-        min-height: 44px; /* Touch-friendly */
-    }
-    
-    .action-item .icon {
-        font-size: 1.1rem;
-    }
-    
-    .action-item .label {
-        font-size: 0.7rem;
-    }
-    
-    /* Chat container - main focus on mobile */
-    .chat-container {
-        order: 2;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 400px;
-    }
-    
-    .chat-header {
-        padding: 1rem;
-        text-align: center;
-    }
-    
-    .chat-header h1 {
-        font-size: 1.3rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .chat-header p {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-    }
-    
-    .chat-messages {
-        padding: 1rem;
-        max-height: 300px;
-        min-height: 250px;
-    }
-    
-    .chat-input-container {
-        padding: 1rem;
-    }
-    
-    .chat-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .footer-center {
-        gap: 0.5rem;
-    }
-    
-    /* Right sidebar - assessments */
-    .sidebar-right {
-        order: 3;
-    }
-    
-    .assessment-card {
-        padding: 1rem;
-        margin-bottom: 1rem;
-        min-height: 44px; /* Touch-friendly */
-    }
-    
-    .assessment-card h4 {
-        font-size: 0.9rem;
-    }
-    
-    .assessment-card p {
-        font-size: 0.8rem;
-        margin-bottom: 0.75rem;
-    }
-    
-    .assessment-btn {
-        padding: 0.8rem;
-        font-size: 0.8rem;
-        min-height: 44px; /* Touch-friendly */
-    }
-}
-
-/* Very small mobile screens */
-@media (max-width: 480px) {
-    :root {
-        --header-height: 80px;
-    }
-    
-    .header-content {
-        padding: 0.5rem 0.75rem;
-        gap: 0.5rem;
-    }
-    
-    .logo {
-        font-size: 1.3rem;
-    }
-    
-    .nav-actions {
-        gap: 0.4rem;
-    }
-    
-    .btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.7rem;
-    }
-    
-    /* Hide sign in button on very small screens */
-    .btn-signin {
-        display: none;
-    }
-    
-    .main-content {
-        padding: 0.5rem;
-        gap: 0.8rem;
     }
     
     .quick-actions {
@@ -291,48 +150,9 @@
     }
 }
 
-/* Landscape mobile orientation */
-@media (max-width: 768px) and (orientation: landscape) {
-    .main-content {
-        flex-direction: row;
-        gap: 0.8rem;
-    }
-    
-    .sidebar-left, .sidebar-right {
-        flex: 0 0 200px;
-        max-height: none;
-        order: initial;
-    }
-    
-    .sidebar-header {
-        display: none;
-    }
-    
-    .sidebar-content {
-        opacity: 1;
-        padding: 1rem;
-    }
-    
-    .avatar-section {
-        display: block;
-        margin-bottom: 1rem;
-    }
-    
-    .quick-actions {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-    
-    .chat-container {
-        flex: 1;
-        order: initial;
-    }
-}
-
-/* Touch-friendly adjustments */
 @media (hover: none) and (pointer: coarse) {
     .action-item, .assessment-card, .btn, .sidebar-toggle {
-        min-height: 44px; /* iOS accessibility standard */
+        min-height: 44px;
         min-width: 44px;
     }
     
@@ -343,29 +163,7 @@
         padding: 1rem;
     }
     
-    /* Add touch feedback */
     .action-item:active, .assessment-card:active {
         transform: scale(0.98);
-    }
-}
-
-/* High DPI displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .logo, .chat-header h1 {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-}
-
-/* Reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    
-    .action-item, .assessment-card, .btn {
-        transform: none !important;
     }
 }

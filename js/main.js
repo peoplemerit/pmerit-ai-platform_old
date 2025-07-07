@@ -1,13 +1,6 @@
-/**
- * Gabriel AI Educational Platform - Main JavaScript
- * Handles initialization, mobile toggles, and core functionality
- */
-
-// Global state
 let isConnected = false;
 let isMobile = false;
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎓 Gabriel AI Educational Platform - Initializing...');
     
@@ -20,18 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Platform initialized successfully!');
 });
 
-/**
- * Mobile Detection and Responsive Handling
- */
 function detectMobile() {
     isMobile = window.innerWidth <= 768;
     
-    // Handle window resize
     window.addEventListener('resize', function() {
         const wasMobile = isMobile;
         isMobile = window.innerWidth <= 768;
         
-        // Reset sidebar states when switching between mobile/desktop
         if (wasMobile && !isMobile) {
             resetSidebarStates();
         }
@@ -53,16 +41,12 @@ function resetSidebarStates() {
     }
 }
 
-/**
- * Mobile Sidebar Toggle Functionality
- */
 function initializeMobileToggles() {
     const leftToggle = document.getElementById('leftToggle');
     const rightToggle = document.getElementById('rightToggle');
     const leftSidebar = document.getElementById('leftSidebar');
     const rightSidebar = document.getElementById('rightSidebar');
     
-    // Left sidebar toggle
     if (leftToggle && leftSidebar) {
         leftToggle.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -74,7 +58,6 @@ function initializeMobileToggles() {
                     leftSidebar.classList.remove('expanded');
                 } else {
                     leftSidebar.classList.add('expanded');
-                    // Close right sidebar if open
                     if (rightSidebar) rightSidebar.classList.remove('expanded');
                     updateToggleText('rightToggle', false);
                 }
@@ -84,7 +67,6 @@ function initializeMobileToggles() {
         });
     }
     
-    // Right sidebar toggle
     if (rightToggle && rightSidebar) {
         rightToggle.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -96,7 +78,6 @@ function initializeMobileToggles() {
                     rightSidebar.classList.remove('expanded');
                 } else {
                     rightSidebar.classList.add('expanded');
-                    // Close left sidebar if open
                     if (leftSidebar) leftSidebar.classList.remove('expanded');
                     updateToggleText('leftToggle', false);
                 }
@@ -106,7 +87,6 @@ function initializeMobileToggles() {
         });
     }
     
-    // Close sidebars when clicking outside on mobile
     document.addEventListener('click', function(e) {
         if (isMobile) {
             const clickedInSidebar = e.target.closest('.sidebar-left') || e.target.closest('.sidebar-right');
@@ -123,25 +103,6 @@ function initializeMobileToggles() {
             }
         }
     });
-    
-    // Prevent sidebar content clicks from closing sidebar
-    if (leftSidebar) {
-        const leftContent = leftSidebar.querySelector('.sidebar-content');
-        if (leftContent) {
-            leftContent.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        }
-    }
-    
-    if (rightSidebar) {
-        const rightContent = rightSidebar.querySelector('.sidebar-content');
-        if (rightContent) {
-            rightContent.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        }
-    }
     
     console.log('📱 Mobile sidebar toggles initialized');
 }
@@ -161,9 +122,6 @@ function updateToggleText(toggleId, isExpanded) {
     }
 }
 
-/**
- * Action Items Functionality
- */
 function initializeActionItems() {
     const actionItems = document.querySelectorAll('.action-item');
     
@@ -172,7 +130,6 @@ function initializeActionItems() {
             const action = this.dataset.action;
             handleActionClick(action);
             
-            // Add visual feedback
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
@@ -197,7 +154,6 @@ function handleActionClick(action) {
     
     const message = responses[action] || `✨ ${action} feature is coming soon! Thank you for your interest.`;
     
-    // Send message to chat (if chat is initialized)
     if (window.chatModule && window.chatModule.addMessage) {
         window.chatModule.addMessage('ai', message);
     } else {
@@ -205,9 +161,6 @@ function handleActionClick(action) {
     }
 }
 
-/**
- * Assessment Cards Functionality
- */
 function initializeAssessments() {
     const assessmentCards = document.querySelectorAll('.assessment-card');
     
@@ -216,7 +169,6 @@ function initializeAssessments() {
             const assessment = this.dataset.assessment;
             handleAssessmentClick(assessment);
             
-            // Add visual feedback
             this.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 this.style.transform = '';
@@ -235,7 +187,6 @@ function handleAssessmentClick(assessmentType) {
     
     const message = responses[assessmentType] || `✨ ${assessmentType} assessment is being developed! Thank you for your interest in personalized learning.`;
     
-    // Send message to chat (if chat is initialized)
     if (window.chatModule && window.chatModule.addMessage) {
         window.chatModule.addMessage('ai', message);
     } else {
@@ -243,13 +194,9 @@ function handleAssessmentClick(assessmentType) {
     }
 }
 
-/**
- * Connection Status
- */
 function updateConnectionStatus() {
     const statusElement = document.querySelector('.status-connected');
     
-    // Simulate connection check
     setTimeout(() => {
         isConnected = true;
         if (statusElement) {
@@ -260,37 +207,6 @@ function updateConnectionStatus() {
     }, 2000);
 }
 
-/**
- * Touch Feedback for Mobile
- */
-function initializeTouchFeedback() {
-    if ('ontouchstart' in window) {
-        const touchElements = document.querySelectorAll('.action-item, .assessment-card, .btn, .sidebar-toggle');
-        
-        touchElements.forEach(element => {
-            element.addEventListener('touchstart', function() {
-                this.style.opacity = '0.8';
-            });
-            
-            element.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    this.style.opacity = '';
-                }, 100);
-            });
-        });
-        
-        console.log('📱 Touch feedback initialized');
-    }
-}
-
-// Initialize touch feedback when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeTouchFeedback);
-} else {
-    initializeTouchFeedback();
-}
-
-// Export functions for use by other modules
 window.mainModule = {
     handleActionClick,
     handleAssessmentClick,
