@@ -333,7 +333,7 @@ html, body {
 /* Responsive for smaller desktops */
 @media (max-width: 1024px) {
     .main-content {
-        grid-template-columns: 180px 1fr 200px;
+        grid-template-columns: 200px 1fr 220px;
         gap: 0.6rem;
     }
 }
