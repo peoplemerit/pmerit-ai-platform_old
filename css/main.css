@@ -353,3 +353,10 @@ html, body {
         padding: 0.5rem 0.3rem;
     }
 }
+/* ADD THIS COMPLETELY NEW RULE: */
+@media (max-width: 1200px) {
+    .main-content {
+        max-width: 98vw;
+        grid-template-columns: 180px 1fr 200px;
+    }
+}
