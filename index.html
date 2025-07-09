@@ -172,12 +172,46 @@
     <script src="js/main.js"></script>
     <script src="js/chat.js"></script>
     <script src="js/auth.js"></script>
-    <!-- Registration Modal - Add this BEFORE </body> tag around line 175 -->
-    <div id="signupModal" class="modal-overlay" style="display:none;">
-        <div class="modal-box">
+    <!-- IMPROVED REGISTRATION MODAL - RICE-STYLE TWO-STEP PROCESS -->
+<!-- Replace the existing signupModal in your index.html -->
+
+<div id="signupModal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        
+        <!-- STEP 1: Role Selection (RICE-inspired) -->
+        <div id="roleSelection" class="registration-step">
             <div class="modal-header">
-                <h2>🎓 Join PMERIT</h2>
-                <p>Start your learning journey - First attempt always free!</p>
+                <h2>🎓 Welcome! Join PMERIT as</h2>
+                <p>Choose your role to get started - First attempt always free!</p>
+            </div>
+            
+            <div class="role-selection-grid">
+                <div class="role-card" data-role="student">
+                    <div class="role-icon">🎓</div>
+                    <h3>Student</h3>
+                    <p>Start learning with our Technology, Business, and Creative tracks. Build skills for global remote opportunities.</p>
+                    <button class="role-select-btn">Continue as Student</button>
+                </div>
+                
+                <div class="role-card" data-role="educator">
+                    <div class="role-icon">👩‍🏫</div>
+                    <h3>Educator</h3>
+                    <p>Teach courses, mentor students, and contribute to our mission of accessible education worldwide.</p>
+                    <button class="role-select-btn">Continue as Educator</button>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" id="closeRoleSelection" class="btn-text">Cancel</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: Registration Form -->
+        <div id="registrationForm" class="registration-step" style="display:none;">
+            <div class="modal-header">
+                <button id="backToRoles" class="back-button">← Back</button>
+                <h2>🎓 Create Your Account</h2>
+                <p id="roleSubtitle">Student Registration</p>
             </div>
             
             <form id="signupForm" autocomplete="off">
@@ -240,12 +274,13 @@
                 </div>
 
                 <div class="privacy-warning">
-                    ⚠️ <strong>Privacy Notice:</strong> Please only share information required for registration. We protect your privacy and will never sell your data.
+                    ⚠️ <strong>Privacy Notice:</strong> We protect your privacy and will never sell your data. Only share information required for registration.
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn-primary" id="submitRegistration">
-                        Create My Account
+                        <span class="button-text">Create My Account</span>
+                        <span class="button-spinner" style="display:none;">Creating...</span>
                     </button>
                     <button type="button" id="closeSignup" class="btn-secondary">
                         Cancel
@@ -256,27 +291,43 @@
                     <small>By registering, you agree to our commitment to equitable education. First attempts at all courses are free globally.</small>
                 </div>
             </form>
+        </div>
 
-            <!-- Registration States -->
-            <div id="registrationLoading" class="registration-state" style="display:none;">
+        <!-- STEP 3: Loading State -->
+        <div id="registrationLoading" class="registration-step" style="display:none;">
+            <div class="loading-state">
                 <div class="loading-spinner"></div>
-                <p>Creating your account...</p>
+                <h3>Creating your account...</h3>
+                <p>Please wait while we set up your learning profile.</p>
             </div>
+        </div>
 
-            <div id="registrationSuccess" class="registration-state" style="display:none;">
+        <!-- STEP 4: Success State -->
+        <div id="registrationSuccess" class="registration-step" style="display:none;">
+            <div class="success-state">
                 <div class="success-icon">✅</div>
-                <h3>Registration Successful!</h3>
-                <p>Please check your email to confirm your account and access your dashboard.</p>
-                <button class="btn-primary" id="closeSuccessModal">Got it!</button>
+                <h3>Welcome to PMERIT!</h3>
+                <p>Registration successful! Please check your email to confirm your account and access your personalized dashboard.</p>
+                <div class="success-actions">
+                    <button class="btn-primary" id="closeSuccessModal">Get Started</button>
+                    <button class="btn-text" id="resendEmail">Resend confirmation email</button>
+                </div>
             </div>
+        </div>
 
-            <div id="registrationError" class="registration-state" style="display:none;">
+        <!-- STEP 5: Error State -->
+        <div id="registrationError" class="registration-step" style="display:none;">
+            <div class="error-state">
                 <div class="error-icon">❌</div>
                 <h3>Registration Failed</h3>
                 <p id="errorMessage">Something went wrong. Please try again.</p>
-                <button class="btn-secondary" id="retryRegistration">Try Again</button>
+                <div class="error-actions">
+                    <button class="btn-primary" id="retryRegistration">Try Again</button>
+                    <button class="btn-text" id="contactSupport">Contact Support</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
