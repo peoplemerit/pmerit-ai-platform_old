@@ -1,3 +1,8 @@
+/**
+ * PMERIT Authentication System - FIXED VERSION
+ * Handles sign-in, registration modal, and user authentication
+ */
+
 let authState = {
     isAuthenticated: false,
     user: null,
@@ -6,6 +11,7 @@ let authState = {
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeAuth();
+    initializeRegistrationModal(); // Add registration modal initialization
 });
 
 function initializeAuth() {
@@ -14,78 +20,24 @@ function initializeAuth() {
     console.log('🔐 Authentication module initialized');
 }
 
-function checkExistingSession() {
-    const savedSession = localStorage.getItem('gabriel_session');
-    if (savedSession) {
-        try {
-            const sessionData = JSON.parse(savedSession);
-            console.log('📱 Found existing session data');
-        } catch (e) {
-            console.log('⚠️ Invalid session data found, clearing...');
-            localStorage.removeItem('gabriel_session');
-        }
-    }
-}
-
-function initializeAuthButtons() {
-    const signInBtn = document.querySelector('.btn-signin');
-    const startLearningBtn = document.querySelector('.btn-primary');
-    
-    if (signInBtn) {
-        signInBtn.addEventListener('click', handleSignIn);
-    }
-    
-    if (startLearningBtn) {
-        startLearningBtn.addEventListener('click', handleStartLearning);
-    }
-}
-
-function handleSignIn() {
-    if (window.chatModule && window.chatModule.addMessage) {
-        window.chatModule.addMessage('ai', '🔐 Sign in functionality is coming soon! We\'re building a secure authentication system. For now, you can explore our educational content and assessments without signing in.');
-    } else {
-        alert('Sign in functionality coming soon!');
-    }
-    
-    console.log('🔐 Sign in clicked');
-}
-
-function handleStartLearning() {
-    if (window.chatModule && window.chatModule.addMessage) {
-        window.chatModule.addMessage('ai', '🚀 Welcome to your learning journey! I\'m excited to help you discover your potential. Let\'s start by understanding your interests and goals. What would you like to learn about? You can also try our assessments in the right sidebar to get personalized recommendations!');
-    } else {
-        console.log('🚀 Start learning clicked');
-    }
-    
-    const chatContainer = document.querySelector('.chat-container');
-    if (chatContainer) {
-        chatContainer.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-window.authModule = {
-    handleSignIn,
-    handleStartLearning
-};
-
-console.log('🔐 Gabriel AI Auth Module - Ready!');
-<!-- 3. ADD THIS JAVASCRIPT TO js/auth.js OR js/main.js -->
-<script>
-/**
- * PMERIT User Registration System
- * Handles modal display, form validation, and submission
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-    initializeRegistrationModal();
-});
-
 function initializeRegistrationModal() {
+    // FIXED: Use correct ID selector instead of class
+    const startLearningBtn = document.getElementById('startLearningBtn');
     const modal = document.getElementById('signupModal');
     const form = document.getElementById('signupForm');
     const closeBtn = document.getElementById('closeSignup');
-    const startLearningBtn = document.querySelector('.btn-primary'); // Adjust selector as needed
     
+    // Check if required elements exist
+    if (!startLearningBtn) {
+        console.error('❌ Start Learning button not found! Check if ID="startLearningBtn" exists');
+        return;
+    }
+    
+    if (!modal) {
+        console.error('❌ Registration modal not found! Check if signupModal HTML was added');
+        return;
+    }
+
     // Character counter for intent textarea
     const intentTextarea = document.getElementById('userIntent');
     const charCounter = document.querySelector('.char-counter');
@@ -96,27 +48,31 @@ function initializeRegistrationModal() {
     const assessmentLink = document.getElementById('takeAssessmentLink');
 
     // Modal state elements
-    const formState = form.parentElement;
+    const formState = form?.parentElement;
     const loadingState = document.getElementById('registrationLoading');
     const successState = document.getElementById('registrationSuccess');
     const errorState = document.getElementById('registrationError');
 
-    // Event Listeners
-    if (startLearningBtn) {
-        startLearningBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            showModal();
-        });
-    }
+    // FIXED: Attach event listener to correct button
+    startLearningBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('🚀 Start Learning button clicked - showing modal');
+        showModal();
+    });
 
-    closeBtn.addEventListener('click', hideModal);
+    // Close modal handlers
+    if (closeBtn) {
+        closeBtn.addEventListener('click', hideModal);
+    }
     
     // Close modal when clicking outside
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            hideModal();
-        }
-    });
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+    }
 
     // Character counter
     if (intentTextarea && charCounter) {
@@ -131,76 +87,100 @@ function initializeRegistrationModal() {
     if (assessmentLink) {
         assessmentLink.addEventListener('click', function(e) {
             e.preventDefault();
-            // Trigger assessment modal or navigate to assessment
             triggerCareerAssessment();
         });
     }
 
     // Form submission
-    form.addEventListener('submit', handleRegistrationSubmit);
+    if (form) {
+        form.addEventListener('submit', handleRegistrationSubmit);
+    }
 
     // Success modal close
-    document.getElementById('closeSuccessModal')?.addEventListener('click', hideModal);
+    const closeSuccessBtn = document.getElementById('closeSuccessModal');
+    if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener('click', hideModal);
+    }
     
     // Retry registration
-    document.getElementById('retryRegistration')?.addEventListener('click', showFormState);
+    const retryBtn = document.getElementById('retryRegistration');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', showFormState);
+    }
 
-    console.log('✅ Registration modal initialized');
+    console.log('✅ Registration modal initialized successfully');
 
     // Helper Functions
     function showModal() {
+        console.log('📋 Showing registration modal');
         modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        document.body.style.overflow = 'hidden';
         
         // Focus first input for accessibility
         setTimeout(() => {
-            document.getElementById('userName')?.focus();
+            const firstInput = document.getElementById('userName');
+            if (firstInput) {
+                firstInput.focus();
+            }
         }, 300);
     }
 
     function hideModal() {
+        console.log('❌ Hiding registration modal');
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         resetForm();
     }
 
     function resetForm() {
-        form.reset();
-        updateCharCounter();
-        assessmentPrompt.style.display = 'none';
+        if (form) {
+            form.reset();
+        }
+        if (updateCharCounter) {
+            updateCharCounter();
+        }
+        if (assessmentPrompt) {
+            assessmentPrompt.style.display = 'none';
+        }
         showFormState();
     }
 
     function showFormState() {
-        formState.style.display = 'block';
-        loadingState.style.display = 'none';
-        successState.style.display = 'none';
-        errorState.style.display = 'none';
+        if (formState) formState.style.display = 'block';
+        if (loadingState) loadingState.style.display = 'none';
+        if (successState) successState.style.display = 'none';
+        if (errorState) errorState.style.display = 'none';
     }
 
     function showLoadingState() {
-        formState.style.display = 'none';
-        loadingState.style.display = 'block';
-        successState.style.display = 'none';
-        errorState.style.display = 'none';
+        if (formState) formState.style.display = 'none';
+        if (loadingState) loadingState.style.display = 'block';
+        if (successState) successState.style.display = 'none';
+        if (errorState) errorState.style.display = 'none';
     }
 
     function showSuccessState() {
-        formState.style.display = 'none';
-        loadingState.style.display = 'none';
-        successState.style.display = 'block';
-        errorState.style.display = 'none';
+        if (formState) formState.style.display = 'none';
+        if (loadingState) loadingState.style.display = 'none';
+        if (successState) successState.style.display = 'block';
+        if (errorState) errorState.style.display = 'none';
     }
 
     function showErrorState(message = 'Registration failed. Please try again.') {
-        formState.style.display = 'none';
-        loadingState.style.display = 'none';
-        successState.style.display = 'none';
-        errorState.style.display = 'block';
-        document.getElementById('errorMessage').textContent = message;
+        if (formState) formState.style.display = 'none';
+        if (loadingState) loadingState.style.display = 'none';
+        if (successState) successState.style.display = 'none';
+        if (errorState) errorState.style.display = 'block';
+        
+        const errorMsg = document.getElementById('errorMessage');
+        if (errorMsg) {
+            errorMsg.textContent = message;
+        }
     }
 
     function updateCharCounter() {
+        if (!intentTextarea || !charCounter) return;
+        
         const count = intentTextarea.value.length;
         charCounter.textContent = `${count}/200`;
         
@@ -213,6 +193,8 @@ function initializeRegistrationModal() {
     }
 
     function handleCareerAssessmentChange() {
+        if (!careerSelect || !assessmentPrompt) return;
+        
         if (careerSelect.value === 'no') {
             assessmentPrompt.style.display = 'block';
         } else {
@@ -221,11 +203,9 @@ function initializeRegistrationModal() {
     }
 
     function triggerCareerAssessment() {
-        // Hide registration modal
         hideModal();
         
-        // Trigger career assessment (integrate with existing assessment system)
-        // This should open the assessment modal or navigate to assessment page
+        // Trigger career assessment
         if (window.mainModule && window.mainModule.handleActionClick) {
             window.mainModule.handleActionClick('assessments');
         } else {
@@ -239,15 +219,18 @@ function initializeRegistrationModal() {
 
     async function handleRegistrationSubmit(e) {
         e.preventDefault();
+        console.log('📝 Processing registration form submission');
         
         const formData = new FormData(form);
         const data = {
-            name: formData.get('name').trim(),
-            email: formData.get('email').trim(),
-            intent: formData.get('intent').trim(),
-            career_assessment: formData.get('career_assessment'),
+            name: formData.get('name')?.trim() || '',
+            email: formData.get('email')?.trim() || '',
+            intent: formData.get('intent')?.trim() || '',
+            career_assessment: formData.get('career_assessment') || '',
             timestamp: new Date().toISOString()
         };
+
+        console.log('📊 Registration data:', data);
 
         // Basic validation
         if (!validateFormData(data)) {
@@ -257,17 +240,13 @@ function initializeRegistrationModal() {
         showLoadingState();
 
         try {
-            // BACKEND INTEGRATION PLACEHOLDER
-            // Replace with your actual API endpoint
             const response = await submitRegistration(data);
             
             if (response.success) {
+                console.log('✅ Registration successful');
                 showSuccessState();
                 
                 // Optional: Track registration event
-                console.log('✅ User registered successfully:', data.email);
-                
-                // Optional: Send to analytics
                 if (window.gtag) {
                     gtag('event', 'sign_up', {
                         method: 'PMERIT_registration'
@@ -275,11 +254,12 @@ function initializeRegistrationModal() {
                 }
                 
             } else {
+                console.log('❌ Registration failed:', response.message);
                 showErrorState(response.message || 'Registration failed. Please try again.');
             }
             
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error('💥 Registration error:', error);
             showErrorState('Network error. Please check your connection and try again.');
         }
     }
@@ -309,26 +289,13 @@ function initializeRegistrationModal() {
     }
 
     async function submitRegistration(data) {
-        // BACKEND INTEGRATION PLACEHOLDER
-        // This is where you'll integrate with your actual backend
+        // MOCK IMPLEMENTATION - Replace with your actual backend
+        console.log('🔄 Submitting registration (mock implementation)');
         
-        /* Example implementation:
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        return await response.json();
-        */
-        
-        // Mock response for testing
         return new Promise((resolve) => {
             setTimeout(() => {
                 // Simulate success/failure
-                const isSuccess = Math.random() > 0.1; // 90% success rate for testing
+                const isSuccess = Math.random() > 0.2; // 80% success rate for testing
                 
                 if (isSuccess) {
                     resolve({
@@ -342,17 +309,63 @@ function initializeRegistrationModal() {
                         message: 'Email already exists. Please use a different email or sign in.'
                     });
                 }
-            }, 2000); // Simulate network delay
+            }, 2000);
         });
     }
 }
 
-// Export for other modules if needed
-window.registrationModule = {
+// Original auth functions (keep these)
+function checkExistingSession() {
+    const savedSession = localStorage.getItem('gabriel_session');
+    if (savedSession) {
+        try {
+            const sessionData = JSON.parse(savedSession);
+            console.log('📱 Found existing session data');
+        } catch (e) {
+            console.log('⚠️ Invalid session data found, clearing...');
+            localStorage.removeItem('gabriel_session');
+        }
+    }
+}
+
+function initializeAuthButtons() {
+    const signInBtn = document.querySelector('.btn-signin');
+    
+    if (signInBtn) {
+        signInBtn.addEventListener('click', handleSignIn);
+    }
+}
+
+function handleSignIn() {
+    if (window.chatModule && window.chatModule.addMessage) {
+        window.chatModule.addMessage('ai', '🔐 Sign in functionality is coming soon! We\'re building a secure authentication system. For now, you can explore our educational content and assessments without signing in.');
+    } else {
+        alert('Sign in functionality coming soon!');
+    }
+    
+    console.log('🔐 Sign in clicked');
+}
+
+function handleStartLearning() {
+    // This function is now replaced by the modal system
+    console.log('🚀 Start learning - opening registration modal');
+    
+    const modal = document.getElementById('signupModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+// Export functions for other modules
+window.authModule = {
+    handleSignIn,
+    handleStartLearning,
     showRegistrationModal: function() {
-        document.getElementById('signupModal').style.display = 'flex';
+        const modal = document.getElementById('signupModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
     }
 };
 
-console.log('🔐 PMERIT Registration System - Ready!');
-</script>
+console.log('🔐 PMERIT Authentication System - Ready!');
