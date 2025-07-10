@@ -40,7 +40,9 @@ class ComponentManager {
 
     initializeEventListeners() {
         // Listen for Start Learning button
-        const startLearningBtn = document.querySelector('a[href="dashboard.html"]');
+       // const startLearningBtn = document.querySelector('a[href="dashboard.html"]');
+        // Listen for Start Learning button
+          const startLearningBtn = document.getElementById('startLearningBtn');
         if (startLearningBtn) {
             startLearningBtn.href = '#';
             startLearningBtn.id = 'startLearningBtn';
