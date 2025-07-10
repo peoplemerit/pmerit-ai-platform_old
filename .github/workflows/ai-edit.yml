@@ -1,1 +1,38 @@
+name: AI Code Editor
 
+on:
+  workflow_dispatch:
+
+jobs:
+  ai-edit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install openai
+
+      - name: Run AI edit script
+        run: python scripts/ai_edit.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "AI Bot"
+          git config user.email "bot@peoplemerit.com"
+          git checkout -b ai-edits
+          git add js/auth.js
+          git commit -m "🤖 AI: Refactored auth.js with JWT scaffold"
+          git push origin ai-edits
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "AI: Refactored auth.js"
+          body: "This PR includes AI-generated improvements to the authentication module."
