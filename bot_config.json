@@ -1,0 +1,21 @@
+{
+  "safety_mode": "MAXIMUM",
+  "backup_before_changes": true,
+  "max_files_per_operation": 3,
+  "require_manual_approval": true,
+  "forbidden_operations": [
+    "delete_files",
+    "modify_critical_files",
+    "branch_operations"
+  ],
+  "critical_files": [
+    "index.html",
+    "CNAME", 
+    "README.md",
+    "package.json"
+  ],
+  "safe_file_extensions": [".js", ".css"],
+  "backup_retention_days": 30,
+  "emergency_contacts": ["admin@pmerit.com"],
+  "rollback_enabled": true
+}
