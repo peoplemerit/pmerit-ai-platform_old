@@ -2,6 +2,9 @@
 # This single workflow can improve ANY branch in the repository
 
 name: 🤖 PMERIT AI Bot - Cross-Branch Improvements
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   workflow_dispatch:
