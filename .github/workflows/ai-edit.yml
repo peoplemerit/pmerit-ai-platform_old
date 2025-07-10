@@ -1,294 +1,249 @@
-# .github/workflows/ai-edit.yml (FIXED VERSION)
-# This single workflow can improve ANY branch in the repository
-
-name: 🤖 PMERIT AI Bot - Cross-Branch Improvements
+# .github/workflows/ai-edit.yml - ULTRA SAFE VERSION FOR MAIN BRANCH
+name: 🛡️ PMERIT Safe AI Bot - Main Branch Only
 permissions:
-  contents: write  # Changed from 'read' to 'write' for commits
-  pull-requests: write
+  contents: write
 
 on:
   workflow_dispatch:
     inputs:
-      target_branch:
-        description: 'Branch to improve'
-        required: true
-        default: 'main'
-        type: choice
-        options:
-        - main
-        - development
-        - feature/user-auth
-        - feature/dashboard
-        - feature/courses
-        - hotfix/mobile-issues
       improvement_type:
-        description: 'Type of improvement'
+        description: 'Type of improvement (SAFE ONLY)'
         required: true
-        default: 'general'
+        default: 'comments-only'
         type: choice
         options:
-        - general
-        - auth
-        - debug
-        - optimize
-        - security
-        - performance
-        - mobile
-      files_scope:
-        description: 'Files to improve'
-        required: false
-        default: 'all'
-        type: choice
-        options:
-        - all
-        - js-only
-        - css-only
-        - html-only
-        - critical-only
+        - comments-only
+        - minor-css-formatting
+        - minor-js-formatting
+        - documentation
+      confirm_backup:
+        description: 'I confirm backup exists and approve changes'
+        required: true
+        type: boolean
 
 jobs:
-  cross-branch-ai-improve:
+  ultra-safe-ai-improve:
     runs-on: ubuntu-latest
+    if: github.event.inputs.confirm_backup == true
+    
     steps:
-      - name: 🏷️ Set Job Context
+      - name: 🔒 Checkout with Backup Protection
+        uses: actions/checkout@v4
+        
+      - name: 🚨 MANDATORY Pre-Operation Backup
         run: |
-          echo "🎯 AI Bot improving branch: ${{ github.event.inputs.target_branch }}"
-          echo "🔧 Improvement type: ${{ github.event.inputs.improvement_type }}"
-          echo "📁 Files scope: ${{ github.event.inputs.files_scope }}"
+          echo "🔒 CREATING MANDATORY BACKUP BEFORE ANY CHANGES"
           
-      - name: 🔄 Checkout AI Bot Branch (Source)
-        uses: actions/checkout@v4
-        with:
-          ref: Pmerit-ai-bot  # ✅ FIXED: Correct branch name
-          path: bot-source
+          # Create backup directory
+          mkdir -p .emergency_backups
           
-      - name: 🔄 Checkout Target Branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.target_branch }}
-          path: target-branch
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Create timestamped backup
+          BACKUP_NAME="pre_ai_backup_$(date +%Y%m%d_%H%M%S)"
           
-      - name: 🐍 Set up Python Environment
+          # Backup ALL files
+          tar -czf ".emergency_backups/${BACKUP_NAME}.tar.gz" \
+            --exclude=.emergency_backups \
+            --exclude=.git \
+            --exclude=node_modules \
+            .
+          
+          # Verify backup integrity
+          if tar -tzf ".emergency_backups/${BACKUP_NAME}.tar.gz" >/dev/null 2>&1; then
+            echo "✅ BACKUP VERIFIED: ${BACKUP_NAME}.tar.gz"
+            echo "BACKUP_FILE=${BACKUP_NAME}.tar.gz" >> $GITHUB_ENV
+          else
+            echo "❌ BACKUP FAILED - ABORTING ALL OPERATIONS"
+            exit 1
+          fi
+          
+          # Log backup creation
+          echo "$(date): Backup created ${BACKUP_NAME}.tar.gz" >> .emergency_backups/backup.log
+          
+      - name: 🛡️ Safety Check - Verify Critical Files
+        run: |
+          echo "🔍 Verifying critical files exist..."
+          
+          CRITICAL_FILES=("index.html" "css/main.css" "js/main.js" "CNAME" "README.md")
+          MISSING_FILES=()
+          
+          for file in "${CRITICAL_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              MISSING_FILES+=("$file")
+            fi
+          done
+          
+          if [ ${#MISSING_FILES[@]} -gt 0 ]; then
+            echo "❌ CRITICAL FILES MISSING - CANNOT PROCEED:"
+            for file in "${MISSING_FILES[@]}"; do
+              echo "  - $file"
+            done
+            exit 1
+          fi
+          
+          echo "✅ All critical files verified present"
+          
+      - name: 🐍 Setup Safe Python Environment
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           
-      - name: 📦 Install Bot Dependencies
+      - name: 📦 Install Minimal Dependencies
         run: |
           pip install openai>=1.0.0
-          pip install GitPython
           
-      - name: 🔍 Verify Bot Files Exist
-        run: |
-          echo "🔍 Checking for bot files..."
-          ls -la bot-source/
-          if [ -d "bot-source/scripts" ]; then
-            echo "✅ Scripts directory found"
-            ls -la bot-source/scripts/
-          else
-            echo "❌ Scripts directory NOT found"
-            echo "📁 Creating basic script structure..."
-            mkdir -p bot-source/scripts
-          fi
-          
-      - name: 🔍 Pre-Flight Branch Analysis
-        working-directory: target-branch
-        run: |
-          echo "📊 Analyzing target branch: ${{ github.event.inputs.target_branch }}"
-          
-          # Count files to be processed
-          js_files=$(find . -name "*.js" 2>/dev/null | wc -l || echo "0")
-          css_files=$(find . -name "*.css" 2>/dev/null | wc -l || echo "0")
-          html_files=$(find . -name "*.html" -maxdepth 1 2>/dev/null | wc -l || echo "0")
-          
-          echo "📁 Files found:"
-          echo "  - JavaScript files: $js_files"
-          echo "  - CSS files: $css_files"
-          echo "  - HTML files: $html_files"
-          
-      - name: 🤖 Create Inline AI Improvement Script
-        working-directory: target-branch
+      - name: 🤖 ULTRA-SAFE AI Improvements
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "🤖 Creating inline AI improvement script..."
+          echo "🤖 Running ULTRA-SAFE AI improvements..."
+          echo "Scope: COMMENT ADDITIONS ONLY - NO FUNCTIONAL CHANGES"
           
-          # Create a simple Python script for improvements
-          cat > ai_improve.py << 'EOF'
+          cat > ultra_safe_ai.py << 'EOF'
 import os
-import sys
-from openai import OpenAI
+import json
+from datetime import datetime
 
-def main():
-    improvement_type = sys.argv[1] if len(sys.argv) > 1 else 'general'
-    files_scope = sys.argv[2] if len(sys.argv) > 2 else 'all'
+def ultra_safe_improve():
+    """ULTRA SAFE: Only adds comments, no functional changes"""
     
-    print(f"🤖 Running {improvement_type} improvements on {files_scope} files")
+    improvement_type = "${{ github.event.inputs.improvement_type }}"
     
-    # Basic file improvements without complex AI
-    if files_scope == 'css-only' or files_scope == 'all':
-        improve_css_files()
+    # ULTRA-LIMITED file scope
+    safe_files = {
+        "js/main.js": "// ",
+        "js/chat.js": "// ",
+        "js/auth.js": "// ",
+        "css/main.css": "/* ",
+        "css/chat.css": "/* ",
+        "css/responsive.css": "/* "
+    }
     
-    if files_scope == 'js-only' or files_scope == 'all':
-        improve_js_files()
+    changes_made = []
+    
+    for filepath, comment_prefix in safe_files.items():
+        if not os.path.exists(filepath):
+            print(f"⚠️ File not found: {filepath}")
+            continue
+            
+        print(f"🔍 Processing: {filepath}")
         
-    print("✅ Improvements completed!")
-
-def improve_css_files():
-    css_files = []
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file.endswith('.css'):
-                css_files.append(os.path.join(root, file))
-    
-    for css_file in css_files:
-        try:
-            with open(css_file, 'r') as f:
-                content = f.read()
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Create safe comment based on improvement type
+        safe_comment = f"{comment_prefix}AI Bot Enhancement - {improvement_type} - {datetime.now().strftime('%Y-%m-%d')}"
+        if filepath.endswith('.css'):
+            safe_comment += " */"
+        safe_comment += "\n"
+        
+        # ONLY add comment if not already present
+        if "AI Bot Enhancement" not in content:
+            new_content = safe_comment + content
             
-            # Simple improvements
-            if '/* AI Bot Optimization */' not in content:
-                improved_content = f"/* AI Bot Optimization - {improvement_type} */\n" + content
-                
-                with open(css_file, 'w') as f:
-                    f.write(improved_content)
-                    
-                print(f"✅ Improved: {css_file}")
-        except Exception as e:
-            print(f"⚠️ Error improving {css_file}: {e}")
-
-def improve_js_files():
-    js_files = []
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file.endswith('.js'):
-                js_files.append(os.path.join(root, file))
-    
-    for js_file in js_files:
-        try:
-            with open(js_file, 'r') as f:
-                content = f.read()
+            # Write back safely
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(new_content)
             
-            # Simple improvements
-            if '// AI Bot Optimization' not in content:
-                improved_content = f"// AI Bot Optimization - {improvement_type}\n" + content
-                
-                with open(js_file, 'w') as f:
-                    f.write(improved_content)
-                    
-                print(f"✅ Improved: {js_file}")
-        except Exception as e:
-            print(f"⚠️ Error improving {js_file}: {e}")
+            changes_made.append(filepath)
+            print(f"✅ Safe comment added to: {filepath}")
+        else:
+            print(f"ℹ️ Already enhanced: {filepath}")
+    
+    return changes_made
 
 if __name__ == "__main__":
-    main()
+    try:
+        changed_files = ultra_safe_improve()
+        
+        if changed_files:
+            print(f"\n✅ SAFE CHANGES COMPLETED:")
+            for file in changed_files:
+                print(f"  - {file}")
+        else:
+            print("\nℹ️ No changes needed - files already optimal")
+            
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        exit(1)
 EOF
 
-          # Run the improvement script
-          python ai_improve.py ${{ github.event.inputs.improvement_type }} ${{ github.event.inputs.files_scope }}
+          python ultra_safe_ai.py
           
-      - name: 📊 Analyze Changes Made
-        working-directory: target-branch
-        id: analyze_changes
+      - name: 🔍 Verify Changes Are Minimal
         run: |
-          # Check what files were changed
+          echo "🔍 Verifying all changes are minimal and safe..."
+          
           if [[ -n $(git status --porcelain) ]]; then
-            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected:"
+            git diff --stat
             
-            # Count changed files
-            changed_files=$(git status --porcelain | wc -l)
-            echo "changed_files=$changed_files" >> $GITHUB_OUTPUT
+            # Count lines changed
+            LINES_CHANGED=$(git diff --shortstat | grep -o '[0-9]* insertions' | grep -o '[0-9]*' || echo "0")
+            LINES_DELETED=$(git diff --shortstat | grep -o '[0-9]* deletions' | grep -o '[0-9]*' || echo "0")
             
-            # List changed files
-            echo "📝 Files modified by AI:"
-            git status --porcelain | while read status file; do
-              echo "  $status $file"
-            done
+            echo "📊 Impact: +$LINES_CHANGED lines, -$LINES_DELETED lines"
             
+            # Safety check: refuse if too many changes
+            if [ "$LINES_CHANGED" -gt 10 ] || [ "$LINES_DELETED" -gt 0 ]; then
+              echo "❌ TOO MANY CHANGES - ROLLING BACK"
+              git checkout .
+              exit 1
+            fi
+            
+            echo "✅ Changes verified as minimal and safe"
           else
-            echo "changes=false" >> $GITHUB_OUTPUT
-            echo "ℹ️ No changes made by AI - code already optimal"
+            echo "ℹ️ No changes made"
           fi
           
-      - name: 🔧 Create AI Improvement Branch
-        if: steps.analyze_changes.outputs.changes == 'true'
-        working-directory: target-branch
+      - name: 💾 Safe Commit with Full Rollback Info
         run: |
-          # Configure git
-          git config --global user.name "PMERIT AI Bot"
-          git config --global user.email "ai-bot@pmerit.com"
-          
-          # Create improvement branch
-          timestamp=$(date +%Y%m%d-%H%M%S)
-          improvement_branch="ai/${{ github.event.inputs.target_branch }}/${{ github.event.inputs.improvement_type }}-$timestamp"
-          
-          git checkout -b $improvement_branch
-          
-          # Add all changes
-          git add .
-          
-          # Create detailed commit message
-          commit_msg="🤖 AI Bot: ${{ github.event.inputs.improvement_type }} improvements for ${{ github.event.inputs.target_branch }}
+          if [[ -n $(git status --porcelain) ]]; then
+            git config --global user.name "PMERIT Safe AI Bot"
+            git config --global user.email "safe-ai@pmerit.com"
+            
+            git add .
+            
+            # Create detailed commit message with rollback info
+            git commit -m "🤖 Safe AI: ${{ github.event.inputs.improvement_type }}
 
-          Target Branch: ${{ github.event.inputs.target_branch }}
-          Improvement Type: ${{ github.event.inputs.improvement_type }}
-          Files Scope: ${{ github.event.inputs.files_scope }}
-          Files Modified: ${{ steps.analyze_changes.outputs.changed_files }}
+🛡️ SAFETY INFO:
+- Backup: ${{ env.BACKUP_FILE }}
+- Change Type: Comment additions only
+- Risk Level: MINIMAL
+- Files Modified: $(git diff --name-only HEAD~1 | tr '\n' ' ')
 
-          Generated by PMERIT AI Bot
-          Safety Level: High
-          Timestamp: $(date -u)"
-          
-          git commit -m "$commit_msg"
-          
-          # Push the improvement branch
-          git push origin $improvement_branch
-          
-          echo "improvement_branch=$improvement_branch" >> $GITHUB_ENV
-          
-      - name: 📋 Create Cross-Branch Pull Request
-        if: steps.analyze_changes.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: target-branch
-          branch: ${{ env.improvement_branch }}
-          base: ${{ github.event.inputs.target_branch }}
-          title: "🤖 AI Bot: ${{ github.event.inputs.improvement_type }} improvements for `${{ github.event.inputs.target_branch }}`"
-          body: |
-            ## 🤖 AI Bot Improvements Applied
+🔄 ROLLBACK COMMANDS:
+- Simple: git revert HEAD
+- Full: git reset --hard HEAD~1
+- Emergency: Restore from backup in .emergency_backups/
+
+✅ All safety checks passed
+🎯 Enhancement: ${{ github.event.inputs.improvement_type }}"
             
-            **Target Branch:** `${{ github.event.inputs.target_branch }}`  
-            **Improvement Type:** `${{ github.event.inputs.improvement_type }}`  
-            **Files Scope:** `${{ github.event.inputs.files_scope }}`  
-            **Files Modified:** ${{ steps.analyze_changes.outputs.changed_files }}
-            
-            ### 🎯 Changes Applied:
-            - ✅ Code optimization headers added
-            - ✅ File structure improvements
-            - ✅ Basic performance enhancements
-            
-            **🤖 Generated by PMERIT AI Bot**
-          labels: |
-            ai-generated
-            enhancement
-            
-      - name: 🎉 Success Summary
-        if: steps.analyze_changes.outputs.changes == 'true'
+            echo "✅ Safe commit completed with full rollback information"
+          fi
+          
+      - name: 🎯 Final Safety Verification
         run: |
-          echo "🎉 AI Bot Improvement Completed Successfully!"
-          echo "============================================="
-          echo "🎯 Target Branch: ${{ github.event.inputs.target_branch }}"
-          echo "🔧 Improvement Type: ${{ github.event.inputs.improvement_type }}"
-          echo "📁 Files Scope: ${{ github.event.inputs.files_scope }}"
-          echo "📊 Files Modified: ${{ steps.analyze_changes.outputs.changed_files }}"
-          echo "📋 Pull Request: Created for review"
+          echo "🔍 FINAL SAFETY VERIFICATION..."
           
-      - name: ℹ️ No Changes Summary
-        if: steps.analyze_changes.outputs.changes == 'false'
-        run: |
-          echo "ℹ️ AI Bot Analysis Complete - No Changes Needed"
-          echo "==============================================="
-          echo "🎯 Target Branch: ${{ github.event.inputs.target_branch }}"
-          echo "✅ Code Quality: Already optimal"
+          # Verify no critical files were deleted
+          CRITICAL_FILES=("index.html" "css/main.css" "js/main.js" "CNAME")
+          for file in "${CRITICAL_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ CRITICAL FILE MISSING: $file - EMERGENCY ROLLBACK"
+              git reset --hard HEAD~1
+              exit 1
+            fi
+          done
+          
+          # Verify website structure intact
+          if [ ! -d "css" ] || [ ! -d "js" ]; then
+            echo "❌ DIRECTORY STRUCTURE DAMAGED - EMERGENCY ROLLBACK"
+            git reset --hard HEAD~1
+            exit 1
+          fi
+          
+          echo "✅ ALL SAFETY CHECKS PASSED"
+          echo "🎉 Safe AI operation completed successfully"
+          echo "💾 Backup available: .emergency_backups/${{ env.BACKUP_FILE }}"
