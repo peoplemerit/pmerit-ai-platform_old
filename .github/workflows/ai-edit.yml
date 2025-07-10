@@ -59,7 +59,7 @@ jobs:
       - name: 🔄 Checkout AI Bot Branch (Source)
         uses: actions/checkout@v4
         with:
-          ref: ai-bot
+          ref: Pmerit-ai-bot
           path: bot-source
           
       - name: 🔄 Checkout Target Branch
