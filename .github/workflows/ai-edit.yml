@@ -209,7 +209,7 @@ jobs:
           body: |
             ## 🤖 Cross-Branch AI Improvements
             
-            **Source Branch:** `ai-bot` (bot files)  
+            **Source Branch:** `Pmerit-ai-bot` (bot files)  
             **Target Branch:** `${{ github.event.inputs.target_branch }}`  
             **Improvement Type:** `${{ github.event.inputs.improvement_type }}`  
             **Files Scope:** `${{ github.event.inputs.files_scope }}`  
