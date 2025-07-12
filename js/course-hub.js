@@ -231,112 +231,267 @@ const SUBJECT_MATERIALS = {
 };
 
 // CART FLOW
+// ====== COMPLETE SOLUTION 5: js/course-hub.js Integration Fix ======
+// Add this function to js/course-hub.js or replace the existing addSubjectToCart function
+
+// Enhanced Cart Protection with Complete Authentication Integration
 function addSubjectToCart(subjectId) {
-  // Check authentication first
-  if (!window.checkAuthForCart || !window.checkAuthForCart()) {
-    return;
-  }
-  
- const studentId = window.PMERIT_AUTH.getSession()?.user?.email || getCurrentStudentId();
-  if (!studentId) {
-    alert("Please sign in to add subjects.");
-    window.location.href = "signin.html";
-    return;
-  }
-  // Button loading state
-  const btn = document.querySelector(`button[data-subject-id="${subjectId}"]`);
-  if (btn) {
-    btn.classList.add('loading');
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    }, 1200);
-  }
-  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
-  if (!cart.includes(subjectId)) cart.push(subjectId);
-  localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
-  showSubjectCartModal();
-}
-
-function showSubjectCartModal() {
-  const studentId = getCurrentStudentId();
-  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
-  let html = `<h2 style="margin-bottom:1rem;">📚 Subject Cart</h2>`;
-  if (cart.length) {
-    html += '<ul style="margin-bottom:1rem;">' + cart.map(id => {
-      const subject = AVAILABLE_SUBJECTS.find(s => s.id === id);
-      return subject ? `<li style="margin-bottom:0.5rem;">
-        <strong>${subject.title}</strong>
-        <button style="margin-left:1rem;" onclick="enrollInSubject('${studentId}', '${id}')">Register</button>
-      </li>` : '';
-    }).join('') + '</ul>';
-  } else {
-    html += '<p>No subjects added.</p>';
-  }
-  html += `<button onclick="closeCartModal()">Close</button>`;
-
-  if (window.pmeritComponentManager) {
-    window.pmeritComponentManager.showComponent('generic-modal');
-    let modal = document.querySelector('.pmerit-modal');
-    if (modal) modal.innerHTML = html;
-  } else {
-    document.getElementById('courseCartModal').innerHTML =
-      `<div class="pmerit-modal-container active"><div class="pmerit-modal">${html}</div></div>`;
-  }
-}
-
-function closeCartModal() {
-  if (window.pmeritComponentManager) {
-    window.pmeritComponentManager.hideCurrentModal();
-  } else {
-    document.getElementById('courseCartModal').innerHTML = '';
-  }
-}
-
-function enrollInSubject(studentId, subjectId) {
-  if (!STUDENT_ENROLLMENTS[studentId]) {
-    STUDENT_ENROLLMENTS[studentId] = { subjects: [], progress: {} };
-  }
-  if (!STUDENT_ENROLLMENTS[studentId].subjects.includes(subjectId)) {
-    STUDENT_ENROLLMENTS[studentId].subjects.push(subjectId);
-    STUDENT_ENROLLMENTS[studentId].progress[subjectId] = 0;
-    alert("Enrollment successful! You can now access the subject in your dashboard.");
-  } else {
-    alert("You're already enrolled in this subject.");
-  }
-  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
-  cart = cart.filter(id => id !== subjectId);
-  localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
-  closeCartModal();
-  window.location.href = "dashboard.html";
-}
-
-// DASHBOARD RENDERING
-function updateDashboard(studentId) {
-  const enrolledSubjectsGrid = document.getElementById('enrolledCoursesGrid');
-  if (enrolledSubjectsGrid) {
-    const enrolled = STUDENT_ENROLLMENTS[studentId]?.subjects || [];
-    if (enrolled.length === 0) {
-      enrolledSubjectsGrid.innerHTML = "<p>No subjects enrolled yet. <a href='courses.html'>Browse Subject Catalog</a></p>";
-    } else {
-      enrolledSubjectsGrid.innerHTML = enrolled.map(subjectId => {
-        const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
-        if (!subject) return '';
-        const progress = STUDENT_ENROLLMENTS[studentId].progress[subjectId] || 0;
-        return `
-        <div class="course-card" data-track="${subject.track}">
-          <span class="track-badge">${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</span>
-          <h3>${subject.title}</h3>
-          <div class="course-info-row">
-            <span class="info-label">Progress:</span> ${progress}%
-            <span class="info-label">Duration:</span> ${subject.duration}
-          </div>
-          <button onclick="launchAIClassroom('${subjectId}')">Start AI Class</button>
-        </div>`;
-      }).join('');
+    // Check authentication using the new auth system
+    const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+    
+    if (!session.user || !session.user.email) {
+        alert("Please sign in to add subjects to your cart.");
+        window.location.href = "signin.html";
+        return;
     }
-  }
+
+    const studentId = session.user.email;
+    
+    // Button loading state
+    const btn = document.querySelector(`button[data-subject-id="${subjectId}"]`);
+    if (btn) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+        btn.textContent = 'Adding...';
+        
+        setTimeout(() => {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            btn.textContent = 'Added to Cart ✓';
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                btn.textContent = 'Add Subject to Cart';
+            }, 2000);
+        }, 1200);
+    }
+
+    // Get or create cart for this user
+    let cart = JSON.parse(localStorage.getItem(`subject_cart_${studentId}`) || '[]');
+    
+    // Check if already in cart
+    if (cart.includes(subjectId)) {
+        alert("This subject is already in your cart!");
+        return;
+    }
+    
+    // Add to cart
+    cart.push(subjectId);
+    localStorage.setItem(`subject_cart_${studentId}`, JSON.stringify(cart));
+    
+    // Show success and cart modal
+    console.log(`✅ Added ${subjectId} to cart for ${session.user.name}`);
+    showSubjectCartModal();
+}
+
+// Enhanced Cart Modal with Enrollment
+function showSubjectCartModal() {
+    const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+    if (!session.user) return;
+    
+    const studentId = session.user.email;
+    let cart = JSON.parse(localStorage.getItem(`subject_cart_${studentId}`) || '[]');
+    
+    let html = `
+        <div style="max-width: 500px;">
+            <h2 style="margin-bottom: 1rem; color: #667eea;">📚 Your Subject Cart</h2>
+    `;
+    
+    if (cart.length === 0) {
+        html += `
+            <div style="text-align: center; padding: 2rem; color: #666;">
+                <p>Your cart is empty.</p>
+                <button onclick="closeCartModal()" style="background: #667eea; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; margin-top: 1rem;">Continue Browsing</button>
+            </div>
+        `;
+    } else {
+        html += `<div style="margin-bottom: 1.5rem;">`;
+        
+        cart.forEach(subjectId => {
+            const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
+            if (subject) {
+                html += `
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; background: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4 style="margin: 0 0 0.25rem 0; color: #333;">${subject.title}</h4>
+                                <p style="margin: 0; font-size: 0.85rem; color: #666;">${subject.track} • ${subject.duration}</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="enrollInSubject('${studentId}', '${subjectId}')" 
+                                        style="background: #22c55e; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                    Enroll FREE
+                                </button>
+                                <button onclick="removeFromCart('${studentId}', '${subjectId}')" 
+                                        style="background: #ef4444; color: white; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer;">
+                                    ×
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        html += `</div>`;
+        
+        html += `
+            <div style="text-align: center; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                <button onclick="enrollInAllCartItems('${studentId}')" 
+                        style="background: #667eea; color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-right: 0.5rem;">
+                    Enroll in All (FREE)
+                </button>
+                <button onclick="closeCartModal()" 
+                        style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    Continue Browsing
+                </button>
+            </div>
+        `;
+    }
+    
+    html += `</div>`;
+
+    // Show modal using existing component system or create simple modal
+    if (window.pmeritComponentManager) {
+        window.pmeritComponentManager.showComponent('generic-modal');
+        const modal = document.querySelector('.pmerit-modal');
+        if (modal) modal.innerHTML = html;
+    } else {
+        // Fallback modal
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="cartModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                <div style="background: white; border-radius: 12px; padding: 2rem; max-width: 90vw; max-height: 85vh; overflow-y: auto;">
+                    ${html}
+                </div>
+            </div>
+        `);
+    }
+}
+
+// Enroll in single subject
+function enrollInSubject(studentId, subjectId) {
+    const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+    
+    // Get current enrollments
+    let enrollments = JSON.parse(localStorage.getItem(`enrollments_${studentId}`) || '[]');
+    
+    // Check if already enrolled
+    if (enrollments.includes(subjectId)) {
+        alert("You're already enrolled in this subject!");
+        return;
+    }
+    
+    // Add to enrollments
+    enrollments.push(subjectId);
+    localStorage.setItem(`enrollments_${studentId}`, JSON.stringify(enrollments));
+    
+    // Initialize progress
+    localStorage.setItem(`progress_${studentId}_${subjectId}`, '0');
+    
+    // Remove from cart
+    let cart = JSON.parse(localStorage.getItem(`subject_cart_${studentId}`) || '[]');
+    cart = cart.filter(id => id !== subjectId);
+    localStorage.setItem(`subject_cart_${studentId}`, JSON.stringify(cart));
+    
+    // Get subject name for success message
+    const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
+    const subjectName = subject ? subject.title : 'the subject';
+    
+    alert(`🎉 Enrollment successful! You're now enrolled in "${subjectName}". Check your dashboard to start learning!`);
+    
+    // Refresh cart modal or close if empty
+    if (cart.length === 0) {
+        closeCartModal();
+        // Optionally redirect to dashboard
+        if (confirm("Would you like to go to your dashboard to start learning?")) {
+            window.location.href = "dashboard.html";
+        }
+    } else {
+        showSubjectCartModal(); // Refresh modal
+    }
+    
+    console.log(`✅ ${session.user.name} enrolled in ${subjectId}`);
+}
+
+// Enroll in all cart items
+function enrollInAllCartItems(studentId) {
+    const cart = JSON.parse(localStorage.getItem(`subject_cart_${studentId}`) || '[]');
+    
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    
+    let enrollments = JSON.parse(localStorage.getItem(`enrollments_${studentId}`) || '[]');
+    let newEnrollments = 0;
+    
+    cart.forEach(subjectId => {
+        if (!enrollments.includes(subjectId)) {
+            enrollments.push(subjectId);
+            localStorage.setItem(`progress_${studentId}_${subjectId}`, '0');
+            newEnrollments++;
+        }
+    });
+    
+    // Save enrollments
+    localStorage.setItem(`enrollments_${studentId}`, JSON.stringify(enrollments));
+    
+    // Clear cart
+    localStorage.setItem(`subject_cart_${studentId}`, '[]');
+    
+    closeCartModal();
+    
+    if (newEnrollments > 0) {
+        alert(`🎉 Excellent! You've enrolled in ${newEnrollments} subject${newEnrollments > 1 ? 's' : ''}. Check your dashboard to start learning!`);
+        if (confirm("Would you like to go to your dashboard now?")) {
+            window.location.href = "dashboard.html";
+        }
+    } else {
+        alert("You're already enrolled in all these subjects!");
+    }
+}
+
+// Remove from cart
+function removeFromCart(studentId, subjectId) {
+    let cart = JSON.parse(localStorage.getItem(`subject_cart_${studentId}`) || '[]');
+    cart = cart.filter(id => id !== subjectId);
+    localStorage.setItem(`subject_cart_${studentId}`, JSON.stringify(cart));
+    
+    // Refresh modal
+    showSubjectCartModal();
+}
+
+// Close cart modal
+function closeCartModal() {
+    if (window.pmeritComponentManager) {
+        window.pmeritComponentManager.hideCurrentModal();
+    } else {
+        const modal = document.getElementById('cartModal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+}
+
+// Make functions globally available
+window.enrollInSubject = enrollInSubject;
+window.enrollInAllCartItems = enrollInAllCartItems;
+window.removeFromCart = removeFromCart;
+window.closeCartModal = closeCartModal;
+
+// Enhanced getCurrentStudentId function
+function getCurrentStudentId() {
+    const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+    return session.user ? session.user.email : null;
+}
+
+// Add authentication check function for cart
+window.checkAuthForCart = function() {
+    const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+    return session.user && session.user.email;
+};
+
+console.log("✅ Enhanced Course Hub with authentication integration loaded!");
   // Next Lessons
   const nextLessonsGrid = document.getElementById('nextLessonsGrid');
   if (nextLessonsGrid) {
