@@ -38,10 +38,20 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-link">← Back to Home</a>
-        <h1>📚 Course Hub</h1>
-        <p>Explore our comprehensive course catalog with Technology, Business, and Creative tracks.</p>
-        <p><strong>Status:</strong> Frontend Complete - Ready for Backend Integration</p>
-    </div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+  <h1>📚 Course Hub</h1>
+  <div id="courseHubFilters">
+    <select id="trackFilter">
+      <option value="">All Tracks</option>
+      <option value="core">Core Curriculum</option>
+      <option value="remote_careers">Remote Careers</option>
+      <option value="electives">Electives</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Search courses...">
+  </div>
+  <div id="courseCards" class="course-grid"></div>
+  <div id="courseCartModal"></div>
+</div>
+<script src="js/course-hub.js"></script>
 </body>
 </html>
