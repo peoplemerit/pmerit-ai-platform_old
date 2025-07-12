@@ -1,36 +1,228 @@
+/* ================================
+   PMERIT Course Hub - Modern Cards
+   ================================ */
+
+/* Responsive grid layout */
 .course-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
+  padding: 1.5rem 0;
 }
 
+/* Modern Course Card */
 .course-card {
-  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
-  border-radius: 15px;
-  box-shadow: 0 4px 24px rgba(102,126,234,0.07);
-  padding: 1.5rem;
-  transition: box-shadow 0.2s, transform 0.2s;
-  border: 1px solid #667eea22;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 28px rgba(102,126,234,0.07), 0 1.5px 6px rgba(34,197,94,0.04);
+  padding: 2rem 1.5rem;
+  transition: box-shadow 0.3s cubic-bezier(.4,0,.2,1), transform 0.3s cubic-bezier(.4,0,.2,1), border-color 0.3s;
+  border: 1.5px solid #f3f4f6;
+  position: relative;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* Track-based accent border and badge */
+.course-card[data-track="core"] {
+  border-left: 7px solid #667eea;
+}
+.course-card[data-track="remote_careers"] {
+  border-left: 7px solid #764ba2;
+}
+.course-card[data-track="electives"] {
+  border-left: 7px solid #22c55e;
+}
+
+/* Track badge */
+.track-badge {
+  display: inline-block;
+  padding: 0.35em 1em;
+  border-radius: 999px;
+  font-size: 0.92em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.8em;
+  background: #f3f4f6;
+}
+
+.course-card[data-track="core"] .track-badge {
+  color: #fff;
+  background: linear-gradient(90deg, #667eea 80%, #a5b4fc 100%);
+  box-shadow: 0 2px 8px #667eea22;
+}
+.course-card[data-track="remote_careers"] .track-badge {
+  color: #fff;
+  background: linear-gradient(90deg, #764ba2 80%, #b4a2fc 100%);
+  box-shadow: 0 2px 8px #764ba222;
+}
+.course-card[data-track="electives"] .track-badge {
+  color: #fff;
+  background: linear-gradient(90deg, #22c55e 80%, #bbf7d0 100%);
+  box-shadow: 0 2px 8px #22c55e22;
+}
+
+/* Heading and typography */
+.course-card h3 {
+  font-size: 1.28rem;
+  font-weight: 700;
+  color: #22223b;
+  margin-bottom: 0.4em;
+  line-height: 1.2;
+}
+
+.course-card p {
+  color: #52525b;
+  font-size: 1.03rem;
+  margin-bottom: 0.3em;
+  line-height: 1.6;
+}
+
+/* Info rows */
+.course-info-row {
+  display: flex;
+  gap: 1.5em;
+  flex-wrap: wrap;
+  font-size: 0.98em;
+  margin-bottom: 0.6em;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #6366f1;
+  margin-right: 0.3em;
+}
+
+.course-card[data-track="remote_careers"] .info-label {
+  color: #764ba2;
+}
+.course-card[data-track="electives"] .info-label {
+  color: #22c55e;
+}
+
+/* Material count indicator */
+.material-indicator {
+  display: inline-block;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 0.2em 0.65em;
+  font-size: 0.87em;
+  color: #64748b;
+  margin-right: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+/* Button styling */
+.course-card button {
+  background: linear-gradient(90deg, #667eea 65%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7em 1.6em;
+  font-size: 1.07rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  box-shadow: 0 2px 12px #667eea19;
+  margin-top: 0.6em;
+  outline: none;
   position: relative;
 }
 
+.course-card[data-track="remote_careers"] button {
+  background: linear-gradient(90deg, #764ba2 65%, #667eea 100%);
+}
+.course-card[data-track="electives"] button {
+  background: linear-gradient(90deg, #22c55e 65%, #a7f3d0 100%);
+  color: #065f46;
+  box-shadow: 0 2px 12px #22c55e19;
+}
+
+.course-card button:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.course-card button:hover, .course-card button:active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 32px #667eea2a;
+  filter: brightness(1.08);
+}
+
+.course-card button.loading {
+  pointer-events: none;
+  opacity: 0.75;
+  background: #e0e7ff;
+  color: #7c3aed;
+}
+.course-card button.loading::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.7em;
+  width: 1em;
+  height: 1em;
+  border: 2px solid #fff;
+  border-top: 2px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Card hover and micro-animations */
 .course-card:hover {
-  box-shadow: 0 8px 32px rgba(102,126,234,0.15);
-  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 40px rgba(102,126,234,0.13), 0 4px 20px rgba(34,197,94,0.09);
+  transform: translateY(-2px) scale(1.019);
+  border-color: #6366f1;
+}
+
+.course-card[data-track="remote_careers"]:hover {
   border-color: #764ba2;
 }
 
-.course-card button {
-  background: #667eea;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1.5rem;
-  margin-top: 0.75rem;
-  cursor: pointer;
-  font-size: 1rem;
+.course-card[data-track="electives"]:hover {
+  border-color: #22c55e;
 }
 
-.course-card button:hover {
-  background: #764ba2;
+.course-card:active {
+  transform: scale(0.98);
+}
+
+/* Accessibility: High contrast on focus */
+.course-card:focus-within {
+  box-shadow: 0 0 0 3px #6366f155;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .course-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.15rem;
+  }
+  .course-card {
+    padding: 1.3rem 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+  .course-card {
+    padding: 1rem 0.7rem;
+  }
+  .course-card h3 {
+    font-size: 1.07rem;
+  }
+}
+
+/* Font family for Inter everywhere */
+body, .course-card, .track-badge, .course-card button, .course-card h3, .course-card p {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
