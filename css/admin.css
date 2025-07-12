@@ -1,1 +1,186 @@
-
+/* ===== PMERIT Admin Panel - admin.css ===== */
+.admin-dashboard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(102,126,234,0.10);
+  padding: 2.5rem 1rem;
+  max-width: 920px;
+  margin: 2rem auto;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.nav-item {
+  background: #fff;
+  color: #667eea;
+  border: none;
+  border-radius: 999px 999px 0 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  padding: 0.9rem 2.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 12px #667eea18;
+  transition: color 0.18s, background 0.18s;
+  border-bottom: 2.5px solid transparent;
+}
+.nav-item.active, .nav-item:hover {
+  background: linear-gradient(90deg, #667eea 65%, #764ba2 100%);
+  color: #fff;
+  border-bottom: 2.5px solid #764ba2;
+}
+.tab-panel {
+  display: none;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px #667eea14;
+  padding: 2rem 1.2rem;
+}
+.tab-panel.active {
+  display: block;
+}
+.add-subject-form h2 {
+  margin-bottom: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #667eea;
+}
+.add-subject-form input, .add-subject-form select, .add-subject-form textarea {
+  width: 100%;
+  margin-bottom: 1.15rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #f7fafc;
+  transition: border-color 0.17s;
+}
+.add-subject-form input:focus, .add-subject-form select:focus, .add-subject-form textarea:focus {
+  border-color: #667eea;
+  outline: none;
+}
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+}
+.btn-primary, .btn-secondary, .btn-danger, .btn-export {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  cursor: pointer;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  transition: background 0.18s, color 0.18s;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #667eea 65%, #764ba2 100%);
+  color: #fff;
+}
+.btn-secondary {
+  background: #f1f5f9;
+  color: #667eea;
+}
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+.btn-export {
+  background: #22c55e;
+  color: #fff;
+  float: right;
+  margin-bottom: 1.5rem;
+  margin-top: -1.5rem;
+}
+.btn-primary:hover, .btn-secondary:hover, .btn-export:hover {
+  filter: brightness(1.05);
+}
+.btn-danger:hover {
+  background: #dc2626;
+}
+.empty-state {
+  color: #667eea;
+  font-size: 1.08rem;
+  text-align: center;
+  margin: 2.5rem 0;
+  font-weight: 500;
+}
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.admin-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e5e9f7 100%);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #667eea12;
+  border-left: 8px solid #667eea;
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem 1.2rem;
+  gap: 0.5rem;
+  position: relative;
+  transition: box-shadow 0.19s, border-color 0.19s;
+}
+.admin-card[data-track="remote_careers"] { border-left: 8px solid #764ba2; }
+.admin-card[data-track="electives"] { border-left: 8px solid #22c55e; }
+.admin-card[data-track="capstone"] { border-left: 8px solid #d97706; }
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+.admin-badge {
+  font-size: 0.92em;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.26em 1em;
+  background: #e0e7ff;
+  color: #667eea;
+  box-shadow: 0 2px 8px #667eea18;
+}
+.admin-card[data-track="remote_careers"] .admin-badge { background: #ede9fe; color: #764ba2; }
+.admin-card[data-track="electives"] .admin-badge { background: #d1fae5; color: #22c55e; }
+.admin-card[data-track="capstone"] .admin-badge { background: #fef3c7; color: #d97706; }
+.admin-card-header h3 {
+  font-size: 1.11rem;
+  font-weight: 700;
+  margin: 0;
+}
+.admin-card-body {
+  font-size: 0.99rem;
+  color: #333;
+  margin-bottom: 0.9rem;
+  line-height: 1.55;
+}
+.material-item {
+  background: #e0e7ff;
+  color: #667eea;
+  border-radius: 7px;
+  padding: 0.15em 0.7em;
+  font-size: 0.88em;
+  margin-right: 0.2em;
+  margin-bottom: 0.18em;
+  display: inline-block;
+}
+.admin-card-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+@media (max-width: 900px) {
+  .admin-dashboard { padding: 1.2rem 0.3rem; }
+  .tab-panel { padding: 1.2rem 0.3rem; }
+  .subjects-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
+@media (max-width: 500px) {
+  .admin-nav { flex-direction: column; gap: 0.7rem; }
+  .admin-card { padding: 1rem 0.4rem; }
+}
