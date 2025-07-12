@@ -4,42 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PMERIT</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/course-hub.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 2rem;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .back-link {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
+      .quick-actions-bar {
+        display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center;
+      }
+      .quick-action-btn {
+        padding: 0.7rem 1.5rem; background: #667eea; color: white; border: none; border-radius: 8px;
+        font-size: 1rem; cursor: pointer; transition: background 0.2s;
+      }
+      .quick-action-btn:hover { background: #764ba2; }
+      #logoutBtn { background: #ef4444; }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← Back to Home</a>
-        <h1>🎓 Your Learning Dashboard</h1>
+        <h1 id="dashboardWelcome">Welcome to PMERIT University Dashboard!</h1>
+        <div class="quick-actions-bar">
+          <button class="quick-action-btn" id="dashboardCourseHub">📚 Course Hub</button>
+          <button class="quick-action-btn" id="dashboardProfile">👤 My Profile</button>
+          <button class="quick-action-btn" id="dashboardSettings">⚙️ Settings</button>
+          <button class="quick-action-btn" id="logoutBtn">🚪 Logout</button>
+        </div>
         <h2>📚 My Enrolled Courses</h2>
         <div id="enrolledCoursesGrid"></div>
         <h2>🔮 Next Lessons</h2>
@@ -47,5 +36,8 @@
         <p>Welcome to your personalized learning dashboard! This page will show your progress, enrolled courses, and achievements.</p>
         <p><strong>Status:</strong> Frontend Complete - Ready for Backend Integration</p>
     </div>
+    <script src="js/course-hub.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
