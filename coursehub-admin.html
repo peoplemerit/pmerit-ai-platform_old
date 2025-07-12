@@ -1,1 +1,29 @@
-# Create admin interface
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Hub Admin - PMERIT</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/course-hub.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🛠️ Course Management Admin Panel</h1>
+    <form id="addCourseForm">
+      <input type="text" name="title" placeholder="Course Title" required>
+      <select name="track">
+        <option value="core">Core</option>
+        <option value="remote_careers">Remote Career</option>
+        <option value="electives">Elective</option>
+      </select>
+      <input type="text" name="duration" placeholder="Duration (e.g. 4 hours)" required>
+      <input type="text" name="assessment" placeholder="Assessment Type" required>
+      <textarea name="description" placeholder="Course Description" required></textarea>
+      <input type="file" name="materials" multiple>
+      <button type="submit">Add Course</button>
+    </form>
+    <div id="adminCourseList"></div>
+  </div>
+  <script src="js/course-hub.js"></script>
+</body>
+</html>
