@@ -7,23 +7,36 @@
   <link rel="stylesheet" href="css/course-hub.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🛠️ Course Management Admin Panel</h1>
-    <form id="addCourseForm">
-      <input type="text" name="title" placeholder="Course Title" required>
-      <select name="track">
-        <option value="core">Core</option>
-        <option value="remote_careers">Remote Career</option>
-        <option value="electives">Elective</option>
-      </select>
-      <input type="text" name="duration" placeholder="Duration (e.g. 4 hours)" required>
-      <input type="text" name="assessment" placeholder="Assessment Type" required>
-      <textarea name="description" placeholder="Course Description" required></textarea>
-      <input type="file" name="materials" multiple>
-      <button type="submit">Add Course</button>
-    </form>
-    <div id="adminCourseList"></div>
+ <div class="admin-dashboard">
+  <nav class="admin-nav">
+    <button class="nav-item active" data-tab="subjects">Manage Subjects</button>
+    <button class="nav-item" data-tab="materials">Materials</button>
+    <button class="nav-item" data-tab="tracks">Tracks</button>
+    <button class="nav-item" data-tab="analytics">Analytics</button>
+  </nav>
+  <div class="admin-content">
+    <!-- Subject Management Tab -->
+    <div class="tab-panel active" id="subjects-panel">
+      <form class="add-subject-form">
+        <!-- Dynamic form fields injected by JS -->
+      </form>
+      <div class="subjects-grid">
+        <!-- Subjects list rendered by JS -->
+      </div>
+    </div>
+    <div class="tab-panel" id="materials-panel">
+      <!-- File upload and drag-and-drop interface -->
+    </div>
+    <div class="tab-panel" id="tracks-panel">
+      <!-- Track management UI -->
+    </div>
+    <div class="tab-panel" id="analytics-panel">
+      <!-- Analytics dashboard UI -->
+    </div>
   </div>
+</div>
+<script src="js/admin.js"></script>
+<link rel="stylesheet" href="css/admin.css">
   <script src="js/course-hub.js"></script>
 </body>
 </html>
