@@ -82,7 +82,7 @@ function addCourseToCart(courseId) {
 function showCourseCartModal() {
   const studentId = getCurrentStudentId();
   let cart = JSON.parse(localStorage.getItem('course_cart_' + studentId) || '[]');
-  let html = `<h2 style="margin-bottom:1rem;">🛒 Course Cart</h2>`;
+  let html = `<h2 style="margin-bottom:1rem;">📚 Subject Cart</h2>`;
   if (cart.length) {
     html += '<ul style="margin-bottom:1rem;">' + cart.map(id => {
       const course = SAMPLE_COURSES.find(c => c.id === id);
@@ -289,7 +289,7 @@ function renderCourseCards() {
       <div><b>Assessment:</b> ${course.assessment}</div>
       <div><b>Materials:</b> ${course.materials.map(m => `<a href="materials/${m}" target="_blank">${m}</a>`).join(', ')}</div>
       <p>${course.description}</p>
-      <button onclick="addCourseToCart('${course.id}')">Add to Cart</button>
+      <button onclick="addCourseToCart('${course.id}')">Add Subject to Cart</button>
     </div>
   `).join('');
   document.getElementById('courseCards').innerHTML = `<div class="course-grid">${cardsHtml}</div>`;
