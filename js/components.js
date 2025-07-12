@@ -174,33 +174,51 @@ class ComponentManager {
         `;
     }
 
-    getRegistrationModalHandlers() {
-        return function(modalContainer) {
-            // Close button
-            modalContainer.querySelector('.pmerit-modal-close').addEventListener('click', () => {
-                this.hideCurrentModal();
-            });
+// ====== COMPLETE SOLUTION 1: js/components.js Registration Fix ======
+// Replace the getRegistrationModalHandlers() function
 
-            // Simple form handler (demo)
-            const form = modalContainer.querySelector('#registrationForm');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Simple validation and feedback
-                const fullname = form.fullname.value.trim();
-                const email = form.email.value.trim();
-                const password = form.password.value;
+getRegistrationModalHandlers() {
+    return function(modalContainer) {
+        // Close button
+        modalContainer.querySelector('.pmerit-modal-close').addEventListener('click', () => {
+            this.hideCurrentModal();
+        });
 
-                if (!fullname || !email || password.length < 6) {
-                    alert('Please fill out all fields correctly.');
-                    return;
-                }
-                // TODO: Integrate with backend/Cloudflare Worker here!
+        // Registration form handler - COMPLETE SOLUTION
+        const form = modalContainer.querySelector('#registrationForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullname = form.fullname.value.trim();
+            const email = form.email.value.trim().toLowerCase();
+            const password = form.password.value;
 
-                alert(`Welcome, ${fullname}! Registration successful (demo).`);
-                this.hideCurrentModal();
-            });
-        };
-    }
+            if (!fullname || !email || password.length < 6) {
+                alert('Please fill out all fields correctly.');
+                return;
+            }
+
+            // Save user to localStorage (demo/frontend)
+            const user = { name: fullname, email, password, verified: true };
+            localStorage.setItem('gabriel_user', JSON.stringify(user));
+            
+            // Create session immediately
+            const session = { 
+                user: { name: fullname, email }, 
+                token: "mock-token", 
+                time: Date.now() 
+            };
+            localStorage.setItem('gabriel_session', JSON.stringify(session));
+
+            // Success message and redirect
+            alert(`Welcome, ${fullname}! Registration successful. Redirecting to your dashboard...`);
+            this.hideCurrentModal();
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 500);
+        });
+    };
 }
 
 // Initialize the component manager on DOM load
