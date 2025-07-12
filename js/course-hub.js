@@ -237,7 +237,7 @@ function addSubjectToCart(subjectId) {
     return;
   }
   
-  const studentId = getCurrentStudentId();
+ const studentId = window.PMERIT_AUTH.getSession()?.user?.email || getCurrentStudentId();
   if (!studentId) {
     alert("Please sign in to add subjects.");
     window.location.href = "signin.html";
