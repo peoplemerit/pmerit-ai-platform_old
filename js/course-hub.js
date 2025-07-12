@@ -232,6 +232,11 @@ const SUBJECT_MATERIALS = {
 
 // CART FLOW
 function addSubjectToCart(subjectId) {
+  // Check authentication first
+  if (!window.checkAuthForCart || !window.checkAuthForCart()) {
+    return;
+  }
+  
   const studentId = getCurrentStudentId();
   if (!studentId) {
     alert("Please sign in to add subjects.");
