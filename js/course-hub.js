@@ -31,6 +31,7 @@ const ACADEMIC_TRACKS = {
 };
 
 const AVAILABLE_SUBJECTS = [
+  // ------------------ CORE CURRICULUM ------------------
   {
     id: "digital-literacy",
     title: "Digital Literacy & Remote Tools",
@@ -68,6 +69,107 @@ const AVAILABLE_SUBJECTS = [
     description: "Master time management for remote work success"
   },
   {
+    id: "freelancing-intro",
+    title: "Introduction to Freelancing Platforms",
+    track: "core",
+    duration: "3 hours",
+    assessment: "Quiz + Profile Setup",
+    materials: [],
+    description: "Learn how to set up profiles and navigate major freelancing platforms."
+  },
+
+  // ------------------ REMOTE CAREER SPECIALIZATIONS ------------------
+  {
+    id: "calendar-inbox-management",
+    title: "Calendar & Inbox Management",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Practical Tasks",
+    materials: [],
+    description: "Organize schedules and manage communications for remote teams."
+  },
+  {
+    id: "crm-tools",
+    title: "CRM Tools (HubSpot)",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "CRM Simulation",
+    materials: [],
+    description: "Master customer relationship management using HubSpot."
+  },
+  {
+    id: "html-css-git",
+    title: "HTML, CSS, Git, GitHub",
+    track: "remote_careers",
+    duration: "6 hours",
+    assessment: "Code Submission",
+    materials: [],
+    description: "Learn web basics and version control with Git and GitHub."
+  },
+  {
+    id: "apis-lowcode",
+    title: "Intro to APIs & Low-Code Tools",
+    track: "remote_careers",
+    duration: "6 hours",
+    assessment: "App Build Challenge",
+    materials: [],
+    description: "Build a simple app using APIs and low-code platforms."
+  },
+  {
+    id: "seo-writing",
+    title: "SEO Writing Basics",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Article Draft",
+    materials: [],
+    description: "Write SEO-friendly articles for online audiences."
+  },
+  {
+    id: "creative-ai-writing",
+    title: "Blog & Creative Writing with AI",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Creative AI Output",
+    materials: [],
+    description: "Harness AI for creative blog and content writing."
+  },
+  {
+    id: "internet-research",
+    title: "Internet Research & Data Sourcing",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Data Collection Task",
+    materials: [],
+    description: "Find, collect, and organize data from online sources."
+  },
+  {
+    id: "excel-sql",
+    title: "Excel & Basic SQL",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Spreadsheet Test",
+    materials: [],
+    description: "Analyze data with spreadsheets and basic SQL queries."
+  },
+  {
+    id: "helpdesk-tools",
+    title: "Helpdesk Tools (Zendesk, Intercom)",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Roleplay Simulation",
+    materials: [],
+    description: "Support customers using helpdesk software and platforms."
+  },
+  {
+    id: "conflict-resolution",
+    title: "Conflict Resolution & Customer Experience",
+    track: "remote_careers",
+    duration: "5 hours",
+    assessment: "Conflict Scenario Response",
+    materials: [],
+    description: "Handle difficult customer scenarios and resolve conflicts."
+  },
+  {
     id: "web-development",
     title: "Web Development Fundamentals",
     track: "remote_careers",
@@ -84,6 +186,37 @@ const AVAILABLE_SUBJECTS = [
     assessment: "Marketing Campaign",
     materials: ["social-media-strategy.pdf", "seo-fundamentals.pdf"],
     description: "Master online marketing strategies and tools"
+  },
+
+  // ------------------ ELECTIVES ------------------
+  {
+    id: "personal-branding",
+    title: "Personal Branding",
+    track: "electives",
+    duration: "3 hours",
+    assessment: "Pitch Presentation",
+    materials: [],
+    description: "Craft and present your personal brand for remote success."
+  },
+  {
+    id: "financial-literacy",
+    title: "Financial Literacy for Freelancers",
+    track: "electives",
+    duration: "2 hours",
+    assessment: "Budget Sheet",
+    materials: [],
+    description: "Learn budgeting and financial management for freelancers."
+  },
+
+  // ------------------ CAPSTONE ------------------
+  {
+    id: "portfolio-project",
+    title: "Portfolio / Client Project",
+    track: "capstone",
+    duration: "10 hours",
+    assessment: "Project Portfolio + Video",
+    materials: [],
+    description: "Complete a client-ready project and present your work."
   }
 ];
 
