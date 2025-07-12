@@ -1,10 +1,9 @@
 // ==========================
-// PMERIT SUBJECT HUB - CLEAN VERSION
+// PMERIT SUBJECT HUB - ENHANCED VERSION (2024)
 // Mission: Accessible, high-quality education through AI-powered learning
 // ==========================
 
-// 1. --- SESSION MANAGEMENT ---
-// Utility to get current user from gabriel_session (as per auth.js)
+// SESSION MANAGEMENT
 function getCurrentStudentId() {
   const session = localStorage.getItem('gabriel_session');
   if (!session) return null;
@@ -14,9 +13,7 @@ function getCurrentStudentId() {
   } catch (e) { return null; }
 }
 
-// ==========================
 // DATA STRUCTURES
-// ==========================
 const ACADEMIC_TRACKS = {
   core: {
     name: "Core Curriculum",
@@ -100,11 +97,7 @@ const SUBJECT_MATERIALS = {
   "digital-marketing": ["social-media-strategy.pdf", "seo-fundamentals.pdf"]
 };
 
-// ==========================
 // CART FLOW
-// ==========================
-
-// Add subject to cart
 function addSubjectToCart(subjectId) {
   const studentId = getCurrentStudentId();
   if (!studentId) {
@@ -112,13 +105,22 @@ function addSubjectToCart(subjectId) {
     window.location.href = "signin.html";
     return;
   }
+  // Button loading state
+  const btn = document.querySelector(`button[data-subject-id="${subjectId}"]`);
+  if (btn) {
+    btn.classList.add('loading');
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }, 1200);
+  }
   let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
   if (!cart.includes(subjectId)) cart.push(subjectId);
   localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
   showSubjectCartModal();
 }
 
-// Show subject cart modal using ComponentManager if available
 function showSubjectCartModal() {
   const studentId = getCurrentStudentId();
   let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
@@ -141,7 +143,6 @@ function showSubjectCartModal() {
     let modal = document.querySelector('.pmerit-modal');
     if (modal) modal.innerHTML = html;
   } else {
-    // fallback: inject into courseCartModal div
     document.getElementById('courseCartModal').innerHTML =
       `<div class="pmerit-modal-container active"><div class="pmerit-modal">${html}</div></div>`;
   }
@@ -155,7 +156,6 @@ function closeCartModal() {
   }
 }
 
-// Enroll in subject
 function enrollInSubject(studentId, subjectId) {
   if (!STUDENT_ENROLLMENTS[studentId]) {
     STUDENT_ENROLLMENTS[studentId] = { subjects: [], progress: {} };
@@ -167,21 +167,15 @@ function enrollInSubject(studentId, subjectId) {
   } else {
     alert("You're already enrolled in this subject.");
   }
-  // Remove from cart
   let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
   cart = cart.filter(id => id !== subjectId);
   localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
   closeCartModal();
-  // Redirect to dashboard after enrollment
   window.location.href = "dashboard.html";
 }
 
-// ==========================
 // DASHBOARD RENDERING
-// ==========================
-
 function updateDashboard(studentId) {
-  // Enrolled Subjects
   const enrolledSubjectsGrid = document.getElementById('enrolledCoursesGrid');
   if (enrolledSubjectsGrid) {
     const enrolled = STUDENT_ENROLLMENTS[studentId]?.subjects || [];
@@ -192,18 +186,20 @@ function updateDashboard(studentId) {
         const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
         if (!subject) return '';
         const progress = STUDENT_ENROLLMENTS[studentId].progress[subjectId] || 0;
-        return `<div class="course-card">
+        return `
+        <div class="course-card" data-track="${subject.track}">
+          <span class="track-badge">${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</span>
           <h3>${subject.title}</h3>
-          <div><strong>Track:</strong> ${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</div>
-          <div><strong>Progress:</strong> ${progress}%</div>
-          <div><strong>Duration:</strong> ${subject.duration}</div>
+          <div class="course-info-row">
+            <span class="info-label">Progress:</span> ${progress}%
+            <span class="info-label">Duration:</span> ${subject.duration}
+          </div>
           <button onclick="launchAIClassroom('${subjectId}')">Start AI Class</button>
         </div>`;
       }).join('');
     }
   }
-  
-  // Next Lessons (simple demo: list first lesson of each enrolled subject)
+  // Next Lessons
   const nextLessonsGrid = document.getElementById('nextLessonsGrid');
   if (nextLessonsGrid) {
     const enrolled = STUDENT_ENROLLMENTS[studentId]?.subjects || [];
@@ -215,10 +211,14 @@ function updateDashboard(studentId) {
         if (!subject) return '';
         const progress = STUDENT_ENROLLMENTS[studentId].progress[subjectId] || 0;
         const nextLesson = progress === 0 ? "Introduction" : `Lesson ${Math.floor(progress/10) + 1}`;
-        return `<div class="course-card">
+        return `
+        <div class="course-card" data-track="${subject.track}">
+          <span class="track-badge">${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</span>
           <h4>Next: ${subject.title}</h4>
-          <div><strong>Lesson:</strong> ${nextLesson}</div>
-          <div><strong>Estimated Time:</strong> 30 minutes</div>
+          <div class="course-info-row">
+            <span class="info-label">Lesson:</span> ${nextLesson}
+            <span class="info-label">Estimated Time:</span> 30 minutes
+          </div>
           <button onclick="launchAIClassroom('${subjectId}')">Continue Learning</button>
         </div>`;
       }).join('');
@@ -226,14 +226,11 @@ function updateDashboard(studentId) {
   }
 }
 
-// ==========================
 // ADMIN PANEL: SUBJECT CREATION
-// ==========================
 function addSubjectFromForm(e) {
   e.preventDefault();
   const form = e.target;
   const data = Object.fromEntries(new FormData(form).entries());
-  // Handle materials (files)
   let materials = [];
   if (form.materials && form.materials.files) {
     materials = Array.from(form.materials.files).map(file => file.name);
@@ -256,33 +253,31 @@ function renderAdminSubjectList() {
   const adminSubjectList = document.getElementById('adminCourseList');
   if (!adminSubjectList) return;
   adminSubjectList.innerHTML = AVAILABLE_SUBJECTS.map(s => `
-    <div class="course-card">
+    <div class="course-card" data-track="${s.track}">
+      <span class="track-badge">${ACADEMIC_TRACKS[s.track]?.name || s.track}</span>
       <h3>${s.title}</h3>
-      <div><strong>Track:</strong> ${ACADEMIC_TRACKS[s.track]?.name || s.track}</div>
-      <div><strong>Duration:</strong> ${s.duration}</div>
-      <div><strong>Assessment:</strong> ${s.assessment}</div>
-      <div><strong>Materials:</strong> ${s.materials.map(m => `<span>${m}</span>`).join(', ')}</div>
+      <div class="course-info-row">
+        <span class="info-label">Duration:</span> ${s.duration}
+        <span class="info-label">Assessment:</span> ${s.assessment}
+        <span class="material-indicator">${s.materials.length} materials</span>
+      </div>
       <p>${s.description}</p>
+      <div>
+        ${s.materials.map(m => `<span class="material-indicator">${m}</span>`).join(' ')}
+      </div>
     </div>
   `).join('');
 }
 
-// ==========================
 // PAGE INTEGRATION & NAVIGATION
-// ==========================
-
 function launchAIClassroom(subjectId) {
-  // Store current subject in session for classroom
   const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
   session.currentSubject = subjectId;
   localStorage.setItem('gabriel_session', JSON.stringify(session));
-  
   window.location.href = `classroom.html?subject=${subjectId}`;
 }
 
-// ==========================
 // INIT CODE FOR EACH PAGE
-// ==========================
 document.addEventListener('DOMContentLoaded', function() {
   // Subject Catalog Page
   if (document.getElementById('courseCards')) {
@@ -292,18 +287,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (trackFilter) trackFilter.addEventListener('change', renderSubjectCards);
     if (searchInput) searchInput.addEventListener('input', renderSubjectCards);
   }
-  
+
   // Dashboard Page
   if (document.getElementById('enrolledCoursesGrid')) {
     const studentId = getCurrentStudentId();
     if (studentId) {
       updateDashboard(studentId);
     } else {
-      // Redirect to sign in if not authenticated
       window.location.href = 'signin.html';
     }
   }
-  
+
   // Admin Panel
   const addSubjectForm = document.getElementById('addCourseForm');
   if (addSubjectForm) {
@@ -311,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderAdminSubjectList();
   }
 
-  // Register generic modal with ComponentManager if available
+  // Register generic modal (if needed)
   if (window.pmeritComponentManager && !window.pmeritComponentManager.components.has('generic-modal')) {
     window.pmeritComponentManager.components.set('generic-modal', {
       name: 'Generic Modal',
@@ -334,37 +328,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Render subject cards for catalog page
+// SUBJECT CARD RENDERING - ENHANCED
 function renderSubjectCards() {
   const track = document.getElementById('trackFilter')?.value || '';
   const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
-  
   let subjects = AVAILABLE_SUBJECTS.filter(subject =>
     (!track || subject.track === track) &&
     (!search || subject.title.toLowerCase().includes(search) || subject.description.toLowerCase().includes(search))
   );
-  
   const cardsHtml = subjects.map(subject => `
-    <div class="course-card">
+    <div class="course-card" data-track="${subject.track}" tabindex="0" aria-label="${subject.title}">
+      <span class="track-badge">${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</span>
       <h3>${subject.title}</h3>
-      <div><b>Track:</b> ${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</div>
-      <div><b>Duration:</b> ${subject.duration}</div>
-      <div><b>Assessment:</b> ${subject.assessment}</div>
-      <div><b>Materials:</b> ${subject.materials.map(m => `<a href="materials/${m}" target="_blank">${m}</a>`).join(', ')}</div>
+      <div class="course-info-row">
+        <span class="info-label">Duration:</span> ${subject.duration}
+        <span class="info-label">Assessment:</span> ${subject.assessment}
+        <span class="material-indicator">${subject.materials.length} materials</span>
+      </div>
       <p>${subject.description}</p>
-      <button onclick="addSubjectToCart('${subject.id}')">Add Subject to Cart</button>
+      <div>
+        ${subject.materials.map(m => `<a href="materials/${m}" target="_blank" class="material-indicator" rel="noopener">${m}</a>`).join(' ')}
+      </div>
+      <button data-subject-id="${subject.id}" onclick="addSubjectToCart('${subject.id}')">Add Subject to Cart</button>
     </div>
   `).join('');
-  
   const courseCards = document.getElementById('courseCards');
   if (courseCards) {
     courseCards.innerHTML = `<div class="course-grid">${cardsHtml}</div>`;
   }
 }
 
-// ==========================
 // EXPORTS FOR OTHER MODULES
-// ==========================
 window.PMERIT_SUBJECT_HUB = {
   addSubjectToCart,
   enrollInSubject,
@@ -380,3 +374,7 @@ window.PMERIT_SUBJECT_HUB = {
 window.addCourseToCart = addSubjectToCart;
 window.enrollInCourse = enrollInSubject;
 window.launchAIClass = launchAIClassroom;
+
+// ==========================
+// END PMERIT SUBJECT HUB
+// ==========================
