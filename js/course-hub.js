@@ -1,5 +1,6 @@
 // ==========================
-// PMERIT Course Hub Updates
+// PMERIT SUBJECT HUB - CLEAN VERSION
+// Mission: Accessible, high-quality education through AI-powered learning
 // ==========================
 
 // 1. --- SESSION MANAGEMENT ---
@@ -16,11 +17,11 @@ function getCurrentStudentId() {
 // ==========================
 // DATA STRUCTURES
 // ==========================
-const CURRICULUM_TRACKS = {
+const ACADEMIC_TRACKS = {
   core: {
     name: "Core Curriculum",
     required: true,
-    courses: ["digital-literacy", "career-communication", "critical-thinking", "time-management", "freelancing-intro"]
+    subjects: ["digital-literacy", "career-communication", "critical-thinking", "time-management", "freelancing-intro"]
   },
   remote_careers: {
     name: "Remote Career Specializations",
@@ -28,11 +29,11 @@ const CURRICULUM_TRACKS = {
   },
   electives: {
     name: "Electives",
-    courses: ["personal-branding", "financial-literacy"]
+    subjects: ["personal-branding", "financial-literacy"]
   }
 };
 
-const SAMPLE_COURSES = [
+const AVAILABLE_SUBJECTS = [
   {
     id: "digital-literacy",
     title: "Digital Literacy & Remote Tools",
@@ -51,48 +52,87 @@ const SAMPLE_COURSES = [
     materials: ["communication-strategies.pdf"],
     description: "Develop effective workplace communication skills"
   },
-  // ... more courses
+  {
+    id: "critical-thinking",
+    title: "Critical Thinking & Problem Solving",
+    track: "core",
+    duration: "5 hours",
+    assessment: "Case Study Analysis",
+    materials: ["critical-thinking-framework.pdf"],
+    description: "Develop analytical skills for complex problem solving"
+  },
+  {
+    id: "time-management",
+    title: "Time Management & Productivity",
+    track: "core",
+    duration: "3 hours",
+    assessment: "Personal Productivity Plan",
+    materials: ["productivity-tools-guide.pdf"],
+    description: "Master time management for remote work success"
+  },
+  {
+    id: "web-development",
+    title: "Web Development Fundamentals",
+    track: "remote_careers",
+    duration: "12 hours",
+    assessment: "Portfolio Project",
+    materials: ["html-css-guide.pdf", "javascript-basics.pdf"],
+    description: "Learn to build modern websites and web applications"
+  },
+  {
+    id: "digital-marketing",
+    title: "Digital Marketing Essentials",
+    track: "remote_careers",
+    duration: "8 hours",
+    assessment: "Marketing Campaign",
+    materials: ["social-media-strategy.pdf", "seo-fundamentals.pdf"],
+    description: "Master online marketing strategies and tools"
+  }
 ];
 
-const STUDENT_ENROLLMENTS = {}; // { studentId: { courses: [], progress: {} } }
-const COURSE_MATERIALS = {
+const STUDENT_ENROLLMENTS = {}; // { studentId: { subjects: [], progress: {} } }
+const SUBJECT_MATERIALS = {
   "digital-literacy": ["google-workspace-guide.pdf", "remote-tools-checklist.pdf"],
-  "career-communication": ["communication-strategies.pdf"]
+  "career-communication": ["communication-strategies.pdf"],
+  "critical-thinking": ["critical-thinking-framework.pdf"],
+  "time-management": ["productivity-tools-guide.pdf"],
+  "web-development": ["html-css-guide.pdf", "javascript-basics.pdf"],
+  "digital-marketing": ["social-media-strategy.pdf", "seo-fundamentals.pdf"]
 };
 
 // ==========================
 // CART FLOW
 // ==========================
 
-// Add course to cart
-function addCourseToCart(courseId) {
+// Add subject to cart
+function addSubjectToCart(subjectId) {
   const studentId = getCurrentStudentId();
   if (!studentId) {
-    alert("Please sign in to add courses.");
+    alert("Please sign in to add subjects.");
     window.location.href = "signin.html";
     return;
   }
-  let cart = JSON.parse(localStorage.getItem('course_cart_' + studentId) || '[]');
-  if (!cart.includes(courseId)) cart.push(courseId);
-  localStorage.setItem('course_cart_' + studentId, JSON.stringify(cart));
-  showCourseCartModal();
+  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
+  if (!cart.includes(subjectId)) cart.push(subjectId);
+  localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
+  showSubjectCartModal();
 }
 
-// Show course cart modal using ComponentManager if available
-function showCourseCartModal() {
+// Show subject cart modal using ComponentManager if available
+function showSubjectCartModal() {
   const studentId = getCurrentStudentId();
-  let cart = JSON.parse(localStorage.getItem('course_cart_' + studentId) || '[]');
+  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
   let html = `<h2 style="margin-bottom:1rem;">📚 Subject Cart</h2>`;
   if (cart.length) {
     html += '<ul style="margin-bottom:1rem;">' + cart.map(id => {
-      const course = SAMPLE_COURSES.find(c => c.id === id);
-      return course ? `<li style="margin-bottom:0.5rem;">
-        <strong>${course.title}</strong>
-        <button style="margin-left:1rem;" onclick="enrollInCourse('${studentId}', '${id}')">Register</button>
+      const subject = AVAILABLE_SUBJECTS.find(s => s.id === id);
+      return subject ? `<li style="margin-bottom:0.5rem;">
+        <strong>${subject.title}</strong>
+        <button style="margin-left:1rem;" onclick="enrollInSubject('${studentId}', '${id}')">Register</button>
       </li>` : '';
     }).join('') + '</ul>';
   } else {
-    html += '<p>No courses added.</p>';
+    html += '<p>No subjects added.</p>';
   }
   html += `<button onclick="closeCartModal()">Close</button>`;
 
@@ -115,22 +155,22 @@ function closeCartModal() {
   }
 }
 
-// Enroll in course
-function enrollInCourse(studentId, courseId) {
+// Enroll in subject
+function enrollInSubject(studentId, subjectId) {
   if (!STUDENT_ENROLLMENTS[studentId]) {
-    STUDENT_ENROLLMENTS[studentId] = { courses: [], progress: {} };
+    STUDENT_ENROLLMENTS[studentId] = { subjects: [], progress: {} };
   }
-  if (!STUDENT_ENROLLMENTS[studentId].courses.includes(courseId)) {
-    STUDENT_ENROLLMENTS[studentId].courses.push(courseId);
-    STUDENT_ENROLLMENTS[studentId].progress[courseId] = 0;
-    alert("Enrollment successful! You can now access the course in your dashboard.");
+  if (!STUDENT_ENROLLMENTS[studentId].subjects.includes(subjectId)) {
+    STUDENT_ENROLLMENTS[studentId].subjects.push(subjectId);
+    STUDENT_ENROLLMENTS[studentId].progress[subjectId] = 0;
+    alert("Enrollment successful! You can now access the subject in your dashboard.");
   } else {
-    alert("You're already enrolled in this course.");
+    alert("You're already enrolled in this subject.");
   }
   // Remove from cart
-  let cart = JSON.parse(localStorage.getItem('course_cart_' + studentId) || '[]');
-  cart = cart.filter(id => id !== courseId);
-  localStorage.setItem('course_cart_' + studentId, JSON.stringify(cart));
+  let cart = JSON.parse(localStorage.getItem('subject_cart_' + studentId) || '[]');
+  cart = cart.filter(id => id !== subjectId);
+  localStorage.setItem('subject_cart_' + studentId, JSON.stringify(cart));
   closeCartModal();
   // Redirect to dashboard after enrollment
   window.location.href = "dashboard.html";
@@ -141,39 +181,45 @@ function enrollInCourse(studentId, courseId) {
 // ==========================
 
 function updateDashboard(studentId) {
-  // Enrolled Courses
-  const enrolledCoursesGrid = document.getElementById('enrolledCoursesGrid');
-  if (enrolledCoursesGrid) {
-    const enrolled = STUDENT_ENROLLMENTS[studentId]?.courses || [];
+  // Enrolled Subjects
+  const enrolledSubjectsGrid = document.getElementById('enrolledCoursesGrid');
+  if (enrolledSubjectsGrid) {
+    const enrolled = STUDENT_ENROLLMENTS[studentId]?.subjects || [];
     if (enrolled.length === 0) {
-      enrolledCoursesGrid.innerHTML = "<p>No courses enrolled yet.</p>";
+      enrolledSubjectsGrid.innerHTML = "<p>No subjects enrolled yet. <a href='courses.html'>Browse Subject Catalog</a></p>";
     } else {
-      enrolledCoursesGrid.innerHTML = enrolled.map(courseId => {
-        const course = SAMPLE_COURSES.find(c => c.id === courseId);
-        if (!course) return '';
-        const progress = STUDENT_ENROLLMENTS[studentId].progress[courseId] || 0;
+      enrolledSubjectsGrid.innerHTML = enrolled.map(subjectId => {
+        const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
+        if (!subject) return '';
+        const progress = STUDENT_ENROLLMENTS[studentId].progress[subjectId] || 0;
         return `<div class="course-card">
-          <h3>${course.title}</h3>
-          <div>Progress: ${progress}%</div>
-          <button onclick="launchAIClass('${courseId}')">Start AI Class</button>
+          <h3>${subject.title}</h3>
+          <div><strong>Track:</strong> ${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</div>
+          <div><strong>Progress:</strong> ${progress}%</div>
+          <div><strong>Duration:</strong> ${subject.duration}</div>
+          <button onclick="launchAIClassroom('${subjectId}')">Start AI Class</button>
         </div>`;
       }).join('');
     }
   }
-  // Next Lessons (simple demo: list first lesson of each enrolled course)
+  
+  // Next Lessons (simple demo: list first lesson of each enrolled subject)
   const nextLessonsGrid = document.getElementById('nextLessonsGrid');
   if (nextLessonsGrid) {
-    const enrolled = STUDENT_ENROLLMENTS[studentId]?.courses || [];
+    const enrolled = STUDENT_ENROLLMENTS[studentId]?.subjects || [];
     if (enrolled.length === 0) {
       nextLessonsGrid.innerHTML = "<p>No lessons scheduled yet.</p>";
     } else {
-      nextLessonsGrid.innerHTML = enrolled.map(courseId => {
-        const course = SAMPLE_COURSES.find(c => c.id === courseId);
-        if (!course) return '';
+      nextLessonsGrid.innerHTML = enrolled.map(subjectId => {
+        const subject = AVAILABLE_SUBJECTS.find(s => s.id === subjectId);
+        if (!subject) return '';
+        const progress = STUDENT_ENROLLMENTS[studentId].progress[subjectId] || 0;
+        const nextLesson = progress === 0 ? "Introduction" : `Lesson ${Math.floor(progress/10) + 1}`;
         return `<div class="course-card">
-          <h4>Next Lesson for ${course.title}</h4>
-          <div>Lesson 1: Introduction</div>
-          <button onclick="launchAIClass('${courseId}')">Continue</button>
+          <h4>Next: ${subject.title}</h4>
+          <div><strong>Lesson:</strong> ${nextLesson}</div>
+          <div><strong>Estimated Time:</strong> 30 minutes</div>
+          <button onclick="launchAIClassroom('${subjectId}')">Continue Learning</button>
         </div>`;
       }).join('');
     }
@@ -181,9 +227,9 @@ function updateDashboard(studentId) {
 }
 
 // ==========================
-// ADMIN PANEL: COURSE CREATION
+// ADMIN PANEL: SUBJECT CREATION
 // ==========================
-function addCourseFromForm(e) {
+function addSubjectFromForm(e) {
   e.preventDefault();
   const form = e.target;
   const data = Object.fromEntries(new FormData(form).entries());
@@ -192,7 +238,7 @@ function addCourseFromForm(e) {
   if (form.materials && form.materials.files) {
     materials = Array.from(form.materials.files).map(file => file.name);
   }
-  SAMPLE_COURSES.push({
+  AVAILABLE_SUBJECTS.push({
     id: data.title.replace(/\s+/g, '-').toLowerCase(),
     title: data.title,
     track: data.track,
@@ -201,21 +247,22 @@ function addCourseFromForm(e) {
     materials: materials,
     description: data.description
   });
-  renderAdminCourseList();
+  renderAdminSubjectList();
   form.reset();
+  alert("Subject added successfully!");
 }
 
-function renderAdminCourseList() {
-  const adminCourseList = document.getElementById('adminCourseList');
-  if (!adminCourseList) return;
-  adminCourseList.innerHTML = SAMPLE_COURSES.map(c => `
+function renderAdminSubjectList() {
+  const adminSubjectList = document.getElementById('adminCourseList');
+  if (!adminSubjectList) return;
+  adminSubjectList.innerHTML = AVAILABLE_SUBJECTS.map(s => `
     <div class="course-card">
-      <h3>${c.title}</h3>
-      <div>Track: ${CURRICULUM_TRACKS[c.track]?.name || c.track}</div>
-      <div>Duration: ${c.duration}</div>
-      <div>Assessment: ${c.assessment}</div>
-      <div>Materials: ${c.materials.map(m => `<span>${m}</span>`).join(', ')}</div>
-      <p>${c.description}</p>
+      <h3>${s.title}</h3>
+      <div><strong>Track:</strong> ${ACADEMIC_TRACKS[s.track]?.name || s.track}</div>
+      <div><strong>Duration:</strong> ${s.duration}</div>
+      <div><strong>Assessment:</strong> ${s.assessment}</div>
+      <div><strong>Materials:</strong> ${s.materials.map(m => `<span>${m}</span>`).join(', ')}</div>
+      <p>${s.description}</p>
     </div>
   `).join('');
 }
@@ -224,30 +271,44 @@ function renderAdminCourseList() {
 // PAGE INTEGRATION & NAVIGATION
 // ==========================
 
-function launchAIClass(courseId) {
-  window.location.href = `classroom.html?course=${courseId}`;
+function launchAIClassroom(subjectId) {
+  // Store current subject in session for classroom
+  const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
+  session.currentSubject = subjectId;
+  localStorage.setItem('gabriel_session', JSON.stringify(session));
+  
+  window.location.href = `classroom.html?subject=${subjectId}`;
 }
 
 // ==========================
 // INIT CODE FOR EACH PAGE
 // ==========================
 document.addEventListener('DOMContentLoaded', function() {
-  // Courses Page
+  // Subject Catalog Page
   if (document.getElementById('courseCards')) {
-    renderCourseCards();
-    document.getElementById('trackFilter').addEventListener('change', renderCourseCards);
-    document.getElementById('searchInput').addEventListener('input', renderCourseCards);
+    renderSubjectCards();
+    const trackFilter = document.getElementById('trackFilter');
+    const searchInput = document.getElementById('searchInput');
+    if (trackFilter) trackFilter.addEventListener('change', renderSubjectCards);
+    if (searchInput) searchInput.addEventListener('input', renderSubjectCards);
   }
+  
   // Dashboard Page
   if (document.getElementById('enrolledCoursesGrid')) {
     const studentId = getCurrentStudentId();
-    updateDashboard(studentId);
+    if (studentId) {
+      updateDashboard(studentId);
+    } else {
+      // Redirect to sign in if not authenticated
+      window.location.href = 'signin.html';
+    }
   }
+  
   // Admin Panel
-  const addCourseForm = document.getElementById('addCourseForm');
-  if (addCourseForm) {
-    addCourseForm.addEventListener('submit', addCourseFromForm);
-    renderAdminCourseList();
+  const addSubjectForm = document.getElementById('addCourseForm');
+  if (addSubjectForm) {
+    addSubjectForm.addEventListener('submit', addSubjectFromForm);
+    renderAdminSubjectList();
   }
 
   // Register generic modal with ComponentManager if available
@@ -273,36 +334,49 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Render course cards for catalog page
-function renderCourseCards() {
-  const track = document.getElementById('trackFilter').value;
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  let courses = SAMPLE_COURSES.filter(course =>
-    (!track || course.track === track) &&
-    (!search || course.title.toLowerCase().includes(search))
+// Render subject cards for catalog page
+function renderSubjectCards() {
+  const track = document.getElementById('trackFilter')?.value || '';
+  const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+  
+  let subjects = AVAILABLE_SUBJECTS.filter(subject =>
+    (!track || subject.track === track) &&
+    (!search || subject.title.toLowerCase().includes(search) || subject.description.toLowerCase().includes(search))
   );
-  const cardsHtml = courses.map(course => `
+  
+  const cardsHtml = subjects.map(subject => `
     <div class="course-card">
-      <h3>${course.title}</h3>
-      <div><b>Track:</b> ${CURRICULUM_TRACKS[course.track]?.name || course.track}</div>
-      <div><b>Duration:</b> ${course.duration}</div>
-      <div><b>Assessment:</b> ${course.assessment}</div>
-      <div><b>Materials:</b> ${course.materials.map(m => `<a href="materials/${m}" target="_blank">${m}</a>`).join(', ')}</div>
-      <p>${course.description}</p>
-      <button onclick="addCourseToCart('${course.id}')">Add Subject to Cart</button>
+      <h3>${subject.title}</h3>
+      <div><b>Track:</b> ${ACADEMIC_TRACKS[subject.track]?.name || subject.track}</div>
+      <div><b>Duration:</b> ${subject.duration}</div>
+      <div><b>Assessment:</b> ${subject.assessment}</div>
+      <div><b>Materials:</b> ${subject.materials.map(m => `<a href="materials/${m}" target="_blank">${m}</a>`).join(', ')}</div>
+      <p>${subject.description}</p>
+      <button onclick="addSubjectToCart('${subject.id}')">Add Subject to Cart</button>
     </div>
   `).join('');
-  document.getElementById('courseCards').innerHTML = `<div class="course-grid">${cardsHtml}</div>`;
+  
+  const courseCards = document.getElementById('courseCards');
+  if (courseCards) {
+    courseCards.innerHTML = `<div class="course-grid">${cardsHtml}</div>`;
+  }
 }
 
 // ==========================
 // EXPORTS FOR OTHER MODULES
 // ==========================
-window.PMERIT_COURSE_HUB = {
-  addCourseToCart,
-  enrollInCourse,
+window.PMERIT_SUBJECT_HUB = {
+  addSubjectToCart,
+  enrollInSubject,
   getCurrentStudentId,
   updateDashboard,
-  launchAIClass,
-  showCourseCartModal
+  launchAIClassroom,
+  showSubjectCartModal,
+  AVAILABLE_SUBJECTS,
+  ACADEMIC_TRACKS
 };
+
+// Legacy support for existing function names
+window.addCourseToCart = addSubjectToCart;
+window.enrollInCourse = enrollInSubject;
+window.launchAIClass = launchAIClassroom;
