@@ -182,3 +182,381 @@
         transform: scale(0.98);
     }
 }
+/* ====== COMPLETE SOLUTION 4: Enhanced Mobile Responsive CSS ======
+   Add this to css/responsive.css or update existing mobile styles */
+
+/* Mobile-First Responsive Design for PMERIT Platform */
+@media (max-width: 768px) {
+    /* Global Mobile Fixes */
+    html, body {
+        overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+    }
+    
+    .app-container {
+        min-height: 100vh;
+        overflow: visible;
+    }
+    
+    /* Header Mobile Optimization */
+    .header-content {
+        padding: 0 1rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
+    }
+    
+    .header-center {
+        display: none; /* Hide on mobile to save space */
+    }
+    
+    .nav-actions {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        min-height: 44px; /* Touch-friendly */
+        min-width: 44px;
+    }
+    
+    /* Main Content Mobile Layout */
+    .main-content {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem;
+        padding: 1rem;
+        max-width: 100vw;
+        margin: 0;
+        min-height: auto;
+    }
+    
+    /* Sidebar Mobile Behavior */
+    .sidebar-left, .sidebar-right {
+        order: 1;
+        max-height: 60px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        max-width: 100vw;
+        margin: 0;
+    }
+    
+    .sidebar-left.expanded, .sidebar-right.expanded {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    /* Sidebar Mobile Headers */
+    .sidebar-left::before {
+        content: "📱 Quick Actions - Tap to expand ▼";
+        display: block;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 1rem;
+        background: rgba(102, 126, 234, 0.05);
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        user-select: none;
+    }
+    
+    .sidebar-left.expanded::before {
+        content: "📱 Quick Actions - Tap to collapse ▲";
+    }
+    
+    .sidebar-right::before {
+        content: "🧠 Assessments - Tap to expand ▼";
+        display: block;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 1rem;
+        background: rgba(102, 126, 234, 0.05);
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        user-select: none;
+    }
+    
+    .sidebar-right.expanded::before {
+        content: "🧠 Assessments - Tap to collapse ▲";
+    }
+    
+    /* Hide sidebar content by default */
+    .sidebar-header, .quick-actions, .discovery-section, .assessment-cards {
+        display: none;
+    }
+    
+    /* Show when expanded */
+    .sidebar-left.expanded .sidebar-header,
+    .sidebar-left.expanded .quick-actions,
+    .sidebar-right.expanded .discovery-section,
+    .sidebar-right.expanded .assessment-cards {
+        display: block;
+    }
+    
+    /* Quick Actions Mobile Grid */
+    .sidebar-left.expanded .quick-actions {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+    
+    .action-item {
+        padding: 0.8rem 0.5rem;
+        font-size: 0.75rem;
+        min-height: 44px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .action-item .icon {
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .action-item .label {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+    
+    /* Chat Container Mobile */
+    .chat-container {
+        order: 0;
+        flex: 1;
+        min-height: 400px;
+        max-height: none;
+    }
+    
+    /* Course Grid Mobile */
+    .course-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        padding: 0.5rem 0;
+    }
+    
+    .course-card {
+        padding: 1.25rem !important;
+        margin-bottom: 1rem;
+        min-height: auto;
+    }
+    
+    .course-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .course-card p {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .course-card button {
+        min-height: 44px;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+    
+    /* Assessment Cards Mobile */
+    .assessment-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-height: 44px;
+    }
+    
+    .assessment-card h4 {
+        font-size: 1rem;
+    }
+    
+    .assessment-card p {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .assessment-btn {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+        min-height: 44px;
+    }
+    
+    /* Modal Mobile Optimization */
+    .pmerit-modal-container {
+        padding: 1rem;
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+    
+    .pmerit-modal {
+        min-width: 90vw !important;
+        max-width: 95vw !important;
+        padding: 1.5rem !important;
+        margin: 0;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    
+    .pmerit-modal-close {
+        font-size: 2rem;
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .pmerit-modal-body input,
+    .pmerit-modal-body textarea,
+    .pmerit-modal-body select {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: 0.8rem;
+        min-height: 44px;
+    }
+    
+    .pmerit-modal-body .btn {
+        min-height: 44px;
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+    
+    /* Dashboard Mobile Specific */
+    .quick-actions-bar {
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .quick-action-btn {
+        width: 100%;
+        min-height: 44px;
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+    
+    /* Container Mobile */
+    .container {
+        padding: 1rem;
+        margin: 0;
+        max-width: 100vw;
+    }
+    
+    /* Back Link Mobile */
+    .back-link {
+        margin-bottom: 1rem;
+        display: inline-block;
+        padding: 0.6rem 1rem;
+        min-height: 44px;
+    }
+    
+    /* Admin Panel Mobile */
+    .admin-nav {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .nav-item {
+        text-align: center;
+        border-bottom: 1px solid #e5e7eb;
+        border-radius: 0;
+        min-height: 44px;
+        padding: 1rem;
+    }
+    
+    .subjects-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+    
+    .admin-subject-card {
+        padding: 1rem;
+    }
+    
+    .subject-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-edit, .btn-delete {
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+/* Smaller Mobile Devices */
+@media (max-width: 480px) {
+    .btn-pricing {
+        display: none; /* Hide pricing button on very small screens */
+    }
+    
+    .main-content {
+        padding: 0.5rem;
+        gap: 0.8rem;
+    }
+    
+    .sidebar-left.expanded .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+    
+    .course-card {
+        padding: 1rem !important;
+    }
+    
+    .pmerit-modal {
+        min-width: 95vw !important;
+        padding: 1rem !important;
+    }
+    
+    .container {
+        padding: 0.75rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .action-item, .assessment-card, .btn, .course-card button, .quick-action-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .action-item:active, .assessment-card:active, .course-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s;
+    }
+    
+    /* Improve touch targets */
+    .pmerit-modal-close,
+    .nav-item,
+    .assessment-btn,
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-content {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .sidebar-left, .sidebar-right {
+        flex: 0 0 200px;
+        max-height: none;
+    }
+    
+    .chat-container {
+        flex: 1;
+    }
+    
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+}
