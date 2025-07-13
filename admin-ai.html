@@ -1,0 +1,112 @@
+<!-- admin-ai.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PMERIT Admin AI Assistant</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body { background: #f5f7fa; font-family: 'Inter', sans-serif; }
+    .admin-ai-container {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 24px rgba(102,126,234,0.08);
+      padding: 2rem;
+    }
+    .admin-ai-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .admin-ai-header h2 { color: #6b46c1; }
+    .admin-ai-chat-box { min-height: 240px; border: 1px solid #ececec; border-radius: 8px; padding: 1rem; background: #fafaff; margin-bottom: 1rem; overflow-y: auto;}
+    .admin-ai-msg { margin-bottom: 1rem; }
+    .admin-ai-msg.admin { color: #6b46c1; }
+    .admin-ai-msg.ai { color: #444; font-style: italic; }
+    .admin-ai-form { display: flex; gap: 0.5rem; }
+    .admin-ai-form input { flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .admin-ai-form button { padding: 0.5rem 1.2rem; background: #6b46c1; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    .admin-ai-form button:disabled { background: #ccc; cursor: not-allowed; }
+    .admin-ai-login { text-align: center; margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="admin-ai-container">
+    <div class="admin-ai-header">
+      <h2>PMERIT Admin AI Assistant</h2>
+      <div style="font-size:0.95rem;color:#888;">Ask platform questions. For admin use only.</div>
+    </div>
+    <div id="adminLogin" class="admin-ai-login">
+      <input type="password" id="adminPass" placeholder="Admin password" style="padding:0.6rem;border-radius:8px;border:1px solid #e2e8f0;width:70%;"/>
+      <button onclick="adminLogin()">Login</button>
+      <div id="adminLoginMsg" style="color:#d53f8c;margin-top:0.7rem;"></div>
+    </div>
+    <div id="adminAIBox" style="display:none;">
+      <div class="admin-ai-chat-box" id="adminAIChat"></div>
+      <form class="admin-ai-form" onsubmit="return sendAdminAI()">
+        <input type="text" id="adminAIInput" placeholder="Type your question..." autocomplete="off" required/>
+        <button id="adminAISendBtn" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // SIMPLE ADMIN PASSWORD (replace with real backend auth for production!)
+    const ADMIN_PASSWORD = "changeme123"; // Set in backend, or use proper auth
+
+    function adminLogin() {
+      const pass = document.getElementById('adminPass').value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('adminAIBox').style.display = '';
+        document.getElementById('adminAIInput').focus();
+      } else {
+        document.getElementById('adminLoginMsg').innerText = "Incorrect password.";
+      }
+    }
+
+    function sendAdminAI() {
+      const input = document.getElementById('adminAIInput');
+      const chat = document.getElementById('adminAIChat');
+      const sendBtn = document.getElementById('adminAISendBtn');
+      const question = input.value.trim();
+      if (!question) return false;
+
+      // Show admin message
+      const adminMsg = document.createElement('div');
+      adminMsg.className = "admin-ai-msg admin";
+      adminMsg.innerHTML = `<strong>You:</strong> ${question}`;
+      chat.appendChild(adminMsg);
+
+      input.value = "";
+      sendBtn.disabled = true;
+
+      // Call backend API for AI response (replace with your endpoint)
+      fetch('/api/admin-ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: question })
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = "admin-ai-msg ai";
+        aiMsg.innerHTML = `<strong>Gabriel AI:</strong> ${data.answer}`;
+        chat.appendChild(aiMsg);
+        chat.scrollTop = chat.scrollHeight;
+        sendBtn.disabled = false;
+      })
+      .catch(e => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = "admin-ai-msg ai";
+        aiMsg.innerHTML = `<strong>Gabriel AI:</strong> Error: ${e.message || "Could not reach AI backend."}`;
+        chat.appendChild(aiMsg);
+        sendBtn.disabled = false;
+      });
+
+      return false;
+    }
+  </script>
+</body>
+</html>
