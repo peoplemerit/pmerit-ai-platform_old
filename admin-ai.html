@@ -1,68 +1,180 @@
-<!-- admin-ai.html -->
+<!-- admin-ai.html - FIXED VERSION -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PMERIT Admin AI Assistant</title>
-  <link rel="stylesheet" href="css/main.css"/>
   <style>
-    body { background: #f5f7fa; font-family: 'Inter', sans-serif; }
+    body { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif; 
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+    }
     .admin-ai-container {
-      max-width: 480px;
+      max-width: 600px;
       margin: 2rem auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 24px rgba(102,126,234,0.08);
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
       padding: 2rem;
     }
     .admin-ai-header {
       text-align: center;
       margin-bottom: 1.5rem;
     }
-    .admin-ai-header h2 { color: #6b46c1; }
-    .admin-ai-chat-box { min-height: 240px; border: 1px solid #ececec; border-radius: 8px; padding: 1rem; background: #fafaff; margin-bottom: 1rem; overflow-y: auto;}
-    .admin-ai-msg { margin-bottom: 1rem; }
-    .admin-ai-msg.admin { color: #6b46c1; }
-    .admin-ai-msg.ai { color: #444; font-style: italic; }
-    .admin-ai-form { display: flex; gap: 0.5rem; }
-    .admin-ai-form input { flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid #e2e8f0; }
-    .admin-ai-form button { padding: 0.5rem 1.2rem; background: #6b46c1; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
-    .admin-ai-form button:disabled { background: #ccc; cursor: not-allowed; }
-    .admin-ai-login { text-align: center; margin-top: 1.5rem; }
+    .admin-ai-header h2 { 
+      color: #667eea; 
+      margin-bottom: 0.5rem;
+    }
+    .mission-text {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+    .admin-ai-chat-box { 
+      min-height: 300px; 
+      border: 1px solid #e5e7eb; 
+      border-radius: 12px; 
+      padding: 1.5rem; 
+      background: #fafaff; 
+      margin-bottom: 1rem; 
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .admin-ai-msg { 
+      margin-bottom: 1rem; 
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+    .admin-ai-msg.admin { 
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea; 
+      border-left: 4px solid #667eea;
+    }
+    .admin-ai-msg.ai { 
+      background: rgba(118, 75, 162, 0.1);
+      color: #444; 
+      border-left: 4px solid #764ba2;
+      white-space: pre-wrap;
+    }
+    .admin-ai-form { 
+      display: flex; 
+      gap: 0.75rem; 
+    }
+    .admin-ai-form input { 
+      flex: 1; 
+      padding: 0.75rem; 
+      border-radius: 8px; 
+      border: 1px solid #e2e8f0; 
+      font-size: 1rem;
+    }
+    .admin-ai-form button { 
+      padding: 0.75rem 1.5rem; 
+      background: #667eea; 
+      color: #fff; 
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .admin-ai-form button:hover {
+      background: #764ba2;
+    }
+    .admin-ai-form button:disabled { 
+      background: #ccc; 
+      cursor: not-allowed; 
+    }
+    .admin-ai-login { 
+      text-align: center; 
+      margin-top: 1.5rem; 
+    }
+    .admin-ai-login input {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      width: 70%;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .admin-ai-login button {
+      padding: 0.75rem 2rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .status-indicator {
+      text-align: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
   <div class="admin-ai-container">
     <div class="admin-ai-header">
-      <h2>PMERIT Admin AI Assistant</h2>
-      <div style="font-size:0.95rem;color:#888;">Ask platform questions. For admin use only.</div>
+      <h2>🤖 PMERIT Admin AI Assistant</h2>
+      <div class="mission-text">Breaking poverty cycles through accessible education</div>
+      <div class="mission-text">Global AI-powered development assistance</div>
     </div>
+    
     <div id="adminLogin" class="admin-ai-login">
-      <input type="password" id="adminPass" placeholder="Admin password" style="padding:0.6rem;border-radius:8px;border:1px solid #e2e8f0;width:70%;"/>
-      <button onclick="adminLogin()">Login</button>
-      <div id="adminLoginMsg" style="color:#d53f8c;margin-top:0.7rem;"></div>
+      <h3>Admin Authentication</h3>
+      <input type="password" id="adminPass" placeholder="Enter admin password" autocomplete="off"/>
+      <br>
+      <button onclick="adminLogin()">🔐 Login to AI Assistant</button>
+      <div id="adminLoginMsg" style="color:#ef4444;margin-top:1rem;"></div>
     </div>
+    
     <div id="adminAIBox" style="display:none;">
-      <div class="admin-ai-chat-box" id="adminAIChat"></div>
+      <div class="status-indicator">
+        ✅ Connected to PMERIT Diagnostic Bot Backend
+      </div>
+      <div class="admin-ai-chat-box" id="adminAIChat">
+        <div class="admin-ai-msg ai">
+          <strong>Gabriel AI:</strong> Welcome to the PMERIT Administrative AI Assistant! 🎓
+
+I'm here to help you optimize the educational platform for students in underserved communities. 
+
+Try asking:
+• "What security issues should I fix for student data?"
+• "How to optimize for Nigerian mobile users?"
+• "Analyze authentication vulnerabilities"
+• "Check mobile accessibility issues"
+        </div>
+      </div>
       <form class="admin-ai-form" onsubmit="return sendAdminAI()">
-        <input type="text" id="adminAIInput" placeholder="Type your question..." autocomplete="off" required/>
+        <input type="text" id="adminAIInput" placeholder="Ask about platform optimization, security, accessibility..." autocomplete="off" required/>
         <button id="adminAISendBtn" type="submit">Send</button>
       </form>
     </div>
   </div>
+  
   <script>
-    // SIMPLE ADMIN PASSWORD (replace with real backend auth for production!)
-    const ADMIN_PASSWORD = "changeme123"; // Set in backend, or use proper auth
+    // Updated admin password to match your backend
+    const ADMIN_PASSWORD = "Ipinle24689_S";
 
     function adminLogin() {
       const pass = document.getElementById('adminPass').value;
+      const msgDiv = document.getElementById('adminLoginMsg');
+      
       if (pass === ADMIN_PASSWORD) {
         document.getElementById('adminLogin').style.display = 'none';
         document.getElementById('adminAIBox').style.display = '';
         document.getElementById('adminAIInput').focus();
+        msgDiv.innerText = "";
       } else {
-        document.getElementById('adminLoginMsg').innerText = "Incorrect password.";
+        msgDiv.innerText = "❌ Incorrect password. Use the admin password from your backend.";
       }
     }
 
@@ -71,6 +183,7 @@
       const chat = document.getElementById('adminAIChat');
       const sendBtn = document.getElementById('adminAISendBtn');
       const question = input.value.trim();
+      
       if (!question) return false;
 
       // Show admin message
@@ -81,14 +194,23 @@
 
       input.value = "";
       sendBtn.disabled = true;
+      sendBtn.textContent = "Analyzing...";
 
-      // Call backend API for AI response (replace with your endpoint)
-      fetch('/api/admin-ai', {
+      // FIXED: Connect to correct backend endpoint
+      fetch('http://localhost:8080/api/admin-ai', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': ADMIN_PASSWORD
+        },
         body: JSON.stringify({ question: question })
       })
-      .then(resp => resp.json())
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+        }
+        return resp.json();
+      })
       .then(data => {
         const aiMsg = document.createElement('div');
         aiMsg.className = "admin-ai-msg ai";
@@ -96,17 +218,33 @@
         chat.appendChild(aiMsg);
         chat.scrollTop = chat.scrollHeight;
         sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
       })
       .catch(e => {
         const aiMsg = document.createElement('div');
         aiMsg.className = "admin-ai-msg ai";
-        aiMsg.innerHTML = `<strong>Gabriel AI:</strong> Error: ${e.message || "Could not reach AI backend."}`;
+        aiMsg.innerHTML = `<strong>Gabriel AI:</strong> ❌ Connection Error: ${e.message}
+
+🔧 Troubleshooting:
+- Make sure backend is running on localhost:8080
+- Check admin password: ${ADMIN_PASSWORD}
+- Verify CORS settings in backend
+
+💡 Backend should show: "PMERIT Diagnostic Bot Backend Started!"`;
         chat.appendChild(aiMsg);
         sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
       });
 
       return false;
     }
+
+    // Allow Enter key to send message
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && document.getElementById('adminAIInput') === document.activeElement) {
+        sendAdminAI();
+      }
+    });
   </script>
 </body>
 </html>
