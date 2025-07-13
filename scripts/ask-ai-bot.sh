@@ -1,109 +1,100 @@
-### Interactive AI Assistant Script (scripts/ask-ai-bot.sh)
-```bash
 #!/bin/bash
-# Interactive AI assistant for PMERIT development
+# =================================================================
+# PMERIT Educational Platform AI Assistant
+# Interactive educational platform helper for developers & educators
+# =================================================================
 
 QUESTION="$1"
+
 if [ -z "$QUESTION" ]; then
-    echo "Usage: ./ask-ai-bot.sh 'Your question about the platform'"
-    exit 1
+  cat << EOF
+🎓 PMERIT Educational Platform AI Assistant
+
+Usage: ./ask-ai-bot.sh 'Your question about the platform'
+
+Example questions:
+  • 'How to improve student registration flow?'
+  • 'Optimize platform for Nigerian mobile users'
+  • 'Implement offline learning capabilities'
+  • 'Secure student data according to GDPR'
+  • 'Best practices for educational accessibility'
+EOF
+  exit 1
 fi
 
+echo ""
 echo "🤖 PMERIT AI Assistant: Analyzing your question..."
+echo "🎓 Context: Accessible education for underserved communities"
+echo ""
 
-node -e "
+if [ -z "$OPENAI_API_KEY" ]; then
+  echo "⚠️  OpenAI API key not found. Please set OPENAI_API_KEY environment variable."
+  echo "   Get an API key from: https://platform.openai.com/api-keys"
+  echo ""
+  echo "Mission: Breaking poverty cycles through accessible education"
+  echo "Target: Underserved communities in Nigeria/Africa"
+  echo "Focus: Mobile-first, low-bandwidth, student data protection"
+  exit 1
+fi
+
+if ! command -v node &> /dev/null; then
+  echo "❌ Node.js not found. Please install Node.js to use the AI assistant."
+  exit 1
+fi
+
+# Create a temporary Node.js script for AI interaction
+cat << 'EOF' > /tmp/pmerit-ai-assistant.js
 const { OpenAI } = require('openai');
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const question = process.argv[2];
 
 (async () => {
+  try {
     const response = await openai.chat.completions.create({
-        model: 'gpt-4-1106-preview',
-        messages: [{
-            role: 'system',
-            content: 'You are an expert AI consultant for the PMERIT Educational Platform, focused on breaking poverty cycles through accessible education in Nigeria/Africa. Provide specific, actionable technical advice.'
-        }, {
-            role: 'user',
-            content: '$QUESTION'
-        }],
-        max_tokens: 1000
+      model: 'gpt-4-1106-preview',
+      messages: [{
+        role: 'system',
+        content: `You are an expert AI consultant for the PMERIT Educational Platform, focused on breaking poverty cycles through accessible education in Nigeria/Africa.
+
+Key Context:
+- Mission: Accessible, high-quality education for underserved communities
+- Target Users: Students in Nigeria/Africa with limited resources
+- Platform: AI-powered educational platform (Gabriel AI)
+- Priorities: Mobile accessibility, low-bandwidth optimization, student data protection
+- Technology: Modern web platform with responsive design
+
+Provide specific, actionable technical advice that considers:
+1. Mobile-first design for low-cost Android devices
+2. Low-bandwidth optimization for areas with poor connectivity
+3. Student privacy and data protection (GDPR/FERPA compliance)
+4. Educational best practices for underserved communities
+5. Practical implementation steps with realistic timelines
+
+Be concise but comprehensive. Focus on solutions that directly impact educational outcomes.`
+      }, {
+        role: 'user',
+        content: question
+      }],
+      max_tokens: 1200,
+      temperature: 0.7
     });
-    
-    console.log('💡 AI Recommendation:');
+
+    console.log('💡 PMERIT AI Educational Recommendation:\n');
     console.log(response.choices[0].message.content);
+    console.log('\n🎓 Educational Impact: This guidance supports our mission of accessible education for all.');
+  } catch (error) {
+    console.error('❌ AI Assistant Error:', error.message);
+    console.log('\n🎓 Educational Platform Support:');
+    console.log('   • Check API key configuration');
+    console.log('   • Verify internet connectivity');
+    console.log('   • Contact: support@pmerit.com');
+  }
 })();
-"
-```
+EOF
 
-### Specialized Report Generators
-```javascript
-// Security-focused analysis
-async generateSecurityReport() {
-    const prompt = `Analyze PMERIT educational platform for security vulnerabilities specifically related to:
-    1. Student data protection (GDPR/privacy compliance)
-    2. Authentication system security for educational users
-    3. Protection against attacks targeting educational platforms
-    4. Secure deployment for African infrastructure
-    
-    Code findings: ${JSON.stringify(this.securityFindings)}`;
-    
-    // Generate security-specific AI recommendations
-}
+node /tmp/pmerit-ai-assistant.js "$QUESTION"
+rm -f /tmp/pmerit-ai-assistant.js
 
-// Mobile accessibility analysis
-async generateMobileReport() {
-    const prompt = `Analyze mobile accessibility for PMERIT platform targeting users in Nigeria/Africa with:
-    1. Low-cost Android devices
-    2. Limited bandwidth connections
-    3. Various screen sizes and touch capabilities
-    4. Accessibility needs in educational contexts
-    
-    Mobile findings: ${JSON.stringify(this.mobileFindings)}`;
-}
-
-// Authentication flow analysis
-async generateAuthReport() {
-    const prompt = `Analyze authentication flow for educational platform serving underserved communities:
-    1. Simplified registration for users with varying tech literacy
-    2. Secure session management for shared devices
-    3. Offline capability for authentication
-    4. Integration with course enrollment system
-    
-    Auth findings: ${JSON.stringify(this.authFindings)}`;
-}
-```
-
-## 🎯 Key Features to Implement
-
-### 1. Proactive Monitoring
-- **Real-time code analysis** on every commit
-- **Automatic security scanning** with AI-powered threat detection
-- **Performance monitoring** for educational platform specific metrics
-- **Accessibility compliance** checking for global users
-
-### 2. AI-Powered Interactions
-- **Natural language queries** about code issues
-- **Contextual recommendations** based on educational mission
-- **Learning path suggestions** for resolving technical debt
-- **Best practices guidance** for educational platform development
-
-### 3. GitHub Integration
-- **Automatic issue creation** for critical findings
-- **Pull request reviews** with AI-generated suggestions
-- **Release readiness** assessment with deployment recommendations
-- **Documentation generation** for new features
-
-### 4. Educational Platform Specific
-- **Course enrollment flow** integrity checking
-- **Student progress tracking** validation
-- **Multi-language readiness** assessment
-- **Offline capability** analysis for low-bandwidth environments
-
-## 🚀 Expected Outcomes
-
-1. **Proactive Problem Detection** - Issues caught before they impact students
-2. **AI-Powered Solutions** - Intelligent recommendations for complex problems
-3. **Educational Mission Alignment** - All suggestions prioritize accessibility and impact
-4. **Automated Quality Assurance** - Continuous platform improvement without manual intervention
-5. **Interactive Development** - Natural language interaction with AI assistant
-
-Create this comprehensive AI-powered development assistant that transforms your GitHub workflow into an intelligent, proactive system focused on your educational mission.
+echo ""
+echo "🎓 PMERIT Educational Platform AI Assistant"
+echo "   Empowering education through intelligent development"
