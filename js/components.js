@@ -174,47 +174,51 @@ class ComponentManager {
         `;
     }
 
-// ====== COMPLETE SOLUTION 1: js/components.js Registration Fix ======
-// Replace the getRegistrationModalHandlers() function
+// ====== BROWSER-COMPATIBLE REGISTRATION FIX ======
+// Update in js/components.js - Replace getRegistrationModalHandlers function
 
-getRegistrationModalHandlers() {
+getRegistrationModalHandlers: function() {
+    var self = this;
     return function(modalContainer) {
         // Close button
-        modalContainer.querySelector('.pmerit-modal-close').addEventListener('click', () => {
-            this.hideCurrentModal();
+        var closeBtn = modalContainer.querySelector('.pmerit-modal-close');
+        closeBtn.addEventListener('click', function() {
+            self.hideCurrentModal();
         });
 
-        // Registration form handler - COMPLETE SOLUTION
-        const form = modalContainer.querySelector('#registrationForm');
-        form.addEventListener('submit', (e) => {
+        // Registration form handler (ES5 Compatible)
+        var form = modalContainer.querySelector('#registrationForm');
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const fullname = form.fullname.value.trim();
-            const email = form.email.value.trim().toLowerCase();
-            const password = form.password.value;
+            
+            var fullname = form.fullname.value.trim();
+            var email = form.email.value.trim().toLowerCase();
+            var password = form.password.value;
 
+            // Validation
             if (!fullname || !email || password.length < 6) {
                 alert('Please fill out all fields correctly.');
                 return;
             }
 
-            // Save user to localStorage (demo/frontend)
-            const user = { name: fullname, email, password, verified: true };
+            // Save user to localStorage (ES5 compatible)
+            var user = { name: fullname, email: email, password: password, verified: true };
             localStorage.setItem('gabriel_user', JSON.stringify(user));
             
             // Create session immediately
-            const session = { 
-                user: { name: fullname, email }, 
+            var session = { 
+                user: { name: fullname, email: email }, 
                 token: "mock-token", 
                 time: Date.now() 
             };
             localStorage.setItem('gabriel_session', JSON.stringify(session));
 
             // Success message and redirect
-            alert(`Welcome, ${fullname}! Registration successful. Redirecting to your dashboard...`);
-            this.hideCurrentModal();
+            alert("Welcome, " + fullname + "! Registration successful. Redirecting to your dashboard...");
+            self.hideCurrentModal();
             
             // Redirect to dashboard
-            setTimeout(() => {
+            setTimeout(function() {
                 window.location.href = 'dashboard.html';
             }, 500);
         });
