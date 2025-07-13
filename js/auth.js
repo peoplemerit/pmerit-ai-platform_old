@@ -1,23 +1,21 @@
-// ====== COMPLETE SOLUTION 2: js/auth.js - Enhanced with Working Sign-in ======
-// Replace your current js/auth.js with this complete version
+// ====== BROWSER-COMPATIBLE AUTH.JS (No Babel Required) ======
+// js/auth.js - PMERIT Authentication System (ES5 Compatible)
 
-// js/auth.js - PMERIT Complete Authentication System
-
-// Mock users for demo (includes test account)
-const DEMO_USERS = [
+// Mock users for demo
+var DEMO_USERS = [
     { name: "Test User", email: "test@example.com", password: "password123", verified: true },
     { name: "Demo Student", email: "demo@pmerit.com", password: "demo123", verified: true }
 ];
 
-let authState = {
+var authState = {
     isAuthenticated: false,
     user: null,
     sessionToken: null
 };
 
-// Utility Functions
+// Utility Functions (ES5 Compatible)
 function getSession() {
-    const session = localStorage.getItem('gabriel_session');
+    var session = localStorage.getItem('gabriel_session');
     if (!session) return null;
     try {
         return JSON.parse(session);
@@ -28,7 +26,7 @@ function getSession() {
 }
 
 function setSession(user) {
-    const session = { user, token: "mock-token", time: Date.now() };
+    var session = { user: user, token: "mock-token", time: Date.now() };
     localStorage.setItem('gabriel_session', JSON.stringify(session));
     authState.isAuthenticated = true;
     authState.user = user;
@@ -41,14 +39,21 @@ function clearSession() {
     authState.user = null;
 }
 
-// Sign-in Handler - COMPLETE WORKING VERSION
+// Sign-in Handler (ES5 Compatible)
 function handleSignIn(email, password) {
     // Check demo users first
-    let user = DEMO_USERS.find(u => u.email === email && u.password === password);
+    var user = null;
+    for (var i = 0; i < DEMO_USERS.length; i++) {
+        if (DEMO_USERS[i].email === email && DEMO_USERS[i].password === password) {
+            user = DEMO_USERS[i];
+            break;
+        }
+    }
     
-    // If not found in demo, check localStorage registered users
+    // If not found in demo, check localStorage
     if (!user) {
-        const storedUser = JSON.parse(localStorage.getItem('gabriel_user') || '{}');
+        var storedUserStr = localStorage.getItem('gabriel_user') || '{}';
+        var storedUser = JSON.parse(storedUserStr);
         if (storedUser.email === email && storedUser.password === password) {
             user = storedUser;
         }
@@ -62,14 +67,14 @@ function handleSignIn(email, password) {
         return { success: false, message: "Please verify your email first." };
     }
 
-    // Success - create session and redirect
+    // Success - create session
     setSession({ name: user.name, email: user.email });
-    return { success: true, message: `Welcome back, ${user.name}!`, user: user };
+    return { success: true, message: "Welcome back, " + user.name + "!", user: user };
 }
 
-// Session validation for protected pages
+// Session validation
 function validateSessionOrRedirect() {
-    const session = getSession();
+    var session = getSession();
     if (!session || !session.user) {
         window.location.href = "signin.html";
         return false;
@@ -86,22 +91,22 @@ function handleLogout() {
     window.location.href = "index.html";
 }
 
-// Auto-initialize on page load
+// Auto-initialize (ES5 Compatible)
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if on sign-in page
-    if (window.location.pathname.endsWith("signin.html")) {
-        const signinForm = document.querySelector('form');
+    // Sign-in page handler
+    if (window.location.pathname.indexOf("signin.html") !== -1) {
+        var signinForm = document.querySelector('form');
         if (signinForm) {
             signinForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const email = signinForm.querySelector('#email').value.trim().toLowerCase();
-                const password = signinForm.querySelector('#password').value;
+                var email = signinForm.querySelector('#email').value.toLowerCase().trim();
+                var password = signinForm.querySelector('#password').value;
                 
-                const result = handleSignIn(email, password);
+                var result = handleSignIn(email, password);
                 
                 if (result.success) {
                     alert(result.message + " Redirecting to dashboard...");
-                    setTimeout(() => {
+                    setTimeout(function() {
                         window.location.href = 'dashboard.html';
                     }, 1000);
                 } else {
@@ -112,14 +117,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle logout buttons
-    const logoutBtns = document.querySelectorAll('#logoutBtn, .logout-btn');
-    logoutBtns.forEach(btn => {
-        btn.addEventListener('click', handleLogout);
-    });
+    var logoutBtns = document.querySelectorAll('#logoutBtn, .logout-btn');
+    for (var i = 0; i < logoutBtns.length; i++) {
+        logoutBtns[i].addEventListener('click', handleLogout);
+    }
 
-    // Auto-redirect if already logged in (for sign-in page)
-    if (window.location.pathname.endsWith("signin.html")) {
-        const session = getSession();
+    // Auto-redirect if already logged in
+    if (window.location.pathname.indexOf("signin.html") !== -1) {
+        var session = getSession();
         if (session && session.user) {
             window.location.href = "dashboard.html";
         }
@@ -128,11 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Global API
 window.PMERIT_AUTH = {
-    getSession,
-    setSession,
-    clearSession,
-    handleSignIn,
-    validateSessionOrRedirect,
-    handleLogout,
-    authState
+    getSession: getSession,
+    setSession: setSession,
+    clearSession: clearSession,
+    handleSignIn: handleSignIn,
+    validateSessionOrRedirect: validateSessionOrRedirect,
+    handleLogout: handleLogout,
+    authState: authState
 };
