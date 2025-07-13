@@ -15,17 +15,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-// EMERGENCY LOGIN - Add this to index.html
-window.emergencyLogin = function() {
-    localStorage.setItem('pmerit_session', JSON.stringify({
-        loggedIn: true, 
-        email: 'demo@pmerit.com', 
-        name: 'Demo User', 
-        time: Date.now()
-    }));
-    window.location.href = 'dashboard.html';
-};
-</script>
+    // EMERGENCY LOGIN
+    window.emergencyLogin = function() {
+        localStorage.setItem('pmerit_session', JSON.stringify({
+            loggedIn: true, 
+            email: 'demo@pmerit.com', 
+            name: 'Demo User', 
+            time: Date.now()
+        }));
+        window.location.href = 'dashboard.html';
+    };
+    </script>
 </head>
 <body>
     <div class="app-container">
