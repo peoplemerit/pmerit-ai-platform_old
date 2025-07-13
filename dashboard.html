@@ -1,4 +1,3 @@
-<!-- ====== COMPLETE SOLUTION 6: Updated dashboard.html ====== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,234 +8,149 @@
     <link rel="stylesheet" href="css/course-hub.css">
     <link rel="stylesheet" href="css/responsive.css">
     <style>
-        /* Dashboard-specific styles */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+        }
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
             background: rgba(255,255,255,0.95);
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            min-height: 80vh;
-        }
-        
-        .quick-actions-bar {
-            display: flex; 
-            gap: 1rem; 
-            margin-bottom: 2rem; 
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .quick-action-btn {
-            padding: 0.8rem 1.5rem; 
-            background: #667eea; 
-            color: white; 
-            border: none; 
-            border-radius: 8px;
-            font-size: 1rem; 
-            cursor: pointer; 
-            transition: all 0.2s;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .quick-action-btn:hover { 
-            background: #764ba2; 
-            transform: translateY(-1px);
-        }
-        
-        #logoutBtn { 
-            background: #ef4444; 
-        }
-        
-        #logoutBtn:hover {
-            background: #dc2626;
-        }
-        
-        .dashboard-section {
-            margin-bottom: 2.5rem;
-        }
-        
-        .dashboard-section h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .empty-state {
-            text-align: center;
             padding: 2rem;
-            color: #666;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 12px;
-            border: 2px dashed rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
-        
-        .empty-state h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
+        .back-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 1rem;
         }
-        
-        .progress-bar {
-            background: #f0f0f0; 
-            height: 8px; 
-            border-radius: 4px; 
-            margin: 0.5rem 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(90deg, #667eea, #764ba2); 
-            height: 100%; 
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .welcome-section {
+            text-align: center;
             margin-bottom: 2rem;
         }
-        
-        .stat-card {
-            background: white;
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #764ba2;
+        }
+        .btn-logout {
+            background: #ef4444;
+        }
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+        .status-box {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
             padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(102, 126, 234, 0.1);
             text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .dashboard-container {
-                margin: 1rem;
-                padding: 1rem;
-                border-radius: 12px;
-            }
-            
-            .quick-actions-bar {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-            
-            .quick-action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .dashboard-stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-            }
-            
-            .stat-card {
-                padding: 1rem;
-            }
-            
-            .stat-number {
-                font-size: 1.5rem;
-            }
+            margin: 2rem 0;
         }
     </style>
 </head>
-<body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; font-family: 'Inter', sans-serif;">
+<body>
     <div class="dashboard-container">
-        <!-- Header Section -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-            <a href="index.html" class="back-link" style="background: #667eea; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 8px; font-size: 0.9rem;">← Back to Home</a>
-            <div style="text-align: center; flex: 1;">
-                <h1 id="dashboardWelcome" style="color: #333; margin: 0; font-size: 1.8rem;">Welcome to PMERIT University Dashboard!</h1>
-            </div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+        
+        <div class="welcome-section">
+            <h1 id="dashboardWelcome">Welcome to PMERIT Dashboard!</h1>
+            <p>Your personalized learning hub</p>
         </div>
         
-        <!-- Quick Actions Bar -->
-        <div class="quick-actions-bar">
-            <button class="quick-action-btn" id="dashboardCourseHub">
-                📚 Course Hub
-            </button>
-            <button class="quick-action-btn" id="dashboardProfile">
-                👤 My Profile
-            </button>
-            <button class="quick-action-btn" id="dashboardSettings">
-                ⚙️ Settings
-            </button>
-            <button class="quick-action-btn" id="logoutBtn">
-                🚪 Logout
-            </button>
+        <div class="quick-actions">
+            <a href="courses.html" class="btn">📚 Browse Courses</a>
+            <button class="btn" onclick="alert('Profile coming soon!')">👤 My Profile</button>
+            <button class="btn" onclick="alert('Settings coming soon!')">⚙️ Settings</button>
+            <button class="btn btn-logout" onclick="handleLogout()">🚪 Logout</button>
         </div>
         
-        <!-- Dashboard Stats -->
-        <div class="dashboard-stats" id="dashboardStats">
-            <div class="stat-card">
-                <div class="stat-number" id="enrolledCount">0</div>
-                <div class="stat-label">Enrolled Courses</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="completedCount">0</div>
-                <div class="stat-label">Completed</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="progressAvg">0%</div>
-                <div class="stat-label">Avg Progress</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="studyStreak">0</div>
-                <div class="stat-label">Day Streak</div>
-            </div>
+        <div class="status-box">
+            <h3>🎓 Ready to Start Learning!</h3>
+            <p>Your courses and progress will appear here once you enroll.</p>
+            <p><strong>Status:</strong> Dashboard Successfully Loaded</p>
         </div>
         
-        <!-- Enrolled Courses Section -->
-        <div class="dashboard-section">
-            <h2>📚 My Enrolled Courses</h2>
-            <div id="enrolledCoursesGrid"></div>
-        </div>
-        
-        <!-- Next Lessons Section -->
-        <div class="dashboard-section">
-            <h2>🔮 Next Lessons</h2>
-            <div id="nextLessonsGrid"></div>
-        </div>
-        
-        <!-- Status Footer -->
-        <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: rgba(102, 126, 234, 0.05); border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.1);">
-            <p style="margin: 0; color: #666;">Welcome to your personalized learning dashboard! Track your progress, access courses, and achieve your educational goals.</p>
-            <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #888;"><strong>Status:</strong> Frontend Complete - Ready for Backend Integration</p>
+        <div id="userInfo" style="background: #f0f0f0; padding: 1rem; border-radius: 8px; margin-top: 2rem;">
+            <h4>Session Information:</h4>
+            <p id="sessionDetails">Loading...</p>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="js/course-hub.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
-    
-    <!-- Session validation script -->
     <script>
-        // Immediate session check
-        (function() {
-            const session = JSON.parse(localStorage.getItem('gabriel_session') || '{}');
-            if (!session.user || !session.user.email) {
-                alert("Please sign in to access your dashboard.");
-                window.location.href = "signin.html";
+        // Dashboard initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎓 Dashboard page loaded');
+            
+            // Check session
+            var session = localStorage.getItem('pmerit_session');
+            var sessionDetails = document.getElementById('sessionDetails');
+            var welcomeEl = document.getElementById('dashboardWelcome');
+            
+            if (session) {
+                try {
+                    var data = JSON.parse(session);
+                    if (data.loggedIn) {
+                        welcomeEl.textContent = 'Welcome to PMERIT Dashboard, ' + data.name + '!';
+                        sessionDetails.innerHTML = 
+                            '<strong>User:</strong> ' + data.name + '<br>' +
+                            '<strong>Email:</strong> ' + data.email + '<br>' +
+                            '<strong>Login Time:</strong> ' + new Date(data.time).toLocaleString() + '<br>' +
+                            '<span style="color: green;">✅ Session Active</span>';
+                        console.log('✅ User session found:', data.name);
+                    } else {
+                        sessionDetails.innerHTML = '<span style="color: red;">❌ No active session</span>';
+                    }
+                } catch (e) {
+                    sessionDetails.innerHTML = '<span style="color: red;">❌ Invalid session data</span>';
+                    console.error('Session parse error:', e);
+                }
+            } else {
+                sessionDetails.innerHTML = '<span style="color: red;">❌ No session found</span>';
+                console.log('⚠️ No session found - user should login');
             }
-        })();
+        });
+        
+        // Logout function
+        function handleLogout() {
+            localStorage.removeItem('pmerit_session');
+            alert('Logged out successfully!');
+            window.location.href = 'index.html';
+        }
+        
+        // Test functions
+        window.testSession = function() {
+            var session = localStorage.getItem('pmerit_session');
+            console.log('Current session:', session);
+            return session;
+        };
+        
+        console.log('💡 Dashboard ready! Use testSession() to check session data');
     </script>
 </body>
 </html>
