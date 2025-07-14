@@ -61,20 +61,62 @@ class AuthenticationManager {
 
     // ROUTING LOGIC
     checkAuthenticationStatus() {
-        const session = this.getSession();
-        if (session && session.user && session.token) {
-            // Valid session
-            window.location.href = 'dashboard.html';
-        } else {
-            // Check if user exists (returning user)
-            const users = this.getUsers();
-            if (Object.keys(users).length) {
-                window.pmeritComponentManager.showComponent('sign-in-modal');
-            } else {
-                window.pmeritComponentManager.showComponent('registration-modal');
-            }
-        }
+    console.log('🔍 [Auth] Checking authentication status...');
+
+    // 1. Clear any current modal to avoid stacking
+    if (this.currentModal) {
+        console.log('🧹 [Auth] Hiding existing modal...');
+        this.hideCurrentModal(true);
     }
+
+    // 2. Try to get session and handle parse errors
+    let session = null;
+    try {
+        session = this.getSession();
+        console.log('[Auth] Session:', session);
+    } catch (e) {
+        console.error('❌ [Auth] Error parsing session:', e);
+        session = null;
+    }
+
+    // 3. Check if session is valid (user + token)
+    if (session && session.user && session.token) {
+        console.log('✅ [Auth] Valid session found; redirecting to dashboard.');
+        window.location.href = 'dashboard.html';
+        return;
+    }
+
+    // 4. Try to get users and handle parse errors
+    let users = {};
+    try {
+        users = this.getUsers();
+        console.log('[Auth] Users:', users);
+    } catch (e) {
+        console.error('❌ [Auth] Error parsing users:', e);
+        users = {};
+    }
+
+    // 5. Decide which modal to show, with debug
+    const userCount = Object.keys(users).length;
+    console.log(`[Auth] User count: ${userCount}`);
+
+    if (userCount > 0) {
+        console.log('🔑 [Auth] Users exist; showing sign-in modal.');
+        this.showComponent('sign-in-modal');
+    } else {
+        console.log('🎯 [Auth] No users; showing registration modal.');
+        this.showComponent('registration-modal');
+    }
+
+    // 6. Confirm modal is actually shown, after a short delay
+    setTimeout(() => {
+        const modalVisible = !!this.currentModal;
+        console.log(`[Auth] Modal visible after showComponent: ${modalVisible}`);
+        if (!modalVisible) {
+            console.warn('[Auth] Modal disappeared unexpectedly after showComponent!');
+        }
+    }, 350);
+}
 
     // USER REGISTRATION
     registerUser({ fullname, email, password }) {
